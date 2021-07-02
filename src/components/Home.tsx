@@ -2,16 +2,21 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import { FileInput } from '../types';
+import { loadPuzzle } from '../controllers';
+
 export interface HomeProps {
+  onLoadPuzzle: (file: FileInput) => any;
 }
 
 const Home = (props: HomeProps) => {
 
-  const poo = () => {
-    console.log('poo');
+  const handleSelectPuzzle = (fileInputEvent: any) => {
+    console.log('handleSelectPuzzle');
+    const files: FileInput[] = fileInputEvent.target.files;
+    console.log(files);
+    props.onLoadPuzzle(files[0]);
   };
-
-  //         onChange={poo}
 
   return (
     <div>
@@ -21,7 +26,7 @@ const Home = (props: HomeProps) => {
       <input
         type="file"
         id="fileInput"
-        onChange={poo}
+        onChange={handleSelectPuzzle}
       >
       </input>
     </div>
@@ -36,6 +41,8 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onLoadPuzzle: loadPuzzle,
+
   }, dispatch);
 };
 
