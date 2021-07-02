@@ -50,3 +50,8 @@ export interface DisplayedPuzzleCell {
 export interface PuzzleElementByNumber {
   [id: number]: DisplayedPuzzleCell;
 }
+
+export interface DisplayedPuzzle {
+  across: PuzzleElementByNumber;
+  down: PuzzleElementByNumber;
+}

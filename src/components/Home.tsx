@@ -2,10 +2,12 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { FileInput } from '../types';
+import { DisplayedPuzzle, FileInput } from '../types';
 import { loadPuzzle } from '../controllers';
+import { getDisplayedPuzzle } from '../selectors';
 
 export interface HomeProps {
+  displayedPuzzle: DisplayedPuzzle;
   onLoadPuzzle: (file: FileInput) => any;
 }
 
@@ -17,6 +19,8 @@ const Home = (props: HomeProps) => {
     console.log(files);
     props.onLoadPuzzle(files[0]);
   };
+
+  console.log(props.displayedPuzzle);
 
   return (
     <div>
@@ -36,6 +40,7 @@ const Home = (props: HomeProps) => {
 
 function mapStateToProps(state: any) {
   return {
+    displayedPuzzle: getDisplayedPuzzle(state),
   };
 }
 
