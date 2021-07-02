@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@confuzzle/puz-crossword": "^1.2.3",
+    "@jaredreisinger/react-crossword": "^2.3.1",
     "@material-ui/core": "^4.9.0",
     "@material-ui/icons": "^4.9.1",
     "axios": "^0.19.2",
