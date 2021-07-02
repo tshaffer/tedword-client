@@ -1,5 +1,4 @@
 import { cloneDeep } from 'lodash';
-import NavigationFullscreen from 'material-ui/svg-icons/navigation/fullscreen';
 import { PuzzleSpec } from '../types';
 import { TedwordApiAction } from './baseAction';
 

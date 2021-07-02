@@ -8,6 +8,7 @@ export interface FileInput {
 
 export interface TedwordState {
   puzzleSpec: PuzzleSpec;
+  puzCrosswordSpec: PuzCrosswordSpec;
 }
 
 export interface PuzzleSpec {
