@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { FileInput, PuzCrosswordSpec } from '../types';
 import { setPuzCrosswordSpec } from '../models';
 
@@ -17,3 +18,29 @@ export const loadPuzzle = (file: FileInput) => {
     reader.readAsArrayBuffer(file as any as Blob);
   });
 };
+
+export const cellChange = (row: number, col: number, typedChar: string) => {
+  return (dispatch: any) => {
+
+    const path = 'http://localhost:8888/cellChange';
+    const cellChangeBody: any = {
+      row,
+      col,
+      typedChar,
+    };
+
+    return axios.post(
+      path,
+      cellChangeBody,
+    ).then((response) => {
+      console.log(response);
+      return;
+    }).catch((error) => {
+      console.log('error');
+      console.log(error);
+      return;
+    });
+  
+  };
+
+}
