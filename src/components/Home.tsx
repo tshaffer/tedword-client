@@ -10,22 +10,21 @@ import { cellChange, loadPuzzle } from '../controllers';
 import { getDisplayedPuzzle } from '../selectors';
 
 const Pusher = require('pusher-js');
-// import Pusher from 'pusher-js';
-console.log(Pusher);
 
 // import Crossword from '@jaredreisinger/react-crossword';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Crossword = require('@jaredreisinger/react-crossword').Crossword;
-console.log(Crossword);
+
+let crossword: any;
+let puzzleUser: string = 'ted';
 
 export interface HomeProps {
   displayedPuzzle: DisplayedPuzzle;
   onLoadPuzzle: (file: FileInput) => any;
-  onCellChange: (row: number, col: number, typedChar: string) => any;
+  onCellChange: (user: string, row: number, col: number, typedChar: string) => any;
 }
 
 const initializePusher = () => {
-  console.log(Pusher);
   const pusher = new Pusher('c6addcc9977bdaa7e8a2', {
     cluster: 'us3',
     // encrypted: true,
@@ -33,14 +32,44 @@ const initializePusher = () => {
 
   const channel = pusher.subscribe('puzzle');
   channel.bind('cell-change', data => {
-    console.log('cell-change');
+    console.log('websocket cell-change');
     console.log(data);
+    console.log('current user is ', puzzleUser);
+    console.log('external event: ', puzzleUser !== data.user);
+
+    const { user, row, col, typedChar } = data;
+
+    const externalEvent: boolean = puzzleUser !== user;
+    if (externalEvent) {
+      (crossword as any).current.remoteSetCell(row, col, typedChar);
+    }
   });
 };
 
 const Home = (props: HomeProps) => {
 
+  const [user, setUser] = React.useState('ted');
+
   React.useEffect(initializePusher, []);
+
+  crossword = React.useRef();
+
+  const handleUserChange = (event) => {
+    setUser(event.target.value);
+    puzzleUser = event.target.value;
+  };
+
+  const handleFillAllAnswers = React.useCallback((event) => {
+    (crossword as any).current.fillAllAnswers();
+  }, []);
+
+  const handleResetPuzzle = React.useCallback((event) => {
+    (crossword as any).current.reset();
+  }, []);
+
+  const handleRemoteSetCell = React.useCallback((event) => {
+    (crossword as any).current.remoteSetCell(0, 1, 'X');
+  }, []);
 
   const handleSelectPuzzle = (fileInputEvent: any) => {
     console.log('handleSelectPuzzle');
@@ -52,7 +81,7 @@ const Home = (props: HomeProps) => {
   const handleCellChange = (row: number, col: number, typedChar: string) => {
     console.log('handleCellChange');
     console.log(row, col, typedChar);
-    props.onCellChange(row, col, typedChar);
+    props.onCellChange(puzzleUser, row, col, typedChar);
   };
 
   const handleClueCorrect = (direction: string, number: string, answer: string) => {
@@ -83,6 +112,13 @@ const Home = (props: HomeProps) => {
         <p>
           Uncooked Pizza
         </p>
+        <div>
+          <select onChange={handleUserChange} value={user}>
+            <option value="joel">Joel</option>
+            <option value="morgan">Morgan</option>
+            <option selected value="ted">Ted</option>
+          </select>
+        </div>
         <input
           type="file"
           id="fileInput"
@@ -98,8 +134,31 @@ const Home = (props: HomeProps) => {
       <p>
         Cooked Pizza
       </p>
+
+      <div>
+        <button
+          type="button"
+          onClick={handleFillAllAnswers}
+        >
+          Fill all answers
+        </button>
+        <button
+          type='button'
+          onClick={handleResetPuzzle}
+        >
+          Reset puzzle
+        </button>
+        <button
+          type='button'
+          onClick={handleRemoteSetCell}
+        >
+          Set cell remote
+        </button>
+      </div>
+
       <Crossword
         data={props.displayedPuzzle}
+        ref={crossword}
         onCellChange={handleCellChange}
         onCorrect={handleClueCorrect}
         onLoadedCorrect={handleLoadedCorrect}

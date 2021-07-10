@@ -19,11 +19,12 @@ export const loadPuzzle = (file: FileInput) => {
   });
 };
 
-export const cellChange = (row: number, col: number, typedChar: string) => {
+export const cellChange = (user: string, row: number, col: number, typedChar: string) => {
   return (dispatch: any) => {
 
     const path = 'http://localhost:8888/cellChange';
     const cellChangeBody: any = {
+      user, 
       row,
       col,
       typedChar,
