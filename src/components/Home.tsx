@@ -21,7 +21,7 @@ let puzzleUser: string = 'ted';
 export interface HomeProps {
   displayedPuzzle: DisplayedPuzzle;
   onLoadPuzzle: (file: FileInput) => any;
-  onCellChange: (user: string, row: number, col: number, typedChar: string) => any;
+  onCellChange: (user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
 }
 
 const initializePusher = () => {
@@ -78,10 +78,10 @@ const Home = (props: HomeProps) => {
     props.onLoadPuzzle(files[0]);
   };
 
-  const handleCellChange = (row: number, col: number, typedChar: string) => {
+  const handleCellChange = (row: number, col: number, typedChar: string, localChange: boolean) => {
     console.log('handleCellChange');
     console.log(row, col, typedChar);
-    props.onCellChange(puzzleUser, row, col, typedChar);
+    props.onCellChange(puzzleUser, row, col, typedChar, localChange);
   };
 
   const handleClueCorrect = (direction: string, number: string, answer: string) => {

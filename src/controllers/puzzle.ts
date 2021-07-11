@@ -19,8 +19,13 @@ export const loadPuzzle = (file: FileInput) => {
   });
 };
 
-export const cellChange = (user: string, row: number, col: number, typedChar: string) => {
+export const cellChange = (user: string, row: number, col: number, typedChar: string, localChange: boolean) => {
   return (dispatch: any) => {
+
+    if (!localChange) {
+      console.log('cellChange - remote change - server update not required');
+      return;
+    }
 
     const path = 'http://localhost:8888/cellChange';
     const cellChangeBody: any = {
