@@ -19,8 +19,6 @@ const Crossword = require('@jaredreisinger/react-crossword').Crossword;
 let crossword: any;
 let puzzleUser: string = 'ted';
 
-let globalProps: HomeProps;
-
 export interface HomeProps {
   displayedPuzzle: DisplayedPuzzle;
   onLoadPuzzlesMetadata: () => any;
@@ -50,23 +48,17 @@ const initializePusher = () => {
   });
 };
 
-const initialize = () => {
-  initializePusher();
-  if (!isNil(globalProps)) {
-    globalProps.onLoadPuzzlesMetadata();
-  }
-};
-
 const Home = (props: HomeProps) => {
-
-  // TEDTODO - bogus for sure
-  if (!isNil(props)) {
-    globalProps = props;
-  }
 
   const [user, setUser] = React.useState('ted');
 
-  React.useEffect(initialize, []);
+  React.useEffect(() => {
+    console.log('useEffect: props');
+    console.log(props);
+    initializePusher();
+    props.onLoadPuzzlesMetadata();
+  });
+  // React.useEffect(initialize, []);
 
   crossword = React.useRef();
 
