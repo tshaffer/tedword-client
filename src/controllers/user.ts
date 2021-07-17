@@ -5,7 +5,7 @@ import { addUser } from '../models';
 export const loadUsers = () => {
   return (dispatch: any) => {
     const path = 'http://localhost:8888/api/v1/users';
-    return axios.get(path)
+    axios.get(path)
       .then((usersResponse: any) => {
         console.log('users response:');
         console.log(usersResponse);

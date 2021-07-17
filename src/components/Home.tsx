@@ -58,7 +58,7 @@ const Home = (props: HomeProps) => {
     // initializePusher();
     props.onLoadPuzzlesMetadata();
     props.onLoadUsers();
-  });
+  }, []);
   // React.useEffect(initialize, []);
 
   crossword = React.useRef();
