@@ -6,9 +6,8 @@ import { connect } from 'react-redux';
 import { isEmpty, isNil } from 'lodash';
 
 import { DisplayedPuzzle, FileInput } from '../types';
-import { cellChange, loadPuzzle, loadPuzzlesMetadata } from '../controllers';
+import { cellChange, loadPuzzle, loadPuzzlesMetadata, loadUsers } from '../controllers';
 import { getDisplayedPuzzle } from '../selectors';
-import { PinDropSharp } from '@material-ui/icons';
 
 const Pusher = require('pusher-js');
 
@@ -22,6 +21,7 @@ let puzzleUser: string = 'ted';
 export interface HomeProps {
   displayedPuzzle: DisplayedPuzzle;
   onLoadPuzzlesMetadata: () => any;
+  onLoadUsers: () => any;
   onLoadPuzzle: (file: FileInput) => any;
   onCellChange: (user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
 }
@@ -57,6 +57,7 @@ const Home = (props: HomeProps) => {
     console.log(props);
     initializePusher();
     props.onLoadPuzzlesMetadata();
+    props.onLoadUsers();
   });
   // React.useEffect(initialize, []);
 
@@ -187,6 +188,7 @@ const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onLoadPuzzlesMetadata: loadPuzzlesMetadata,
     onLoadPuzzle: loadPuzzle,
+    onLoadUsers: loadUsers,
     onCellChange: cellChange,
   }, dispatch);
 };

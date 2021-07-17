@@ -60,3 +60,10 @@ export interface PuzzleMetadata {
   author: string;
   title: string;
 }
+
+export interface User {
+  userName: string;
+  password: string;
+  email: string;
+  cellTextColorPartnerBoard: string;
+}

@@ -19,6 +19,21 @@ export const loadPuzzle = (file: FileInput) => {
   });
 };
 
+export const loadPuzzlesMetadata = () => {
+  return (dispatch: any) => {
+    const path = 'http://localhost:8888/api/v1/allPuzzlesMetadata';
+    return axios.get(path)
+      .then((puzzlesMetadataResponse: any) => {
+        console.log('loadPuzzlesMetadata response:');
+        console.log(puzzlesMetadataResponse);
+        const puzzlesMetadata: PuzzleMetadata[] = (puzzlesMetadataResponse as any).data;
+        console.log('puzzlesMetadata');
+        console.log(puzzlesMetadata);
+        // add to redux
+      });
+  };
+};
+
 export const cellChange = (user: string, row: number, col: number, typedChar: string, localChange: boolean) => {
   return (dispatch: any) => {
 
@@ -29,7 +44,7 @@ export const cellChange = (user: string, row: number, col: number, typedChar: st
 
     const path = 'http://localhost:8888/cellChange';
     const cellChangeBody: any = {
-      user, 
+      user,
       row,
       col,
       typedChar,
@@ -46,22 +61,8 @@ export const cellChange = (user: string, row: number, col: number, typedChar: st
       console.log(error);
       return;
     });
-  
+
   };
 
 };
 
-export const loadPuzzlesMetadata = () => {
-  return (dispatch: any) => {
-    const path = 'http://localhost:8888/api/v1/allPuzzlesMetadata';
-    return axios.get(path)
-      .then((puzzlesMetadataResponse: any) => {
-        console.log('loadPuzzlesMetadata response:');
-        console.log(puzzlesMetadataResponse);
-        const puzzlesMetadata: PuzzleMetadata[] = (puzzlesMetadataResponse as any).data;
-        console.log('puzzlesMetadata');
-        console.log(puzzlesMetadata);
-        // add to redux
-      });
-  };
-};
