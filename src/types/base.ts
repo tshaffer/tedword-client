@@ -55,3 +55,8 @@ export interface DisplayedPuzzle {
   across: PuzzleElementByNumber;
   down: PuzzleElementByNumber;
 }
+
+export interface PuzzleMetadata {
+  author: string;
+  title: string;
+}

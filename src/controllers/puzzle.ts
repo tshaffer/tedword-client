@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FileInput, PuzCrosswordSpec } from '../types';
+import { FileInput, PuzCrosswordSpec, PuzzleMetadata } from '../types';
 import { setPuzCrosswordSpec } from '../models';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -49,4 +49,19 @@ export const cellChange = (user: string, row: number, col: number, typedChar: st
   
   };
 
-}
+};
+
+export const loadPuzzlesMetadata = () => {
+  return (dispatch: any) => {
+    const path = 'http://localhost:8888/api/v1/allPuzzlesMetadata';
+    return axios.get(path)
+      .then((puzzlesMetadataResponse: any) => {
+        console.log('loadPuzzlesMetadata response:');
+        console.log(puzzlesMetadataResponse);
+        const puzzlesMetadata: PuzzleMetadata[] = (puzzlesMetadataResponse as any).data;
+        console.log('puzzlesMetadata');
+        console.log(puzzlesMetadata);
+        // add to redux
+      });
+  };
+};

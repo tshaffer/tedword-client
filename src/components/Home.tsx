@@ -3,11 +3,12 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { isEmpty } from 'lodash';
+import { isEmpty, isNil } from 'lodash';
 
 import { DisplayedPuzzle, FileInput } from '../types';
-import { cellChange, loadPuzzle } from '../controllers';
+import { cellChange, loadPuzzle, loadPuzzlesMetadata } from '../controllers';
 import { getDisplayedPuzzle } from '../selectors';
+import { PinDropSharp } from '@material-ui/icons';
 
 const Pusher = require('pusher-js');
 
@@ -18,8 +19,11 @@ const Crossword = require('@jaredreisinger/react-crossword').Crossword;
 let crossword: any;
 let puzzleUser: string = 'ted';
 
+let globalProps: HomeProps;
+
 export interface HomeProps {
   displayedPuzzle: DisplayedPuzzle;
+  onLoadPuzzlesMetadata: () => any;
   onLoadPuzzle: (file: FileInput) => any;
   onCellChange: (user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
 }
@@ -46,11 +50,23 @@ const initializePusher = () => {
   });
 };
 
+const initialize = () => {
+  initializePusher();
+  if (!isNil(globalProps)) {
+    globalProps.onLoadPuzzlesMetadata();
+  }
+};
+
 const Home = (props: HomeProps) => {
+
+  // TEDTODO - bogus for sure
+  if (!isNil(props)) {
+    globalProps = props;
+  }
 
   const [user, setUser] = React.useState('ted');
 
-  React.useEffect(initializePusher, []);
+  React.useEffect(initialize, []);
 
   crossword = React.useRef();
 
@@ -177,6 +193,7 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onLoadPuzzlesMetadata: loadPuzzlesMetadata,
     onLoadPuzzle: loadPuzzle,
     onCellChange: cellChange,
   }, dispatch);
