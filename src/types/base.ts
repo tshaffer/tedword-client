@@ -9,6 +9,7 @@ export interface FileInput {
 export interface TedwordState {
   puzzleSpec: PuzzleSpec;
   puzCrosswordSpec: PuzCrosswordSpec;
+  users: UsersMap;
 }
 
 export interface PuzzleSpec {
@@ -67,3 +68,8 @@ export interface User {
   email: string;
   cellTextColorPartnerBoard: string;
 }
+
+export interface UsersMap {
+  [id: string]: User; // userName
+}
+

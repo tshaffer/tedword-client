@@ -55,7 +55,7 @@ const Home = (props: HomeProps) => {
   React.useEffect(() => {
     console.log('useEffect: props');
     console.log(props);
-    initializePusher();
+    // initializePusher();
     props.onLoadPuzzlesMetadata();
     props.onLoadUsers();
   });
