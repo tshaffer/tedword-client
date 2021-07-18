@@ -8,6 +8,8 @@ import { cellChange, loadPuzzle, loadPuzzlesMetadata, loadUsers } from '../contr
 import { getAppState, getDisplayedPuzzle, getUsers } from '../selectors';
 import { setUiState, setUserName } from '../models';
 
+import Login from './Login';
+
 const Pusher = require('pusher-js');
 
 // import Crossword from '@jaredreisinger/react-crossword';
@@ -62,17 +64,8 @@ const Home = (props: HomeProps) => {
     props.onLoadPuzzlesMetadata();
     props.onLoadUsers();
   }, []);
-  // React.useEffect(initialize, []);
 
   crossword = React.useRef();
-
-  const handleUserChange = (event) => {
-    console.log('handleUserChange');
-    console.log(event.target.value);
-    props.onSetUserName(event.target.value);
-    // setUser(event.target.value);
-    // puzzleUser = event.target.value;
-  };
 
   const handleFillAllAnswers = React.useCallback((event) => {
     (crossword as any).current.fillAllAnswers();
@@ -114,82 +107,12 @@ const Home = (props: HomeProps) => {
     console.log(param);
   };
 
-  const handleLogin = () => {
-    console.log('handleLogin invoked');
-    props.onSetUiState(UiState.SelectPuzzleOrBoard);
-  };
-
-  const getSelectedUserName = (userNames: string[]) => {
-    const userNameFromRedux: string = props.appState.userName;
-    return userNameFromRedux === '' ? userNames[0] : userNameFromRedux;
-  };
-
-  const getUserNames = (): string[] => {
-    const userNames: string[] = [];
-    for (const userName in props.users) {
-      if (Object.prototype.hasOwnProperty.call(props.users, userName)) {
-        userNames.push(userName);
-      }
-    }
-    return userNames;
-  };
-
-  const getUserOptions = (userNames: string[]) => {
-    const userOptions = userNames.map((userName: string) => {
-      return getUserOption(userName);
-    });
-    return userOptions;
-  };
-
-  const getUserOption = (userName: string) => {
-    return (
-      <option
-        key={userName}
-        value={userName}
-      >
-        {userName}
-      </option>
-    );
-  };
-
-  const renderSelectUser = () => {
-
-    const userNames: string[] = getUserNames();
-    if (userNames.length === 0) {
-      return null;
-    }
-
-    const userOptions = getUserOptions(userNames);
-
-    const selectedUserName = getSelectedUserName(userNames);
-
-    return (
-      <div>
-
-        <p>Select user</p>
-        <select
-          tabIndex={-1}
-          value={selectedUserName}
-          onChange={handleUserChange}
-        >
-          {userOptions}
-        </select>
-        <p>
-          <button
-            type="button"
-            onClick={handleLogin}
-          >
-            Login
-          </button>
-        </p>
-      </div>
-    );
-
-  };
-
   switch (props.appState.uiState) {
     case UiState.SelectUser: {
-      return renderSelectUser();
+      // return renderSelectUser();
+      return (
+        <Login/>
+      );
     }
     case UiState.SelectPuzzleOrBoard: {
       return (
