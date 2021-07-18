@@ -121,26 +121,6 @@ const Home = (props: HomeProps) => {
     return users;
   };
 
-  // const getUserOptions = () => {
-  //   const userOptions: any[] = [];
-  //   for (const userName in props.users) {
-  //     if (Object.prototype.hasOwnProperty.call(props.users, userName)) {
-  //       const user: User = props.users[userName];
-  //       userOptions.push({
-  //         user,
-  //       });
-  //     }
-  //   }
-  //   return userOptions;
-  // };
-
-  const getUserOptions = (userNames: string[]) => {
-    const userOptions = userNames.map( (userName: string) => {
-      return getOption(userName);
-    });
-    return userOptions;
-  };
-
   const getUserNames = (): string[] => {
     const userNames: string[] = [];
     for (const userName in props.users) {
@@ -151,7 +131,14 @@ const Home = (props: HomeProps) => {
     return userNames;
   };
 
-  const getOption = (userName: string) => {
+  const getUserOptions = (userNames: string[]) => {
+    const userOptions = userNames.map( (userName: string) => {
+      return getUserOption(userName);
+    });
+    return userOptions;
+  };
+
+  const getUserOption = (userName: string) => {
     return (
       <option
         key={userName}
@@ -162,25 +149,7 @@ const Home = (props: HomeProps) => {
     );
   };
 
-  // const getOptions = (): any[] => {
-  //   const options: any[] = [];
-  //   for (const userName in props.users) {
-  //     if (Object.prototype.hasOwnProperty.call(props.users, userName)) {
-  //       options.push(getOption(userName));
-  //     }
-  //   }
-  //   return options;
-  // };
-
   const renderSelectUser = () => {
-
-    // const userOptions = getUserOptions();
-
-    // if (userOptions.length === 0) {
-    //   return null;
-    // }
-
-    // const options: any[] = getOptions();
 
     const userNames: string[] = getUserNames();
     if (userNames.length === 0) {
@@ -189,13 +158,6 @@ const Home = (props: HomeProps) => {
 
     const userOptions = getUserOptions(userNames);
 
-    // const users: User[] = getUsers();
-    // if (users.length === 0) {
-    //   return null;
-    // }
-    // for (const user of users) {
-      
-    // }
     return (
       <select
         tabIndex={-1}
