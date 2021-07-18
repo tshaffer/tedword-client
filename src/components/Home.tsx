@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { isEmpty, isNil } from 'lodash';
 
-import { DisplayedPuzzle, FileInput } from '../types';
+import { AppState, DisplayedPuzzle, FileInput } from '../types';
 import { cellChange, loadPuzzle, loadPuzzlesMetadata, loadUsers } from '../controllers';
 import { getDisplayedPuzzle } from '../selectors';
 
@@ -19,6 +19,7 @@ let crossword: any;
 let puzzleUser: string = 'ted';
 
 export interface HomeProps {
+  appState: AppState,
   displayedPuzzle: DisplayedPuzzle;
   onLoadPuzzlesMetadata: () => any;
   onLoadUsers: () => any;
@@ -180,6 +181,7 @@ const Home = (props: HomeProps) => {
 
 function mapStateToProps(state: any) {
   return {
+    appState: null,
     displayedPuzzle: getDisplayedPuzzle(state),
   };
 }
