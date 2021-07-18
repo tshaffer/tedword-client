@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 
 import { isEmpty, isNil } from 'lodash';
 
-import { AppState, DisplayedPuzzle, FileInput } from '../types';
+import { AppState, DisplayedPuzzle, FileInput, UiState, User, UsersMap } from '../types';
 import { cellChange, loadPuzzle, loadPuzzlesMetadata, loadUsers } from '../controllers';
-import { getDisplayedPuzzle } from '../selectors';
+import { getAppState, getDisplayedPuzzle, getUsers } from '../selectors';
 
 const Pusher = require('pusher-js');
 
@@ -20,6 +20,7 @@ let puzzleUser: string = 'ted';
 
 export interface HomeProps {
   appState: AppState,
+  users: UsersMap;
   displayedPuzzle: DisplayedPuzzle;
   onLoadPuzzlesMetadata: () => any;
   onLoadUsers: () => any;
@@ -109,79 +110,270 @@ const Home = (props: HomeProps) => {
     console.log(param);
   };
 
-  console.log(props.displayedPuzzle);
+  const getUserOptions = () => {
+    const userOptions: any[] = [];
+    for (const userName in props.users) {
+      if (Object.prototype.hasOwnProperty.call(props.users, userName)) {
+        const user: User = props.users[userName];
+        userOptions.push({
+          user,
+        });
+      }
+    }
+    return userOptions;
+  };
 
-  console.log(isEmpty(props.displayedPuzzle.across));
-  console.log(isEmpty(props.displayedPuzzle.down));
-  console.log(Object.keys(props.displayedPuzzle.across).length);
-  console.log(Object.keys(props.displayedPuzzle.down).length);
+  // const renderUserOptions = (options: any[]) => {
+  //   // return options.map((option) =>
+  //   // (
+  //   //   <option
+  //   //     key={option.userName}
+  //   //     value={option.userName}
+  //   //   >
+  //   //     {option.userName}
+  //   //   </option>
+  //   // )
+  //   // );
+  //   const optionsJsx = [];
+  //   if (options.length > 0) {
+  //     optionsJsx.push(
+  //       <option
+  //         key={options[0].userName}
+  //         value={options[0].userName}
+  //       >
+  //         {options[0].userName}
+  //       </option>
+  //     );
+  //   }
+  //   if (options.length > 1) {
+  //     optionsJsx.push(
+  //       <option
+  //         key={options[1].userName}
+  //         value={options[1].userName}
+  //       >
+  //         {options[1].userName}
+  //       </option>
+  //     );
+  //   }
+  //   if (options.length > 2) {
+  //     optionsJsx.push(
+  //       <option
+  //         key={options[2].userName}
+  //         value={options[2].userName}
+  //       >
+  //         {options[2].userName}
+  //       </option>
+  //     );
+  //   }
 
-  if (isEmpty(props.displayedPuzzle.across) && isEmpty(props.displayedPuzzle.down)) {
+  //   return optionsJsx;
+  // };
+
+  const getOption = (userName: string) => {
+    return (
+      <option
+        key={userName}
+        value={userName}
+      >
+        {userName}
+      </option>
+    );
+  };
+
+  const getOptions = (): any[] => {
+    const options: any[] = [];
+    for (const userName in props.users) {
+      if (Object.prototype.hasOwnProperty.call(props.users, userName)) {
+        options.push(getOption(userName));
+      }
+    }
+    return options;
+  };
+
+  // const getOption0 = () => {
+  //   return (
+  //     <option
+  //       key='Ted'
+  //       value='Ted'
+  //     >
+  //       Ted
+  //     </option>
+  //   );
+  // };
+
+  // const getOption1 = () => {
+  //   return (
+  //     <option
+  //       key='Joel'
+  //       value='Joel'
+  //     >
+  //       Joel
+  //     </option>
+  //   );
+  // };
+
+  // const getOption2 = () => {
+  //   return (
+  //     <option
+  //       key='Morgan'
+  //       value='Morgan'
+  //     >
+  //       Morgan
+  //     </option>
+  //   );
+  // };
+
+
+
+  const renderSelectUser = () => {
+
+    const userOptions = getUserOptions();
+
+    if (userOptions.length === 0) {
+      return null;
+    }
+
+    // return (
+    //   <select>
+    //     {renderUserOptions(userOptions)}
+    //   </select>
+    // );
+
+    // return (
+    //   <select
+    //     tabIndex={-1}
+    //     value={userOptions[0].userName}
+    //   >
+    //     <option
+    //       key='Ted'
+    //       value='Ted'
+    //     >
+    //       Ted
+    //     </option>
+    //     <option
+    //       key='Joel'
+    //       value='Joel'
+    //     >
+    //       Joel
+    //     </option>
+    //     <option
+    //       key='Morgan'
+    //       value='Morgan'
+    //     >
+    //       Morgan
+    //     </option>
+    //   </select>
+    // );
+
+    // const option0 = getOption0();
+    // const option1 = getOption1();
+    // const option2 = getOption2();
+
+    // const options = [option0, option1, option2];
+
+    // { option0 }
+    // { option1 }
+    // { option2 }
+
+    // const option00 = getOption('Ted');
+    // const option01 = getOption('Joel');
+    // const option02 = getOption('Morgan');
+    // const options = [option00, option01, option02];
+
+    // const options: any[] = [];
+    // for (const userName in props.users) {
+    //   if (Object.prototype.hasOwnProperty.call(props.users, userName)) {
+    //     options.push(getOption(userName));
+    //     // const element = props.users[userName];
+    //   }
+    // }
+
+    const options: any[] = getOptions();
+
+    return (
+      <select
+        tabIndex={-1}
+        value={userOptions[0].userName}
+      >
+        {options}
+      </select>
+    );
+
+  };
+
+  switch (props.appState.uiState) {
+    case UiState.SelectUser: {
+      return renderSelectUser();
+    }
+  }
+  /*
+    if (isEmpty(props.displayedPuzzle.across) && isEmpty(props.displayedPuzzle.down)) {
+      return (
+        <div>
+          <p>
+            Uncooked Pizza
+          </p>
+          <div>
+            <select onChange={handleUserChange} value={user}>
+              <option value="joel">Joel</option>
+              <option value="morgan">Morgan</option>
+              <option selected value="ted">Ted</option>
+            </select>
+          </div>
+          <input
+            type="file"
+            id="fileInput"
+            onChange={handleSelectPuzzle}
+          >
+          </input>
+        </div>
+      );
+    }
+  
     return (
       <div>
         <p>
-          Uncooked Pizza
+          Cooked Pizza
         </p>
+  
         <div>
-          <select onChange={handleUserChange} value={user}>
-            <option value="joel">Joel</option>
-            <option value="morgan">Morgan</option>
-            <option selected value="ted">Ted</option>
-          </select>
+          <button
+            type="button"
+            onClick={handleFillAllAnswers}
+          >
+            Fill all answers
+          </button>
+          <button
+            type='button'
+            onClick={handleResetPuzzle}
+          >
+            Reset puzzle
+          </button>
+          <button
+            type='button'
+            onClick={handleRemoteSetCell}
+          >
+            Set cell remote
+          </button>
         </div>
-        <input
-          type="file"
-          id="fileInput"
-          onChange={handleSelectPuzzle}
-        >
-        </input>
+  
+        <Crossword
+          data={props.displayedPuzzle}
+          ref={crossword}
+          onCellChange={handleCellChange}
+          onCorrect={handleClueCorrect}
+          onLoadedCorrect={handleLoadedCorrect}
+          onCrosswordCorrect={handleCrosswordCorrect}
+        />
       </div>
     );
-  }
-
-  return (
-    <div>
-      <p>
-        Cooked Pizza
-      </p>
-
-      <div>
-        <button
-          type="button"
-          onClick={handleFillAllAnswers}
-        >
-          Fill all answers
-        </button>
-        <button
-          type='button'
-          onClick={handleResetPuzzle}
-        >
-          Reset puzzle
-        </button>
-        <button
-          type='button'
-          onClick={handleRemoteSetCell}
-        >
-          Set cell remote
-        </button>
-      </div>
-
-      <Crossword
-        data={props.displayedPuzzle}
-        ref={crossword}
-        onCellChange={handleCellChange}
-        onCorrect={handleClueCorrect}
-        onLoadedCorrect={handleLoadedCorrect}
-        onCrosswordCorrect={handleCrosswordCorrect}
-      />
-    </div>
-  );
-
+  */
 };
 
 function mapStateToProps(state: any) {
   return {
-    appState: null,
+    users: getUsers(state),
+    appState: getAppState(state),
     displayedPuzzle: getDisplayedPuzzle(state),
   };
 }
