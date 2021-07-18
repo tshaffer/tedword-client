@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { AppState, DisplayedPuzzle, FileInput, UiState, User, UsersMap } from '../types';
 import { cellChange, loadPuzzle, loadPuzzlesMetadata, loadUsers } from '../controllers';
 import { getAppState, getDisplayedPuzzle, getUsers } from '../selectors';
-import { setUserName } from '../models';
+import { setUiState, setUserName } from '../models';
 
 const Pusher = require('pusher-js');
 
@@ -21,6 +21,7 @@ export interface HomeProps {
   appState: AppState,
   users: UsersMap;
   onSetUserName: (userName: string) => any;
+  onSetUiState: (uiState: UiState) => any;
   displayedPuzzle: DisplayedPuzzle;
   onLoadPuzzlesMetadata: () => any;
   onLoadUsers: () => any;
@@ -113,20 +114,14 @@ const Home = (props: HomeProps) => {
     console.log(param);
   };
 
+  const handleLogin = () => {
+    console.log('handleLogin invoked');
+    props.onSetUiState(UiState.SelectPuzzleOrBoard);
+  };
+
   const getSelectedUserName = (userNames: string[]) => {
     const userNameFromRedux: string = props.appState.userName;
     return userNameFromRedux === '' ? userNames[0] : userNameFromRedux;
-  };
-
-  const getUsers = (): User[] => {
-    const users: any[] = [];
-    for (const userName in props.users) {
-      if (Object.prototype.hasOwnProperty.call(props.users, userName)) {
-        const user: User = props.users[userName];
-        users.push(user);
-      }
-    }
-    return users;
   };
 
   const getUserNames = (): string[] => {
@@ -140,7 +135,7 @@ const Home = (props: HomeProps) => {
   };
 
   const getUserOptions = (userNames: string[]) => {
-    const userOptions = userNames.map( (userName: string) => {
+    const userOptions = userNames.map((userName: string) => {
       return getUserOption(userName);
     });
     return userOptions;
@@ -169,13 +164,25 @@ const Home = (props: HomeProps) => {
     const selectedUserName = getSelectedUserName(userNames);
 
     return (
-      <select
-        tabIndex={-1}
-        value={selectedUserName}
-        onChange={handleUserChange} 
-      >
-        {userOptions}
-      </select>
+      <div>
+
+        <p>Select user</p>
+        <select
+          tabIndex={-1}
+          value={selectedUserName}
+          onChange={handleUserChange}
+        >
+          {userOptions}
+        </select>
+        <p>
+          <button
+            type="button"
+            onClick={handleLogin}
+          >
+            Login
+          </button>
+        </p>
+      </div>
     );
 
   };
@@ -183,6 +190,13 @@ const Home = (props: HomeProps) => {
   switch (props.appState.uiState) {
     case UiState.SelectUser: {
       return renderSelectUser();
+    }
+    case UiState.SelectPuzzleOrBoard: {
+      return (
+        <div>
+          Pick a puzzle to play
+        </div>
+      );
     }
   }
   /*
@@ -260,6 +274,7 @@ function mapStateToProps(state: any) {
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onSetUserName: setUserName,
+    onSetUiState: setUiState,
     onLoadPuzzlesMetadata: loadPuzzlesMetadata,
     onLoadPuzzle: loadPuzzle,
     onLoadUsers: loadUsers,

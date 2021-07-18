@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { User } from '../types';
-import { addUser } from '../models';
+import { addUser, setUserName } from '../models';
 
 export const loadUsers = () => {
   return (dispatch: any) => {
@@ -15,6 +15,9 @@ export const loadUsers = () => {
         // TEDTODO - add all in a single call
         for (const user of users) {
           dispatch(addUser(user.userName, user));
+        }
+        if (users.length > 0) {
+          dispatch(setUserName(users[0].userName));
         }
       });
   };
