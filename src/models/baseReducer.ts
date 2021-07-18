@@ -6,6 +6,7 @@ import { puzCrosswordSpecReducer } from './puzCrosswordSpec';
 import { puzzlesMetadataReducer } from './puzzles';
 import { puzzleSpecReducer } from './puzzleSpec';
 import { usersReducer } from './users';
+import { appStateReducer } from './appState';
 
 // -----------------------------------------------------------------------
 // Reducers
@@ -15,6 +16,7 @@ export const rootReducer = combineReducers<TedwordState>({
   puzCrosswordSpec: puzCrosswordSpecReducer,
   users: usersReducer,
   puzzlesMetadata: puzzlesMetadataReducer,
+  appState: appStateReducer,
 });
 
 // -----------------------------------------------------------------------

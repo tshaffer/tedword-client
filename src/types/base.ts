@@ -7,10 +7,22 @@ export interface FileInput {
 }
 
 export interface TedwordState {
+  appState: AppState;
   puzzleSpec: PuzzleSpec;
   puzCrosswordSpec: PuzCrosswordSpec;
   puzzlesMetadata: PuzzlesMetadataMap,
   users: UsersMap;
+}
+
+export enum UiState {
+  SelectUser = 'SelectUser',
+  SelectPuzzleOrBoard = 'selectPuzzleOrBoard',
+}
+
+export interface AppState {
+  uiState: UiState;
+  userName: string;
+  puzzleId: string;
 }
 
 export interface PuzzleSpec {
