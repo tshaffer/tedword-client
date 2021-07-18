@@ -3,11 +3,10 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { isEmpty, isNil } from 'lodash';
-
 import { AppState, DisplayedPuzzle, FileInput, UiState, User, UsersMap } from '../types';
 import { cellChange, loadPuzzle, loadPuzzlesMetadata, loadUsers } from '../controllers';
 import { getAppState, getDisplayedPuzzle, getUsers } from '../selectors';
+import { setUserName } from '../models';
 
 const Pusher = require('pusher-js');
 
@@ -16,11 +15,12 @@ const Pusher = require('pusher-js');
 const Crossword = require('@jaredreisinger/react-crossword').Crossword;
 
 let crossword: any;
-let puzzleUser: string = 'ted';
+const puzzleUser: string = 'ted';
 
 export interface HomeProps {
   appState: AppState,
   users: UsersMap;
+  onSetUserName: (userName: string) => any;
   displayedPuzzle: DisplayedPuzzle;
   onLoadPuzzlesMetadata: () => any;
   onLoadUsers: () => any;
@@ -66,8 +66,11 @@ const Home = (props: HomeProps) => {
   crossword = React.useRef();
 
   const handleUserChange = (event) => {
-    setUser(event.target.value);
-    puzzleUser = event.target.value;
+    console.log('handleUserChange');
+    console.log(event.target.value);
+    props.onSetUserName(event.target.value);
+    // setUser(event.target.value);
+    // puzzleUser = event.target.value;
   };
 
   const handleFillAllAnswers = React.useCallback((event) => {
@@ -108,6 +111,11 @@ const Home = (props: HomeProps) => {
   const handleCrosswordCorrect = (param) => {
     console.log('handleCrosswordCorrect');
     console.log(param);
+  };
+
+  const getSelectedUserName = (userNames: string[]) => {
+    const userNameFromRedux: string = props.appState.userName;
+    return userNameFromRedux === '' ? userNames[0] : userNameFromRedux;
   };
 
   const getUsers = (): User[] => {
@@ -158,10 +166,13 @@ const Home = (props: HomeProps) => {
 
     const userOptions = getUserOptions(userNames);
 
+    const selectedUserName = getSelectedUserName(userNames);
+
     return (
       <select
         tabIndex={-1}
-        value={userNames[0]}
+        value={selectedUserName}
+        onChange={handleUserChange} 
       >
         {userOptions}
       </select>
@@ -248,6 +259,7 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onSetUserName: setUserName,
     onLoadPuzzlesMetadata: loadPuzzlesMetadata,
     onLoadPuzzle: loadPuzzle,
     onLoadUsers: loadUsers,

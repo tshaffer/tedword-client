@@ -1,12 +1,11 @@
-import { cloneDeep } from 'lodash';
-import { AppState, UiState, User, UsersMap } from '../types';
+import { AppState, UiState } from '../types';
 import { TedwordModelBaseAction } from './baseAction';
 
 // ------------------------------------
 // Constants
 // ------------------------------------
 export const SET_UI_STATE = 'SET_UI_STATE';
-export const SET_USER = 'SET_USER';
+export const SET_USER_NAME = 'SET_USER_NAME';
 export const SET_PUZZLE_ID = 'SET_PUZZLE_ID';
 
 // ------------------------------------
@@ -28,15 +27,15 @@ export const setUiState = (
   };
 };
 
-export interface SetUserPayload {
+export interface SetUserNamePayload {
   userName: string;
 }
 
-export const setUser = (
+export const setUserName = (
   userName: string,
 ): any => {
   return {
-    type: SET_USER,
+    type: SET_USER_NAME,
     payload: {
       userName,
     },
@@ -71,13 +70,13 @@ const initialState: AppState = {
 
 export const appStateReducer = (
   state: AppState = initialState,
-  action: TedwordModelBaseAction<SetUiStatePayload & SetUserPayload & SetPuzzleIdPayload>
+  action: TedwordModelBaseAction<SetUiStatePayload & SetUserNamePayload & SetPuzzleIdPayload>
 ): AppState => {
   switch (action.type) {
     case SET_UI_STATE: {
       return { ...state, uiState: action.payload.uiState };
     }
-    case SET_USER: {
+    case SET_USER_NAME: {
       return { ...state, userName: action.payload.userName };
     }
     case SET_PUZZLE_ID: {
