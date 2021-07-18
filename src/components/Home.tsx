@@ -110,64 +110,46 @@ const Home = (props: HomeProps) => {
     console.log(param);
   };
 
-  const getUserOptions = () => {
-    const userOptions: any[] = [];
+  const getUsers = (): User[] => {
+    const users: any[] = [];
     for (const userName in props.users) {
       if (Object.prototype.hasOwnProperty.call(props.users, userName)) {
         const user: User = props.users[userName];
-        userOptions.push({
-          user,
-        });
+        users.push(user);
       }
     }
+    return users;
+  };
+
+  // const getUserOptions = () => {
+  //   const userOptions: any[] = [];
+  //   for (const userName in props.users) {
+  //     if (Object.prototype.hasOwnProperty.call(props.users, userName)) {
+  //       const user: User = props.users[userName];
+  //       userOptions.push({
+  //         user,
+  //       });
+  //     }
+  //   }
+  //   return userOptions;
+  // };
+
+  const getUserOptions = (userNames: string[]) => {
+    const userOptions = userNames.map( (userName: string) => {
+      return getOption(userName);
+    });
     return userOptions;
   };
 
-  // const renderUserOptions = (options: any[]) => {
-  //   // return options.map((option) =>
-  //   // (
-  //   //   <option
-  //   //     key={option.userName}
-  //   //     value={option.userName}
-  //   //   >
-  //   //     {option.userName}
-  //   //   </option>
-  //   // )
-  //   // );
-  //   const optionsJsx = [];
-  //   if (options.length > 0) {
-  //     optionsJsx.push(
-  //       <option
-  //         key={options[0].userName}
-  //         value={options[0].userName}
-  //       >
-  //         {options[0].userName}
-  //       </option>
-  //     );
-  //   }
-  //   if (options.length > 1) {
-  //     optionsJsx.push(
-  //       <option
-  //         key={options[1].userName}
-  //         value={options[1].userName}
-  //       >
-  //         {options[1].userName}
-  //       </option>
-  //     );
-  //   }
-  //   if (options.length > 2) {
-  //     optionsJsx.push(
-  //       <option
-  //         key={options[2].userName}
-  //         value={options[2].userName}
-  //       >
-  //         {options[2].userName}
-  //       </option>
-  //     );
-  //   }
-
-  //   return optionsJsx;
-  // };
+  const getUserNames = (): string[] => {
+    const userNames: string[] = [];
+    for (const userName in props.users) {
+      if (Object.prototype.hasOwnProperty.call(props.users, userName)) {
+        userNames.push(userName);
+      }
+    }
+    return userNames;
+  };
 
   const getOption = (userName: string) => {
     return (
@@ -180,122 +162,46 @@ const Home = (props: HomeProps) => {
     );
   };
 
-  const getOptions = (): any[] => {
-    const options: any[] = [];
-    for (const userName in props.users) {
-      if (Object.prototype.hasOwnProperty.call(props.users, userName)) {
-        options.push(getOption(userName));
-      }
-    }
-    return options;
-  };
-
-  // const getOption0 = () => {
-  //   return (
-  //     <option
-  //       key='Ted'
-  //       value='Ted'
-  //     >
-  //       Ted
-  //     </option>
-  //   );
+  // const getOptions = (): any[] => {
+  //   const options: any[] = [];
+  //   for (const userName in props.users) {
+  //     if (Object.prototype.hasOwnProperty.call(props.users, userName)) {
+  //       options.push(getOption(userName));
+  //     }
+  //   }
+  //   return options;
   // };
-
-  // const getOption1 = () => {
-  //   return (
-  //     <option
-  //       key='Joel'
-  //       value='Joel'
-  //     >
-  //       Joel
-  //     </option>
-  //   );
-  // };
-
-  // const getOption2 = () => {
-  //   return (
-  //     <option
-  //       key='Morgan'
-  //       value='Morgan'
-  //     >
-  //       Morgan
-  //     </option>
-  //   );
-  // };
-
-
 
   const renderSelectUser = () => {
 
-    const userOptions = getUserOptions();
+    // const userOptions = getUserOptions();
 
-    if (userOptions.length === 0) {
+    // if (userOptions.length === 0) {
+    //   return null;
+    // }
+
+    // const options: any[] = getOptions();
+
+    const userNames: string[] = getUserNames();
+    if (userNames.length === 0) {
       return null;
     }
 
-    // return (
-    //   <select>
-    //     {renderUserOptions(userOptions)}
-    //   </select>
-    // );
+    const userOptions = getUserOptions(userNames);
 
-    // return (
-    //   <select
-    //     tabIndex={-1}
-    //     value={userOptions[0].userName}
-    //   >
-    //     <option
-    //       key='Ted'
-    //       value='Ted'
-    //     >
-    //       Ted
-    //     </option>
-    //     <option
-    //       key='Joel'
-    //       value='Joel'
-    //     >
-    //       Joel
-    //     </option>
-    //     <option
-    //       key='Morgan'
-    //       value='Morgan'
-    //     >
-    //       Morgan
-    //     </option>
-    //   </select>
-    // );
-
-    // const option0 = getOption0();
-    // const option1 = getOption1();
-    // const option2 = getOption2();
-
-    // const options = [option0, option1, option2];
-
-    // { option0 }
-    // { option1 }
-    // { option2 }
-
-    // const option00 = getOption('Ted');
-    // const option01 = getOption('Joel');
-    // const option02 = getOption('Morgan');
-    // const options = [option00, option01, option02];
-
-    // const options: any[] = [];
-    // for (const userName in props.users) {
-    //   if (Object.prototype.hasOwnProperty.call(props.users, userName)) {
-    //     options.push(getOption(userName));
-    //     // const element = props.users[userName];
-    //   }
+    // const users: User[] = getUsers();
+    // if (users.length === 0) {
+    //   return null;
     // }
-
-    const options: any[] = getOptions();
-
+    // for (const user of users) {
+      
+    // }
     return (
       <select
         tabIndex={-1}
-        value={userOptions[0].userName}
+        value={userNames[0]}
       >
-        {options}
+        {userOptions}
       </select>
     );
 
