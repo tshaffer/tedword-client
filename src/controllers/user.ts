@@ -12,7 +12,6 @@ export const loadUsers = () => {
         const users: User[] = (usersResponse as any).data;
         console.log('users');
         console.log(users);
-        // add to redux
         // TEDTODO - add all in a single call
         for (const user of users) {
           dispatch(addUser(user.userName, user));

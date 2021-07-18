@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { FileInput, PuzCrosswordSpec, PuzzleMetadata } from '../types';
-import { setPuzCrosswordSpec } from '../models';
+import { addPuzzleMetadata, setPuzCrosswordSpec } from '../models';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const PuzCrossword = require('@confuzzle/puz-crossword').PuzCrossword;
@@ -29,7 +29,10 @@ export const loadPuzzlesMetadata = () => {
         const puzzlesMetadata: PuzzleMetadata[] = (puzzlesMetadataResponse as any).data;
         console.log('puzzlesMetadata');
         console.log(puzzlesMetadata);
-        // add to redux
+        // TEDTODO - add all in a single call
+        for (const puzzleMetadata of puzzlesMetadata) {
+          dispatch(addPuzzleMetadata(puzzleMetadata.id, puzzleMetadata));
+        }
       });
   };
 };

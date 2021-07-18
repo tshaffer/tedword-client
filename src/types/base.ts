@@ -9,6 +9,7 @@ export interface FileInput {
 export interface TedwordState {
   puzzleSpec: PuzzleSpec;
   puzCrosswordSpec: PuzCrosswordSpec;
+  puzzlesMetadata: PuzzlesMetadataMap,
   users: UsersMap;
 }
 
@@ -58,8 +59,13 @@ export interface DisplayedPuzzle {
 }
 
 export interface PuzzleMetadata {
+  id: string;
   author: string;
   title: string;
+}
+
+export interface PuzzlesMetadataMap {
+  [id: string]: PuzzleMetadata; // id
 }
 
 export interface User {
