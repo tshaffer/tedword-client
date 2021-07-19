@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { FileInput, PuzCrosswordSpec, PuzzleMetadata } from '../types';
-import { addPuzzleMetadata, setPuzCrosswordSpec } from '../models';
+import { addPuzzleMetadata, setPuzCrosswordSpec, setPuzzleId } from '../models';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const PuzCrossword = require('@confuzzle/puz-crossword').PuzCrossword;
@@ -33,6 +33,10 @@ export const loadPuzzlesMetadata = () => {
         for (const puzzleMetadata of puzzlesMetadata) {
           dispatch(addPuzzleMetadata(puzzleMetadata.id, puzzleMetadata));
         }
+        if (puzzlesMetadata.length > 0) {
+          dispatch(setPuzzleId(puzzlesMetadata[0].id));
+        }
+
       });
   };
 };

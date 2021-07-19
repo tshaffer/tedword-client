@@ -9,6 +9,7 @@ import { getAppState, getDisplayedPuzzle, getUsers } from '../selectors';
 import { setUiState, setUserName } from '../models';
 
 import Login from './Login';
+import GameHome from './GameHome';
 
 const Pusher = require('pusher-js');
 
@@ -109,16 +110,13 @@ const Home = (props: HomeProps) => {
 
   switch (props.appState.uiState) {
     case UiState.SelectUser: {
-      // return renderSelectUser();
       return (
         <Login/>
       );
     }
     case UiState.SelectPuzzleOrBoard: {
       return (
-        <div>
-          Pick a puzzle to play
-        </div>
+        <GameHome/>
       );
     }
   }
