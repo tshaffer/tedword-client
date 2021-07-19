@@ -1,11 +1,12 @@
 import { cloneDeep } from 'lodash';
-import { PuzzleMetadata, PuzzlesMetadataMap, User, UsersMap } from '../types';
+import { PuzzleMetadata, PuzzlesMetadataMap, PuzzleEntity, PuzzlesState } from '../types';
 import { TedwordModelBaseAction } from './baseAction';
 
 // ------------------------------------
 // Constants
 // ------------------------------------
 export const ADD_PUZZLE_METADATA = 'ADD_PUZZLE_METADATA';
+export const ADD_PUZZLE = 'ADD_PUZZLE';
 
 // ------------------------------------
 // Actions
@@ -29,20 +30,47 @@ export const addPuzzleMetadata = (
   };
 };
 
+export interface AddPuzzlePayload {
+  id: string;
+  puzzle: PuzzleEntity;
+}
+
+export const addPuzzle = (
+  id: string,
+  puzzle: PuzzleEntity
+): any => {
+  return {
+    type: ADD_PUZZLE,
+    payload: {
+      id,
+      puzzle,
+    }
+  };
+};
+
 // ------------------------------------
 // Reducer
 // ------------------------------------
 
-const initialState: PuzzlesMetadataMap = {};
+const initialState: PuzzlesState = 
+{
+  puzzlesMetadata: {},
+  puzzles: {},
+};
 
-export const puzzlesMetadataReducer = (
-  state: PuzzlesMetadataMap = initialState,
-  action: TedwordModelBaseAction<AddPuzzleMetadataPayload>
-): PuzzlesMetadataMap => {
+export const puzzlesStateReducer = (
+  state: PuzzlesState = initialState,
+  action: TedwordModelBaseAction<AddPuzzleMetadataPayload & AddPuzzlePayload>
+): PuzzlesState => {
   switch (action.type) {
     case ADD_PUZZLE_METADATA: {
-      const newState = cloneDeep(state);
-      newState[action.payload.id] = action.payload.puzzleMetadata;
+      const newState = cloneDeep(state) as PuzzlesState;
+      newState.puzzlesMetadata[action.payload.id] = action.payload.puzzleMetadata;
+      return newState;
+    }
+    case ADD_PUZZLE: {
+      const newState = cloneDeep(state) as PuzzlesState;
+      newState.puzzles[action.payload.id] = action.payload.puzzle;
       return newState;
     }
     default:

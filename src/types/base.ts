@@ -8,15 +8,21 @@ export interface FileInput {
 
 export interface TedwordState {
   appState: AppState;
-  puzzleSpec: PuzzleSpec;
+  // puzzleSpec: PuzzleSpec;
   puzCrosswordSpec: PuzCrosswordSpec;
-  puzzlesMetadata: PuzzlesMetadataMap,
+  puzzlesState: PuzzlesState,
   users: UsersMap;
+}
+
+export interface PuzzlesState {
+  puzzlesMetadata: PuzzlesMetadataMap,
+  puzzles: PuzzlesMap;
 }
 
 export enum UiState {
   SelectUser = 'SelectUser',
-  SelectPuzzleOrBoard = 'selectPuzzleOrBoard',
+  SelectPuzzleOrBoard = 'SelectPuzzleOrBoard',
+  BoardPlay = 'BoardPlay',
 }
 
 export interface AppState {
@@ -80,6 +86,10 @@ export interface PuzzlesMetadataMap {
   [id: string]: PuzzleMetadata; // id
 }
 
+export interface PuzzlesMap {
+  [id: string]: PuzzleEntity; // id
+}
+
 export interface User {
   userName: string;
   password: string;
@@ -91,3 +101,20 @@ export interface UsersMap {
   [id: string]: User; // userName
 }
 
+export interface PuzzleSpec {
+  title: string;
+  author: string;
+  copyright: string;
+  note: string;
+  width: number;
+  height: number;
+  clues: string[];
+  solution: string;
+  state: string;
+  hasState: boolean;
+  parsedClues: ParsedClue[];
+}
+
+export interface PuzzleEntity extends PuzzleSpec {
+  id: string;
+}

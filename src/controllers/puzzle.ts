@@ -1,11 +1,33 @@
 import axios from 'axios';
-import { FileInput, PuzCrosswordSpec, PuzzleMetadata } from '../types';
-import { addPuzzleMetadata, setPuzCrosswordSpec, setPuzzleId } from '../models';
+import { FileInput, PuzCrosswordSpec, PuzzleEntity, PuzzleMetadata } from '../types';
+import { addPuzzle, addPuzzleMetadata, setPuzCrosswordSpec, setPuzzleId } from '../models';
+import { ContactSupportOutlined } from '@material-ui/icons';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const PuzCrossword = require('@confuzzle/puz-crossword').PuzCrossword;
 
-export const loadPuzzle = (file: FileInput) => {
+export const loadPuzzle = (id: string) => {
+  return ((dispatch: any, getState: any): any => {
+    const path = 'http://localhost:8888/api/v1/puzzle?id=' + id;
+    return axios.get(path)
+      .then((puzzleResponse: any) => {
+        console.log('loadPuzzle response:');
+        console.log(puzzleResponse);
+        const puzzleEntity: PuzzleEntity = puzzleResponse.data as PuzzleEntity;
+        console.log(puzzleEntity);
+        dispatch(addPuzzle(id, puzzleEntity));
+        // // TEDTODO - add all in a single call
+        // for (const puzzleMetadata of puzzlesMetadata) {
+        //   dispatch(addPuzzleMetadata(puzzleMetadata.id, puzzleMetadata));
+        // }
+        // if (puzzlesMetadata.length > 0) {
+        //   dispatch(setPuzzleId(puzzlesMetadata[0].id));
+        // }
+      });
+  });
+};
+
+export const oldLoadPuzzle = (file: FileInput) => {
   return ((dispatch: any, getState: any): any => {
     const reader = new FileReader();
     reader.onload = function fileReadCompleted() {
@@ -36,7 +58,6 @@ export const loadPuzzlesMetadata = () => {
         if (puzzlesMetadata.length > 0) {
           dispatch(setPuzzleId(puzzlesMetadata[0].id));
         }
-
       });
   };
 };

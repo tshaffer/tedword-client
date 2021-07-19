@@ -4,18 +4,15 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { AppState, DisplayedPuzzle, FileInput, UiState, User, UsersMap } from '../types';
-import { cellChange, loadPuzzle, loadPuzzlesMetadata, loadUsers } from '../controllers';
+import { cellChange, oldLoadPuzzle, loadPuzzlesMetadata, loadUsers } from '../controllers';
 import { getAppState, getDisplayedPuzzle, getUsers } from '../selectors';
 import { setUiState, setUserName } from '../models';
 
 import Login from './Login';
 import GameHome from './GameHome';
+import BoardPlay from './BoardPlay';
 
 const Pusher = require('pusher-js');
-
-// import Crossword from '@jaredreisinger/react-crossword';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const Crossword = require('@jaredreisinger/react-crossword').Crossword;
 
 let crossword: any;
 const puzzleUser: string = 'ted';
@@ -68,18 +65,6 @@ const Home = (props: HomeProps) => {
 
   crossword = React.useRef();
 
-  const handleFillAllAnswers = React.useCallback((event) => {
-    (crossword as any).current.fillAllAnswers();
-  }, []);
-
-  const handleResetPuzzle = React.useCallback((event) => {
-    (crossword as any).current.reset();
-  }, []);
-
-  const handleRemoteSetCell = React.useCallback((event) => {
-    (crossword as any).current.remoteSetCell(0, 1, 'X');
-  }, []);
-
   const handleSelectPuzzle = (fileInputEvent: any) => {
     console.log('handleSelectPuzzle');
     const files: FileInput[] = fileInputEvent.target.files;
@@ -119,30 +104,13 @@ const Home = (props: HomeProps) => {
         <GameHome/>
       );
     }
-  }
-  /*
-    if (isEmpty(props.displayedPuzzle.across) && isEmpty(props.displayedPuzzle.down)) {
+    case UiState.BoardPlay: {
       return (
-        <div>
-          <p>
-            Uncooked Pizza
-          </p>
-          <div>
-            <select onChange={handleUserChange} value={user}>
-              <option value="joel">Joel</option>
-              <option value="morgan">Morgan</option>
-              <option selected value="ted">Ted</option>
-            </select>
-          </div>
-          <input
-            type="file"
-            id="fileInput"
-            onChange={handleSelectPuzzle}
-          >
-          </input>
-        </div>
+        <BoardPlay/>
       );
     }
+  }
+  /*
   
     return (
       <div>
@@ -197,7 +165,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetUserName: setUserName,
     onSetUiState: setUiState,
     onLoadPuzzlesMetadata: loadPuzzlesMetadata,
-    onLoadPuzzle: loadPuzzle,
+    onLoadPuzzle: oldLoadPuzzle,
     onLoadUsers: loadUsers,
     onCellChange: cellChange,
   }, dispatch);

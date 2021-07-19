@@ -61,7 +61,7 @@ const GameHome = (props: GameHomeProps) => {
 
   const handleSubmit = () => {
     console.log('handleSubmit invoked');
-    props.onSetUiState(UiState.SelectPuzzleOrBoard);
+    props.onSetUiState(UiState.BoardPlay);
   };
 
   const getSelectedPuzzleTitle = (): string => {
