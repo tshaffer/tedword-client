@@ -1,14 +1,17 @@
 import axios from 'axios';
 import { FileInput, PuzCrosswordSpec, PuzzleEntity, PuzzleMetadata } from '../types';
 import { addPuzzle, addPuzzleMetadata, setPuzCrosswordSpec, setPuzzleId } from '../models';
-import { ContactSupportOutlined } from '@material-ui/icons';
+
+import { apiUrlFragment, serverUrl } from '../index';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const PuzCrossword = require('@confuzzle/puz-crossword').PuzCrossword;
 
 export const loadPuzzle = (id: string) => {
   return ((dispatch: any, getState: any): any => {
-    const path = 'http://localhost:8888/api/v1/puzzle?id=' + id;
+    // const path = 'http://localhost:8888/api/v1/puzzle?id=' + id;
+    const path = serverUrl + apiUrlFragment + 'puzzle?id=' + id;
+
     return axios.get(path)
       .then((puzzleResponse: any) => {
         console.log('loadPuzzle response:');
@@ -43,7 +46,9 @@ export const oldLoadPuzzle = (file: FileInput) => {
 
 export const loadPuzzlesMetadata = () => {
   return (dispatch: any) => {
-    const path = 'http://localhost:8888/api/v1/allPuzzlesMetadata';
+    // const path = 'http://localhost:8888/api/v1/allPuzzlesMetadata';
+    const path = serverUrl + apiUrlFragment + 'allPuzzlesMetadata';
+
     return axios.get(path)
       .then((puzzlesMetadataResponse: any) => {
         console.log('loadPuzzlesMetadata response:');
@@ -70,7 +75,9 @@ export const cellChange = (user: string, row: number, col: number, typedChar: st
       return;
     }
 
-    const path = 'http://localhost:8888/cellChange';
+    // const path = 'http://localhost:8888/cellChange';
+    const path = serverUrl + apiUrlFragment + 'cellChange';
+
     const cellChangeBody: any = {
       user,
       row,

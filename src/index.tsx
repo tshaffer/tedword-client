@@ -8,8 +8,6 @@ import thunkMiddleware from 'redux-thunk';
 import Home from './components/Home';
 import { rootReducer } from './models';
 
-// export const serverUrl = 'http://localhost:8888';
-
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 export const store = createStore(
   rootReducer, /* preloadedState, */ composeEnhancers(
