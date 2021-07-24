@@ -31,8 +31,6 @@ const BoardPlay = (props: BoardPlayProps) => {
 
 
   boardPlayCrossword = React.useRef();
-  console.log('BoardPlay: boardPlayCrossword');
-  console.log(boardPlayCrossword);
 
   const getPuzzleUser = (): string => {
     return props.appState.userName;

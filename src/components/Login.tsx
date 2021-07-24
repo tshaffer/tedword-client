@@ -49,14 +49,11 @@ const Login = (props: LoginProps) => {
   };
 
   const handleUserChange = (event) => {
-    console.log('handleUserChange');
-    console.log(event.target.value);
     props.onSetUserName(event.target.value);
   };
 
 
   const handleLogin = () => {
-    console.log('handleLogin invoked');
     props.onSetUiState(UiState.SelectPuzzleOrBoard);
   };
 

@@ -60,7 +60,6 @@ const GameHome = (props: GameHomeProps) => {
   };
 
   const handleSubmit = () => {
-    console.log('handleSubmit invoked');
     props.onSetUiState(UiState.BoardPlay);
   };
 

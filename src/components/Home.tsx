@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 
 import { isNil } from 'lodash';
 
-import { AppState, DisplayedPuzzle, FileInput, UiState, User, UsersMap } from '../types';
-import { cellChange, oldLoadPuzzle, loadPuzzlesMetadata, loadUsers } from '../controllers';
+import { AppState, DisplayedPuzzle, UiState, UsersMap } from '../types';
+import { cellChange, loadPuzzlesMetadata, loadUsers } from '../controllers';
 import { getAppState, getDisplayedPuzzle, getUsers } from '../selectors';
 import { setUiState, setUserName } from '../models';
 
@@ -16,7 +16,6 @@ import BoardPlay from './BoardPlay';
 
 const Pusher = require('pusher-js');
 
-// let homeCrossword: any;
 import { boardPlayCrossword } from './BoardPlay';
 
 let globalProps: HomeProps = null;
@@ -29,7 +28,6 @@ export interface HomeProps {
   displayedPuzzle: DisplayedPuzzle;
   onLoadPuzzlesMetadata: () => any;
   onLoadUsers: () => any;
-  onLoadPuzzle: (file: FileInput) => any;
   onCellChange: (user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
 }
 
@@ -63,16 +61,10 @@ const Home = (props: HomeProps) => {
   globalProps = props;
 
   React.useEffect(() => {
-    console.log('useEffect: props');
-    console.log(props);
     initializePusher();
     props.onLoadPuzzlesMetadata();
     props.onLoadUsers();
   }, []);
-
-  // homeCrossword = React.useRef();
-  // console.log('Home: homeCrossword');
-  // console.log(homeCrossword);
 
   switch (props.appState.uiState) {
     case UiState.SelectUser: {
@@ -106,7 +98,6 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetUserName: setUserName,
     onSetUiState: setUiState,
     onLoadPuzzlesMetadata: loadPuzzlesMetadata,
-    onLoadPuzzle: oldLoadPuzzle,
     onLoadUsers: loadUsers,
     onCellChange: cellChange,
   }, dispatch);

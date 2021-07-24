@@ -14,10 +14,7 @@ export const loadPuzzle = (id: string) => {
 
     return axios.get(path)
       .then((puzzleResponse: any) => {
-        console.log('loadPuzzle response:');
-        console.log(puzzleResponse);
         const puzzleEntity: PuzzleEntity = puzzleResponse.data as PuzzleEntity;
-        console.log(puzzleEntity);
         dispatch(addPuzzle(id, puzzleEntity));
         // // TEDTODO - add all in a single call
         // for (const puzzleMetadata of puzzlesMetadata) {
@@ -27,20 +24,6 @@ export const loadPuzzle = (id: string) => {
         //   dispatch(setPuzzleId(puzzlesMetadata[0].id));
         // }
       });
-  });
-};
-
-export const oldLoadPuzzle = (file: FileInput) => {
-  return ((dispatch: any, getState: any): any => {
-    const reader = new FileReader();
-    reader.onload = function fileReadCompleted() {
-      const pc: PuzCrosswordSpec = PuzCrossword.from(reader.result);
-      console.log(pc);
-
-      dispatch(setPuzCrosswordSpec(pc));
-    };
-
-    reader.readAsArrayBuffer(file as any as Blob);
   });
 };
 
@@ -75,7 +58,7 @@ export const cellChange = (user: string, row: number, col: number, typedChar: st
       return;
     }
 
-    // const path = 'http://localhost:8888/cellChange';
+    // const path = 'http://localhost:8888/api/v1/cellChange';
     const path = serverUrl + apiUrlFragment + 'cellChange';
 
     const cellChangeBody: any = {
