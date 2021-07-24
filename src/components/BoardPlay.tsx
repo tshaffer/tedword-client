@@ -22,7 +22,6 @@ export interface BoardPlayProps {
 const Crossword = require('@jaredreisinger/react-crossword').Crossword;
 
 let crossword: any;
-const puzzleUser: string = 'ted';
 
 const BoardPlay = (props: BoardPlayProps) => {
 
@@ -33,14 +32,14 @@ const BoardPlay = (props: BoardPlayProps) => {
 
   crossword = React.useRef();
 
-  const getPuzzleId = () => {
-    return props.appState.puzzleId;
+  const getPuzzleUser = (): string => {
+    return props.appState.userName;
   };
 
   const handleCellChange = (row: number, col: number, typedChar: string, localChange: boolean) => {
     console.log('handleCellChange');
     console.log(row, col, typedChar);
-    props.onCellChange(puzzleUser, row, col, typedChar, localChange);
+    props.onCellChange(getPuzzleUser(), row, col, typedChar, localChange);
   };
 
 

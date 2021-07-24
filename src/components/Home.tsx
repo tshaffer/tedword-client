@@ -3,6 +3,8 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import { isNil } from 'lodash';
+
 import { AppState, DisplayedPuzzle, FileInput, UiState, User, UsersMap } from '../types';
 import { cellChange, oldLoadPuzzle, loadPuzzlesMetadata, loadUsers } from '../controllers';
 import { getAppState, getDisplayedPuzzle, getUsers } from '../selectors';
@@ -15,7 +17,8 @@ import BoardPlay from './BoardPlay';
 const Pusher = require('pusher-js');
 
 let crossword: any;
-const puzzleUser: string = 'ted';
+
+let globalProps = null;
 
 export interface HomeProps {
   appState: AppState,
@@ -37,14 +40,17 @@ const initializePusher = () => {
 
   const channel = pusher.subscribe('puzzle');
   channel.bind('cell-change', data => {
+    if (isNil(globalProps)) {
+      console.log('globalProps null - return');
+    }
     console.log('websocket cell-change');
     console.log(data);
-    console.log('current user is ', puzzleUser);
-    console.log('external event: ', puzzleUser !== data.user);
+    console.log('current user is ', globalProps.puzzleUser);
+    console.log('external event: ', globalProps.puzzleUser !== data.user);
 
     const { user, row, col, typedChar } = data;
 
-    const externalEvent: boolean = puzzleUser !== user;
+    const externalEvent: boolean = globalProps.puzzleUser !== user;
     if (externalEvent) {
       (crossword as any).current.remoteSetCell(row, col, typedChar);
     }
@@ -53,7 +59,7 @@ const initializePusher = () => {
 
 const Home = (props: HomeProps) => {
 
-  const [user, setUser] = React.useState('ted');
+  globalProps = props;
 
   React.useEffect(() => {
     console.log('useEffect: props');
@@ -64,34 +70,6 @@ const Home = (props: HomeProps) => {
   }, []);
 
   crossword = React.useRef();
-
-  const handleSelectPuzzle = (fileInputEvent: any) => {
-    console.log('handleSelectPuzzle');
-    const files: FileInput[] = fileInputEvent.target.files;
-    console.log(files);
-    props.onLoadPuzzle(files[0]);
-  };
-
-  const handleCellChange = (row: number, col: number, typedChar: string, localChange: boolean) => {
-    console.log('handleCellChange');
-    console.log(row, col, typedChar);
-    props.onCellChange(puzzleUser, row, col, typedChar, localChange);
-  };
-
-  const handleClueCorrect = (direction: string, number: string, answer: string) => {
-    console.log('handleClueCorrect');
-    console.log(direction, number, answer);
-  };
-
-  const handleLoadedCorrect = (param) => {
-    console.log('handleLoadedCorrect');
-    console.log(param);
-  };
-
-  const handleCrosswordCorrect = (param) => {
-    console.log('handleCrosswordCorrect');
-    console.log(param);
-  };
 
   switch (props.appState.uiState) {
     case UiState.SelectUser: {
@@ -110,46 +88,6 @@ const Home = (props: HomeProps) => {
       );
     }
   }
-  /*
-  
-    return (
-      <div>
-        <p>
-          Cooked Pizza
-        </p>
-  
-        <div>
-          <button
-            type="button"
-            onClick={handleFillAllAnswers}
-          >
-            Fill all answers
-          </button>
-          <button
-            type='button'
-            onClick={handleResetPuzzle}
-          >
-            Reset puzzle
-          </button>
-          <button
-            type='button'
-            onClick={handleRemoteSetCell}
-          >
-            Set cell remote
-          </button>
-        </div>
-  
-        <Crossword
-          data={props.displayedPuzzle}
-          ref={crossword}
-          onCellChange={handleCellChange}
-          onCorrect={handleClueCorrect}
-          onLoadedCorrect={handleLoadedCorrect}
-          onCrosswordCorrect={handleCrosswordCorrect}
-        />
-      </div>
-    );
-  */
 };
 
 function mapStateToProps(state: any) {
