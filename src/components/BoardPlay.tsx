@@ -17,9 +17,9 @@ export interface BoardPlayProps {
   onCellChange: (user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
 }
 
-// import Crossword from '@jaredreisinger/react-boardPlayCrossword';
+// import Crossword from '@jaredreisinger/react-crossword';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const Crossword = require('@jaredreisinger/react-boardPlayCrossword').Crossword;
+const Crossword = require('@jaredreisinger/react-crossword').Crossword;
 
 export let boardPlayCrossword: any;
 
