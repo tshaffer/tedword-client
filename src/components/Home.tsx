@@ -70,7 +70,9 @@ const Home = (props: HomeProps) => {
   }, []);
 
   crossword = React.useRef();
-
+  console.log('Home: crossword');
+  console.log(crossword);
+  
   switch (props.appState.uiState) {
     case UiState.SelectUser: {
       return (
