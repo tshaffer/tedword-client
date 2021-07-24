@@ -76,7 +76,7 @@ export const cellChange = (user: string, row: number, col: number, typedChar: st
     }
 
     // const path = 'http://localhost:8888/cellChange';
-    const path = serverUrl + '/cellChange';
+    const path = serverUrl + apiUrlFragment + 'cellChange';
 
     const cellChangeBody: any = {
       user,
