@@ -31,35 +31,61 @@ export interface HomeProps {
   onCellChange: (user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
 }
 
-const initializePusher = () => {
-  const pusher = new Pusher('c6addcc9977bdaa7e8a2', {
-    cluster: 'us3',
-    // encrypted: true,
-  });
+// const initializePusher = () => {
+//   const pusher = new Pusher('c6addcc9977bdaa7e8a2', {
+//     cluster: 'us3',
+//     // encrypted: true,
+//   });
 
-  const channel = pusher.subscribe('puzzle');
-  channel.bind('cell-change', data => {
-    if (isNil(globalProps)) {
-      console.log('globalProps null - return');
-    }
-    console.log('websocket cell-change');
-    console.log(data);
-    console.log('current user is ', globalProps.appState.userName);
-    console.log('external event: ', globalProps.appState.userName !== data.user);
+//   const channel = pusher.subscribe('puzzle');
+//   channel.bind('cell-change', data => {
+//     if (isNil(globalProps)) {
+//       console.log('globalProps null - return');
+//     }
+//     console.log('websocket cell-change');
+//     console.log(data);
+//     console.log('current user is ', globalProps.appState.userName);
+//     console.log('external event: ', globalProps.appState.userName !== data.user);
 
-    const { user, row, col, typedChar } = data;
+//     const { user, row, col, typedChar } = data;
 
-    const externalEvent: boolean = globalProps.appState.userName !== user;
-    if (externalEvent) {
-      (boardPlayCrossword as any).current.remoteSetCell(row, col, typedChar);
-    }
-  });
-};
+//     const externalEvent: boolean = globalProps.appState.userName !== user;
+//     if (externalEvent) {
+//       (boardPlayCrossword as any).current.remoteSetCell(row, col, typedChar);
+//     }
+//   });
+// };
 
 const Home = (props: HomeProps) => {
 
   globalProps = props;
 
+  const initializePusher = () => {
+    
+    const pusher = new Pusher('c6addcc9977bdaa7e8a2', {
+      cluster: 'us3',
+      // encrypted: true,
+    });
+  
+    const channel = pusher.subscribe('puzzle');
+    channel.bind('cell-change', data => {
+      if (isNil(globalProps)) {
+        console.log('globalProps null - return');
+      }
+      console.log('websocket cell-change');
+      console.log(data);
+      console.log('current user is ', globalProps.appState.userName);
+      console.log('external event: ', globalProps.appState.userName !== data.user);
+  
+      const { user, row, col, typedChar } = data;
+  
+      const externalEvent: boolean = globalProps.appState.userName !== user;
+      if (externalEvent) {
+        (boardPlayCrossword as any).current.remoteSetCell(row, col, typedChar);
+      }
+    });
+  };
+  
   React.useEffect(() => {
     initializePusher();
     props.onLoadPuzzlesMetadata();
