@@ -18,7 +18,7 @@ const Pusher = require('pusher-js');
 
 let crossword: any;
 
-let globalProps = null;
+let globalProps: HomeProps = null;
 
 export interface HomeProps {
   appState: AppState,
@@ -45,12 +45,12 @@ const initializePusher = () => {
     }
     console.log('websocket cell-change');
     console.log(data);
-    console.log('current user is ', globalProps.puzzleUser);
-    console.log('external event: ', globalProps.puzzleUser !== data.user);
+    console.log('current user is ', globalProps.appState.userName);
+    console.log('external event: ', globalProps.appState.userName !== data.user);
 
     const { user, row, col, typedChar } = data;
 
-    const externalEvent: boolean = globalProps.puzzleUser !== user;
+    const externalEvent: boolean = globalProps.appState.userName !== user;
     if (externalEvent) {
       (crossword as any).current.remoteSetCell(row, col, typedChar);
     }
