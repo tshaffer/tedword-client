@@ -29,7 +29,11 @@ export interface HomeProps {
   onCellChange: (user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
 }
 
+let globalProps;
+
 const Home = (props: HomeProps) => {
+
+  globalProps = props;
 
   const initializePusher = () => {
 
@@ -40,6 +44,10 @@ const Home = (props: HomeProps) => {
   
     const channel = pusher.subscribe('puzzle');
     channel.bind('cell-change', data => {
+
+      console.log(props);
+      console.log(globalProps);
+      
       if (isNil(props)) {
         console.log('globalProps null - return');
       }
