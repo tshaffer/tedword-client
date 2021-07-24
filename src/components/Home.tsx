@@ -16,7 +16,8 @@ import BoardPlay from './BoardPlay';
 
 const Pusher = require('pusher-js');
 
-let crossword: any;
+// let homeCrossword: any;
+import { boardPlayCrossword } from './BoardPlay';
 
 let globalProps: HomeProps = null;
 
@@ -52,7 +53,7 @@ const initializePusher = () => {
 
     const externalEvent: boolean = globalProps.appState.userName !== user;
     if (externalEvent) {
-      (crossword as any).current.remoteSetCell(row, col, typedChar);
+      (boardPlayCrossword as any).current.remoteSetCell(row, col, typedChar);
     }
   });
 };
@@ -69,10 +70,10 @@ const Home = (props: HomeProps) => {
     props.onLoadUsers();
   }, []);
 
-  crossword = React.useRef();
-  console.log('Home: crossword');
-  console.log(crossword);
-  
+  // homeCrossword = React.useRef();
+  // console.log('Home: homeCrossword');
+  // console.log(homeCrossword);
+
   switch (props.appState.uiState) {
     case UiState.SelectUser: {
       return (

@@ -17,11 +17,11 @@ export interface BoardPlayProps {
   onCellChange: (user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
 }
 
-// import Crossword from '@jaredreisinger/react-crossword';
+// import Crossword from '@jaredreisinger/react-boardPlayCrossword';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const Crossword = require('@jaredreisinger/react-crossword').Crossword;
+const Crossword = require('@jaredreisinger/react-boardPlayCrossword').Crossword;
 
-let crossword: any;
+export let boardPlayCrossword: any;
 
 const BoardPlay = (props: BoardPlayProps) => {
 
@@ -30,9 +30,9 @@ const BoardPlay = (props: BoardPlayProps) => {
   }, []);
 
 
-  crossword = React.useRef();
-  console.log('BoardPlay: crossword');
-  console.log(crossword);
+  boardPlayCrossword = React.useRef();
+  console.log('BoardPlay: boardPlayCrossword');
+  console.log(boardPlayCrossword);
 
   const getPuzzleUser = (): string => {
     return props.appState.userName;
@@ -46,15 +46,15 @@ const BoardPlay = (props: BoardPlayProps) => {
 
 
   const handleFillAllAnswers = React.useCallback((event) => {
-    (crossword as any).current.fillAllAnswers();
+    (boardPlayCrossword as any).current.fillAllAnswers();
   }, []);
 
   const handleResetPuzzle = React.useCallback((event) => {
-    (crossword as any).current.reset();
+    (boardPlayCrossword as any).current.reset();
   }, []);
 
   const handleRemoteSetCell = React.useCallback((event) => {
-    (crossword as any).current.remoteSetCell(0, 1, 'X');
+    (boardPlayCrossword as any).current.remoteSetCell(0, 1, 'X');
   }, []);
 
   const handleClueCorrect = (direction: string, number: string, answer: string) => {
@@ -76,7 +76,7 @@ const BoardPlay = (props: BoardPlayProps) => {
   /*
       <Crossword
         data={props.displayedPuzzle}
-        ref={crossword}
+        ref={boardPlayCrossword}
         onCellChange={handleCellChange}
         onCorrect={handleClueCorrect}
         onLoadedCorrect={handleLoadedCorrect}
@@ -110,7 +110,7 @@ const BoardPlay = (props: BoardPlayProps) => {
       </div>
       <Crossword
         data={props.displayedPuzzle}
-        ref={crossword}
+        ref={boardPlayCrossword}
         onCellChange={handleCellChange}
         onCorrect={handleClueCorrect}
         onLoadedCorrect={handleLoadedCorrect}
