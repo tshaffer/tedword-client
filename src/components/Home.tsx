@@ -45,9 +45,10 @@ const Home = (props: HomeProps) => {
     const channel = pusher.subscribe('puzzle');
     channel.bind('cell-change', data => {
 
+      console.log('compare props');
       console.log(props);
       console.log(globalProps);
-      
+
       if (isNil(props)) {
         console.log('globalProps null - return');
       }
