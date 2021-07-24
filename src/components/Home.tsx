@@ -29,11 +29,11 @@ export interface HomeProps {
   onCellChange: (user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
 }
 
-let globalProps;
+let homeProps;
 
 const Home = (props: HomeProps) => {
 
-  globalProps = props;
+  homeProps = props;
 
   const initializePusher = () => {
 
@@ -45,21 +45,19 @@ const Home = (props: HomeProps) => {
     const channel = pusher.subscribe('puzzle');
     channel.bind('cell-change', data => {
 
-      console.log('compare props');
-      console.log(props);
-      console.log(globalProps);
+      console.log(homeProps);
 
-      if (isNil(props)) {
-        console.log('globalProps null - return');
+      if (isNil(homeProps)) {
+        console.log('homeProps null - return');
       }
       console.log('websocket cell-change');
       console.log(data);
-      console.log('current user is ', props.appState.userName);
-      console.log('external event: ', props.appState.userName !== data.user);
+      console.log('current user is ', homeProps.appState.userName);
+      console.log('external event: ', homeProps.appState.userName !== data.user);
   
       const { user, row, col, typedChar } = data;
   
-      const externalEvent: boolean = props.appState.userName !== user;
+      const externalEvent: boolean = homeProps.appState.userName !== user;
       if (externalEvent) {
         (boardPlayCrossword as any).current.remoteSetCell(row, col, typedChar);
       }
