@@ -1,7 +1,7 @@
 // export const serverUrl = 'http://localhost:8888';
 // export const serverUrl = 'https://damp-falls-28733.herokuapp.com';
-// export const serverUrl = 'http://localhost:5000';
-export const serverUrl = 'https://tedword.herokuapp.com';
+export const serverUrl = 'http://localhost:5000';
+// export const serverUrl = 'https://tedword.herokuapp.com';
 export const apiUrlFragment = '/api/v1/';
 
 export interface FileInput {
@@ -35,6 +35,7 @@ export interface AppState {
   uiState: UiState;
   userName: string;
   puzzleId: string;
+  boardId: string;
 }
 
 export interface PuzzleSpec {
@@ -89,11 +90,11 @@ export interface PuzzleMetadata {
 }
 
 export interface PuzzlesMetadataMap {
-  [id: string]: PuzzleMetadata; // id
+  [id: string]: PuzzleMetadata; // puzzle id
 }
 
 export interface PuzzlesMap {
-  [id: string]: PuzzleEntity; // id
+  [id: string]: PuzzleEntity; // puzzle id
 }
 
 export interface User {

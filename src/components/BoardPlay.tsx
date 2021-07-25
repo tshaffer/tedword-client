@@ -14,7 +14,7 @@ export interface BoardPlayProps {
   onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
   onLoadPuzzle: (puzzleId: string) => any;
-  onCellChange: (user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
+  onCellChange: (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
 }
 
 // import Crossword from '@jaredreisinger/react-crossword';
@@ -32,6 +32,10 @@ const BoardPlay = (props: BoardPlayProps) => {
 
   boardPlayCrossword = React.useRef();
 
+  const getBoardId = (): string => {
+    return props.appState.boardId;
+  }
+
   const getPuzzleUser = (): string => {
     return props.appState.userName;
   };
@@ -39,7 +43,7 @@ const BoardPlay = (props: BoardPlayProps) => {
   const handleCellChange = (row: number, col: number, typedChar: string, localChange: boolean) => {
     console.log('handleCellChange');
     console.log(row, col, typedChar);
-    props.onCellChange(getPuzzleUser(), row, col, typedChar, localChange);
+    props.onCellChange(getBoardId(), getPuzzleUser(), row, col, typedChar, localChange);
   };
 
 

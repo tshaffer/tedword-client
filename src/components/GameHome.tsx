@@ -5,10 +5,12 @@ import { connect } from 'react-redux';
 import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata } from '../types';
 import { getAppState, getPuzzlesMetadata } from '../selectors';
 import { setPuzzleId, setUiState } from '../models';
+import { createBoard } from '../controllers';
 
 export interface GameHomeProps {
   appState: AppState,
   puzzlesMetadata: PuzzlesMetadataMap;
+  onCreateBoard: () => any;
   onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
 }
@@ -60,6 +62,7 @@ const GameHome = (props: GameHomeProps) => {
   };
 
   const handleSubmit = () => {
+    props.onCreateBoard();
     props.onSetUiState(UiState.BoardPlay);
   };
 
@@ -123,6 +126,7 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onCreateBoard: createBoard,
     onSetPuzzleId: setPuzzleId,
     onSetUiState: setUiState,
   }, dispatch);

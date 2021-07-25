@@ -50,7 +50,7 @@ export const loadPuzzlesMetadata = () => {
   };
 };
 
-export const cellChange = (user: string, row: number, col: number, typedChar: string, localChange: boolean) => {
+export const cellChange = (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => {
   return (dispatch: any) => {
 
     if (!localChange) {
@@ -62,6 +62,7 @@ export const cellChange = (user: string, row: number, col: number, typedChar: st
     const path = serverUrl + apiUrlFragment + 'cellChange';
 
     const cellChangeBody: any = {
+      boardId,
       user,
       row,
       col,
