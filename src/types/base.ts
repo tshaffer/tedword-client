@@ -14,7 +14,7 @@ export interface FileInput {
 
 export interface TedwordState {
   appState: AppState;
-  // puzzleSpec: PuzzleSpec;
+  boardsState: BoardsState;
   puzCrosswordSpec: PuzCrosswordSpec;
   puzzlesState: PuzzlesState,
   users: UsersMap;
@@ -23,6 +23,10 @@ export interface TedwordState {
 export interface PuzzlesState {
   puzzlesMetadata: PuzzlesMetadataMap,
   puzzles: PuzzlesMap;
+}
+
+export interface BoardsState {
+  boards: BoardsMap;
 }
 
 export enum UiState {
@@ -97,6 +101,10 @@ export interface PuzzlesMap {
   [id: string]: PuzzleEntity; // puzzle id
 }
 
+export interface BoardsMap {
+  [id: string]: BoardEntity; // board id
+}
+
 export interface User {
   userName: string;
   password: string;
@@ -125,3 +133,21 @@ export interface PuzzleSpec {
 export interface PuzzleEntity extends PuzzleSpec {
   id: string;
 }
+
+export interface CellContentsMap {
+  [id: string]: string;
+}
+
+export interface BoardEntity {
+  id: string;
+  puzzleId: string;
+  title: string;
+  users: string[];
+  cellContents: CellContentsMap;
+  startDateTime: Date;
+  lastPlayedDateTime: Date;
+  elapsedTime: number;
+  solved: boolean;
+  difficulty: number;
+}
+

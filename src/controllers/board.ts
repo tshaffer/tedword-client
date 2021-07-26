@@ -1,9 +1,31 @@
 import axios from 'axios';
-import { AppState, PuzzleMetadata, PuzzlesMetadataMap, TedwordState } from '../types';
+import { AppState, BoardEntity, PuzzleMetadata, PuzzlesMetadataMap, TedwordState } from '../types';
 
 import { apiUrlFragment, serverUrl } from '../index';
 import { getPuzzlesMetadata } from '../selectors';
-import { setBoardId } from '../models';
+import { addBoard, setBoardId } from '../models';
+
+export const loadBoards = () => {
+  return (dispatch: any) => {
+    // const path = 'http://localhost:8888/api/v1/boards';
+    const path = serverUrl + apiUrlFragment + 'boards';
+
+    return axios.get(path)
+      .then((boardsResponse: any) => {
+        console.log('loadBoards response:');
+        console.log(boardsResponse);
+        const boardEntities: BoardEntity[] = (boardsResponse as any).data;
+        // // TEDTODO - add all in a single call
+        for (const boardEntity of boardEntities) {
+          dispatch(addBoard(boardEntity.id, boardEntity));
+        }
+        if (boardEntities.length > 0) {
+          dispatch(setBoardId(boardEntities[0].id));
+        }
+      });
+  };
+};
+
 
 export const createBoard = () => {
 

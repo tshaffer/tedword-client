@@ -2,15 +2,17 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata } from '../types';
-import { getAppState, getPuzzlesMetadata } from '../selectors';
-import { setPuzzleId, setUiState } from '../models';
+import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata, BoardEntity, BoardsMap } from '../types';
+import { getAppState, getBoards, getPuzzlesMetadata } from '../selectors';
+import { setBoardId, setPuzzleId, setUiState } from '../models';
 import { createBoard } from '../controllers';
 
 export interface GameHomeProps {
   appState: AppState,
+  boardsMap: BoardsMap;
   puzzlesMetadata: PuzzlesMetadataMap;
   onCreateBoard: () => any;
+  onSetBoardId: (boardId: string) => any;
   onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
 }
@@ -46,6 +48,17 @@ const GameHome = (props: GameHomeProps) => {
     return puzzleOptions;
   };
 
+  const getSelectedPuzzleTitle = (): string => {
+
+    // eslint-disable-next-line no-prototype-builtins
+    if (props.puzzlesMetadata.hasOwnProperty(props.appState.puzzleId)) {
+      const puzzleMetadata: PuzzleMetadata = props.puzzlesMetadata[props.appState.puzzleId];
+      return puzzleMetadata.title;
+    }
+
+    return '';
+  };
+
   const handlePuzzleChange = (event) => {
     console.log('handlePuzzleChange');
     console.log(event.target.value);
@@ -61,20 +74,69 @@ const GameHome = (props: GameHomeProps) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleOpenPuzzle = () => {
     props.onCreateBoard();
     props.onSetUiState(UiState.BoardPlay);
   };
 
-  const getSelectedPuzzleTitle = (): string => {
+  const getBoardTitles = (): string[] => {
+    const boardTitles: string[] = [];
+    for (const boardId in props.boardsMap) {
+      if (Object.prototype.hasOwnProperty.call(props.boardsMap, boardId)) {
+        const boardEntity: BoardEntity = props.boardsMap[boardId];
+        boardTitles.push(boardEntity.title);
+      }
+    }
+    return boardTitles;
+  };
+
+  const getBoardOption = (boardTitle: string) => {
+    return (
+      <option
+        key={boardTitle}
+        value={boardTitle}
+      >
+        {boardTitle}
+      </option>
+    );
+  };
+
+  const getBoardOptions = (boardTitles: string[]) => {
+    const boardOptions = boardTitles.map((boardTitle: string) => {
+      return getBoardOption(boardTitle);
+    });
+    return boardOptions;
+  };
+
+  const handleBoardChange = (event) => {
+    console.log('handleBoardChange');
+    console.log(event.target.value);
+
+    const boardTitle: string = event.target.value;
+    for (const boardId in props.boardsMap) {
+      if (Object.prototype.hasOwnProperty.call(props.boardsMap, boardId)) {
+        const boardEntity = props.boardsMap[boardId];
+        if (boardEntity.title === boardTitle) {
+          props.onSetBoardId(boardId);
+        }
+      }
+    }
+  };
+
+  const getSelectedBoardTitle = (): string => {
 
     // eslint-disable-next-line no-prototype-builtins
-    if (props.puzzlesMetadata.hasOwnProperty(props.appState.puzzleId)) {
-      const puzzleMetadata: PuzzleMetadata = props.puzzlesMetadata[props.appState.puzzleId];
-      return puzzleMetadata.title;
+    if (props.boardsMap.hasOwnProperty(props.appState.boardId)) {
+      const board: BoardEntity = props.boardsMap[props.appState.boardId];
+      return board.title;
     }
 
     return '';
+  };
+
+
+  const handleOpenBoard = () => {
+    props.onSetUiState(UiState.BoardPlay);
   };
 
   const renderSelectPuzzle = () => {
@@ -89,7 +151,18 @@ const GameHome = (props: GameHomeProps) => {
       return null;
     }
 
+    // TEDTODO - this isn't right when there are no boards
+    const boardTitles: string[] = getBoardTitles();
+    if (boardTitles.length === 0) {
+      return null;
+    }
+    const selectedBoardTitle: string = getSelectedBoardTitle();
+    if (selectedBoardTitle === '') {
+      return null;
+    }
+
     const puzzleOptions = getPuzzleOptions(puzzleTitles);
+    const boardOptions = getBoardOptions(boardTitles);
 
     return (
       <div>
@@ -104,9 +177,26 @@ const GameHome = (props: GameHomeProps) => {
         <p>
           <button
             type="button"
-            onClick={handleSubmit}
+            onClick={handleOpenPuzzle}
           >
-            Submit
+            Open Puzzle
+          </button>
+        </p>
+        <p></p>
+        <p>Select Board</p>
+        <select
+          tabIndex={-1}
+          value={selectedBoardTitle}
+          onChange={handleBoardChange}
+        >
+          {boardOptions}
+        </select>
+        <p>
+          <button
+            type="button"
+            onClick={handleOpenBoard}
+          >
+            Open Board
           </button>
         </p>
       </div>
@@ -119,14 +209,16 @@ const GameHome = (props: GameHomeProps) => {
 
 function mapStateToProps(state: any) {
   return {
-    puzzlesMetadata: getPuzzlesMetadata(state),
     appState: getAppState(state),
+    boardsMap: getBoards(state),
+    puzzlesMetadata: getPuzzlesMetadata(state),
   };
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onCreateBoard: createBoard,
+    onSetBoardId: setBoardId,
     onSetPuzzleId: setPuzzleId,
     onSetUiState: setUiState,
   }, dispatch);

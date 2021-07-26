@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { isNil } from 'lodash';
 
 import { AppState, DisplayedPuzzle, UiState, UsersMap } from '../types';
-import { cellChange, loadPuzzlesMetadata, loadUsers } from '../controllers';
+import { cellChange, loadBoards, loadPuzzlesMetadata, loadUsers } from '../controllers';
 import { getAppState, getDisplayedPuzzle, getUsers } from '../selectors';
 import { setUiState, setUserName } from '../models';
 
@@ -24,9 +24,10 @@ export interface HomeProps {
   onSetUserName: (userName: string) => any;
   onSetUiState: (uiState: UiState) => any;
   displayedPuzzle: DisplayedPuzzle;
+  onLoadBoards: () => any;
   onLoadPuzzlesMetadata: () => any;
   onLoadUsers: () => any;
-  onCellChange: (user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
+  onCellChange: (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
 }
 
 let homeProps;
@@ -67,6 +68,7 @@ const Home = (props: HomeProps) => {
   React.useEffect(() => {
     initializePusher();
     props.onLoadPuzzlesMetadata();
+    props.onLoadBoards();
     props.onLoadUsers();
   }, []);
 
@@ -101,6 +103,7 @@ const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onSetUserName: setUserName,
     onSetUiState: setUiState,
+    onLoadBoards: loadBoards,
     onLoadPuzzlesMetadata: loadPuzzlesMetadata,
     onLoadUsers: loadUsers,
     onCellChange: cellChange,

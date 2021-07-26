@@ -4,17 +4,17 @@ import { combineReducers } from 'redux';
 import { TedwordState } from '../types';
 import { puzCrosswordSpecReducer } from './puzCrosswordSpec';
 import { puzzlesStateReducer } from './puzzles';
-// import { puzzleSpecReducer } from './puzzleSpec';
 import { usersReducer } from './users';
 import { appStateReducer } from './appState';
+import { boardsStateReducer } from './boards';
 
 // -----------------------------------------------------------------------
 // Reducers
 // -----------------------------------------------------------------------
 export const rootReducer = combineReducers<TedwordState>({
-  // puzzleSpec: puzzleSpecReducer,
   puzCrosswordSpec: puzCrosswordSpecReducer,
   users: usersReducer,
+  boardsState: boardsStateReducer,
   puzzlesState: puzzlesStateReducer,
   appState: appStateReducer,
 });
