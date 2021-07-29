@@ -36,17 +36,27 @@ export let boardPlayCrossword: any;
 
 const BoardPlay = (props: BoardPlayProps) => {
 
+  console.log('BoardPlay invoked');
+
   React.useEffect(() => {
     props.onLoadPuzzle(props.appState.puzzleId);
-    props.onLoadBoardCellContents();
+    // props.onLoadBoardCellContents();
+    setTimeout(boardRenderTimeoutHandler, 5000);
+
   }, []);
 
 
   boardPlayCrossword = React.useRef();
 
+  const boardRenderTimeoutHandler = () => {
+    console.log('boardRenderTimeoutHandler');
+    console.log(props);
+    props.onLoadBoardCellContents();
+  };
+
   const getBoardId = (): string => {
     return props.appState.boardId;
-  }
+  };
 
   const getPuzzleUser = (): string => {
     return props.appState.userName;
@@ -104,6 +114,8 @@ const BoardPlay = (props: BoardPlayProps) => {
   // } else {
   //   displayedPuzzleData = props.displayedPuzzle;
   // }
+
+  console.log('BoardPlay rendering');
 
   return (
     <div>
