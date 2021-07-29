@@ -32,7 +32,8 @@ export interface BoardsState {
 export enum UiState {
   SelectUser = 'SelectUser',
   SelectPuzzleOrBoard = 'SelectPuzzleOrBoard',
-  BoardPlay = 'BoardPlay',
+  NewBoardPlay = 'NewBoardPlay',
+  ExistingBoardPlay = 'ExistingBoardPlay',
 }
 
 export interface AppState {

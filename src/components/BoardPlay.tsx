@@ -3,14 +3,25 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata, DisplayedPuzzle } from '../types';
-import { getAppState, getDisplayedPuzzle, getPuzzlesMetadata } from '../selectors';
+import { 
+  getAppState, 
+  getDisplayedPuzzle, 
+  getPuzzlesMetadata, 
+  // getBoardData
+ } from '../selectors';
 import { setPuzzleId, setUiState } from '../models';
-import { cellChange, loadPuzzle } from '../controllers';
+import { 
+  cellChange,
+  loadBoardCellContents,
+  loadPuzzle
+ } from '../controllers';
 
 export interface BoardPlayProps {
   appState: AppState,
+  // boardData: DisplayedPuzzle,
   displayedPuzzle: DisplayedPuzzle;
   puzzlesMetadata: PuzzlesMetadataMap;
+  onLoadBoardCellContents: () => any;
   onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
   onLoadPuzzle: (puzzleId: string) => any;
@@ -27,6 +38,7 @@ const BoardPlay = (props: BoardPlayProps) => {
 
   React.useEffect(() => {
     props.onLoadPuzzle(props.appState.puzzleId);
+    props.onLoadBoardCellContents();
   }, []);
 
 
@@ -85,6 +97,14 @@ const BoardPlay = (props: BoardPlayProps) => {
         onCrosswordCorrect={handleCrosswordCorrect}
       />
   */
+
+  const displayedPuzzleData: DisplayedPuzzle = props.displayedPuzzle;
+  // if (props.appState.uiState === UiState.NewBoardPlay) {
+  //   displayedPuzzleData = props.boardData;
+  // } else {
+  //   displayedPuzzleData = props.displayedPuzzle;
+  // }
+
   return (
     <div>
       <p>
@@ -111,7 +131,7 @@ const BoardPlay = (props: BoardPlayProps) => {
         </button>
       </div>
       <Crossword
-        data={props.displayedPuzzle}
+        data={displayedPuzzleData}
         ref={boardPlayCrossword}
         onCellChange={handleCellChange}
         onCorrect={handleClueCorrect}
@@ -127,6 +147,7 @@ function mapStateToProps(state: any) {
     puzzlesMetadata: getPuzzlesMetadata(state),
     appState: getAppState(state),
     displayedPuzzle: getDisplayedPuzzle(state),
+    // boardData: getBoardData(state),
 
   };
 }
@@ -135,6 +156,7 @@ const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onSetPuzzleId: setPuzzleId,
     onSetUiState: setUiState,
+    onLoadBoardCellContents: loadBoardCellContents,
     onLoadPuzzle: loadPuzzle,
     onCellChange: cellChange,
   }, dispatch);

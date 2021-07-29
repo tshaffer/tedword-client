@@ -1,9 +1,25 @@
+/* eslint-disable no-prototype-builtins */
 import axios from 'axios';
-import { AppState, BoardEntity, PuzzleMetadata, PuzzlesMetadataMap, TedwordState } from '../types';
+import {
+  AppState,
+  BoardEntity,
+  CellContentsMap,
+  PuzzleMetadata,
+  PuzzlesMetadataMap,
+  TedwordState
+} from '../types';
 
 import { apiUrlFragment, serverUrl } from '../index';
-import { getPuzzlesMetadata } from '../selectors';
+import {
+  getBoard,
+  getBoardId,
+  getPuzzlesMetadata
+} from '../selectors';
 import { addBoard, setBoardId } from '../models';
+import { boardPlayCrossword } from '../components/BoardPlay';
+import { isNil } from 'lodash';
+
+// import { boardPlayCrossword } from '../components/BoardPlay';
 
 export const loadBoards = () => {
   return (dispatch: any) => {
@@ -26,6 +42,30 @@ export const loadBoards = () => {
   };
 };
 
+export const loadBoardCellContents = () => {
+  return (dispatch: any, getState: any) => {
+
+    if (isNil(boardPlayCrossword)) {
+      return;
+    }
+
+    (boardPlayCrossword as any).current.reset();
+
+    const state: TedwordState = getState();
+    const boardId: string = getBoardId(state);
+    const board: BoardEntity = getBoard(state, boardId);
+    const cellContents: CellContentsMap = board.cellContents;
+    for (const cellSpec in cellContents) {
+      if (cellContents.hasOwnProperty(cellSpec)) {
+        const rowAndCol: string[] = cellSpec.split('_');
+        const row: number = parseInt(rowAndCol[0], 10);
+        const col: number = parseInt(rowAndCol[1], 10);
+        const typedChar: string = cellContents[cellSpec];
+        (boardPlayCrossword as any).current.remoteSetCell(row, col, typedChar);
+      }
+    }
+  };
+};
 
 export const createBoard = () => {
 

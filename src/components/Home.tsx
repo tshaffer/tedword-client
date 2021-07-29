@@ -83,7 +83,8 @@ const Home = (props: HomeProps) => {
         <GameHome/>
       );
     }
-    case UiState.BoardPlay: {
+    case UiState.NewBoardPlay:
+    case UiState.ExistingBoardPlay: {
       return (
         <BoardPlay/>
       );
