@@ -80,8 +80,35 @@ export const createBoard = () => {
     const puzzleMetadata: PuzzleMetadata = puzzlesMetadataMap[puzzleId];
 
     const currentDate = new Date();
-    const currentDateTime = currentDate.toString();
-    const title = puzzleMetadata.title + ' ' + currentDateTime;
+    const currentDateTime = currentDate.toLocaleDateString(
+      'en',
+      {
+        month: 'long',
+        day: 'numeric',
+      }
+    );
+
+    // possible components of the title
+    //    users (only a single user at the time of create)
+    //    current date/time - formatting options
+    //      day of week, day, month
+    //      ??
+    //    puzzle title
+    const userName: string = appState.userName;
+    const weekdayMonthDay: string = currentDate.toLocaleDateString(
+      'en',
+      {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+
+      }
+    );
+    const puzzleTitle: string = puzzleMetadata.title.trim();
+    // eslint-disable-next-line quotes
+    const title = userName + ': ' + weekdayMonthDay + '. "' + puzzleTitle + '"';
+
+    // const title = puzzleMetadata.title + ' ' + currentDateTime;
 
     const path = serverUrl + apiUrlFragment + 'board';
 
