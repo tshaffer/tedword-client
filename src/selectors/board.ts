@@ -26,6 +26,15 @@ export const getBoard = (state: TedwordState, boardId: string): BoardEntity => {
   return null;
 };
 
+export const getCellContents = (state: TedwordState): CellContentsMap => {
+  const boardId: string = getBoardId(state);
+  const boardsMap: BoardsMap = getBoards(state);
+  if (boardsMap.hasOwnProperty(boardId)) {
+    return boardsMap[boardId].cellContents;
+  }
+  return null;
+};
+
 // export const getBoardData = (state: TedwordState): DisplayedPuzzle => {
   
 //   console.log('boardPlayCrossword');

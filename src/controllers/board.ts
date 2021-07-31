@@ -15,7 +15,7 @@ import {
   getBoardId,
   getPuzzlesMetadata
 } from '../selectors';
-import { addBoard, setBoardId } from '../models';
+import { addBoard, setBoardId, setCellContents } from '../models';
 import { boardPlayCrossword } from '../components/BoardPlay';
 import { isNil } from 'lodash';
 
@@ -35,35 +35,17 @@ export const loadBoards = () => {
         for (const boardEntity of boardEntities) {
           dispatch(addBoard(boardEntity.id, boardEntity));
         }
+
+        boardEntities.sort((a: BoardEntity, b: BoardEntity) => {
+          return a.startDateTime > b.startDateTime
+            ? -1
+            : 1;
+        });
         if (boardEntities.length > 0) {
           dispatch(setBoardId(boardEntities[0].id));
         }
+    
       });
-  };
-};
-
-export const loadBoardCellContents = () => {
-  return (dispatch: any, getState: any) => {
-
-    if (isNil(boardPlayCrossword)) {
-      return;
-    }
-
-    (boardPlayCrossword as any).current.reset();
-
-    const state: TedwordState = getState();
-    const boardId: string = getBoardId(state);
-    const board: BoardEntity = getBoard(state, boardId);
-    const cellContents: CellContentsMap = board.cellContents;
-    for (const cellSpec in cellContents) {
-      if (cellContents.hasOwnProperty(cellSpec)) {
-        const rowAndCol: string[] = cellSpec.split('_');
-        const row: number = parseInt(rowAndCol[0], 10);
-        const col: number = parseInt(rowAndCol[1], 10);
-        const typedChar: string = cellContents[cellSpec];
-        (boardPlayCrossword as any).current.remoteSetCell(row, col, typedChar);
-      }
-    }
   };
 };
 

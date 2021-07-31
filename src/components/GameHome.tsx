@@ -64,13 +64,23 @@ const GameHome = (props: GameHomeProps) => {
   };
 
   const getBoardTitles = (): string[] => {
-    const boardTitles: string[] = [];
+    const boardEntities: BoardEntity[] = [];
     for (const boardId in props.boardsMap) {
       if (Object.prototype.hasOwnProperty.call(props.boardsMap, boardId)) {
         const boardEntity: BoardEntity = props.boardsMap[boardId];
-        boardTitles.push(boardEntity.title);
+        boardEntities.push(boardEntity);
       }
     }
+    boardEntities.sort((a: BoardEntity, b: BoardEntity) => {
+      return a.startDateTime > b.startDateTime
+        ? -1
+        : 1;
+    });
+
+    const boardTitles: string[] = boardEntities.map( (boardEntity) => {
+      return boardEntity.title;
+    });
+
     return boardTitles;
   };
 

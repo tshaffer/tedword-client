@@ -2,9 +2,10 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata, DisplayedPuzzle } from '../types';
+import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata, DisplayedPuzzle, CellContentsMap } from '../types';
 import { 
   getAppState, 
+  getCellContents, 
   getDisplayedPuzzle, 
   getPuzzlesMetadata, 
   // getBoardData
@@ -12,16 +13,16 @@ import {
 import { setPuzzleId, setUiState } from '../models';
 import { 
   cellChange,
-  loadBoardCellContents,
   loadPuzzle
  } from '../controllers';
+import { isNil } from 'lodash';
 
 export interface BoardPlayProps {
   appState: AppState,
   // boardData: DisplayedPuzzle,
+  cellContents: CellContentsMap;
   displayedPuzzle: DisplayedPuzzle;
   puzzlesMetadata: PuzzlesMetadataMap;
-  onLoadBoardCellContents: () => any;
   onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
   onLoadPuzzle: (puzzleId: string) => any;
@@ -40,19 +41,10 @@ const BoardPlay = (props: BoardPlayProps) => {
 
   React.useEffect(() => {
     props.onLoadPuzzle(props.appState.puzzleId);
-    // props.onLoadBoardCellContents();
-    setTimeout(boardRenderTimeoutHandler, 5000);
-
   }, []);
 
 
   boardPlayCrossword = React.useRef();
-
-  const boardRenderTimeoutHandler = () => {
-    console.log('boardRenderTimeoutHandler');
-    console.log(props);
-    props.onLoadBoardCellContents();
-  };
 
   const getBoardId = (): string => {
     return props.appState.boardId;
@@ -117,6 +109,11 @@ const BoardPlay = (props: BoardPlayProps) => {
 
   console.log('BoardPlay rendering');
 
+  const cellContents: CellContentsMap = props.cellContents;
+  if (isNil(cellContents)) {
+    return null;
+  }
+  
   return (
     <div>
       <p>
@@ -144,6 +141,7 @@ const BoardPlay = (props: BoardPlayProps) => {
       </div>
       <Crossword
         data={displayedPuzzleData}
+        tedGuesses={cellContents}
         ref={boardPlayCrossword}
         onCellChange={handleCellChange}
         onCorrect={handleClueCorrect}
@@ -160,7 +158,7 @@ function mapStateToProps(state: any) {
     appState: getAppState(state),
     displayedPuzzle: getDisplayedPuzzle(state),
     // boardData: getBoardData(state),
-
+    cellContents: getCellContents(state),
   };
 }
 
@@ -168,7 +166,6 @@ const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onSetPuzzleId: setPuzzleId,
     onSetUiState: setUiState,
-    onLoadBoardCellContents: loadBoardCellContents,
     onLoadPuzzle: loadPuzzle,
     onCellChange: cellChange,
   }, dispatch);
