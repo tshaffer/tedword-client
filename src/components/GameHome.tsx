@@ -194,7 +194,7 @@ const GameHome = (props: GameHomeProps) => {
     //     </select>
     //     <p>
     //       <button
-    //         type="button"
+    //         type='button'
     //         onClick={handleOpenPuzzle}
     //       >
     //         Open Puzzle
@@ -211,7 +211,7 @@ const GameHome = (props: GameHomeProps) => {
     //     </select>
     //     <p>
     //       <button
-    //         type="button"
+    //         type='button'
     //         onClick={handleOpenBoard}
     //       >
     //         Open Board
@@ -243,157 +243,47 @@ const GameHome = (props: GameHomeProps) => {
       transition: '0.3s'
     };
 
-    /*
+    function handleSelectTab(evt: any) {
 
-<!-- Tab links -->
-<div class="tab">
-  <button class="tablinks" onclick="openCity(event, 'London')">London</button>
-  <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
-  <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
-</div>
+      const selectedTabId = evt.target.id;
 
-<!-- Tab content -->
-<div id="London" class="tabcontent">
-  <h3>London</h3>
-  <p>London is the capital city of England.</p>
-</div>
+      // Hide content divs
+      newGamesContentRef.current.style.display = 'none';
+      inProgressGamesContentRef.current.style.display = 'none';
 
-<div id="Paris" class="tabcontent">
-  <h3>Paris</h3>
-  <p>Paris is the capital of France.</p>
-</div>
-
-<div id="Tokyo" class="tabcontent">
-  <h3>Tokyo</h3>
-  <p>Tokyo is the capital of Japan.</p>
-</div>
-
-** Style the tab **
-.tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
-}
-
-** Style the buttons that are used to open the tab content **
-.tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-}
-
-** Change background color of buttons on hover **
-.tab button:hover {
-  background-color: #ddd;
-}
-
-* Create an active/current tablink class *
-.tab button.active {
-  background-color: #ccc;
-}
-
-* Style the tab content *
-.tabcontent {
-  display: none;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-top: none;
-}
-
-
-function openCity(evt, cityName) {
-  // Declare all variables
-  var i, tabcontent, tablinks;
-
-  // Get all elements with class="tabcontent" and hide them
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-
-  // Get all elements with class="tablinks" and remove the class "active"
-  tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-
-  // Show the current tab, and add an "active" class to the button that opened the tab
-  document.getElementById(cityName).style.display = "block";
-  evt.currentTarget.className += " active";
-}
-    */
-
-    function handleOpenCity(evt: any) {
-
-      const cityName = evt.target.id;
-
-      console.log(londonTabButtonRef);
-
-      // Get all elements with class="tabcontent" and hide them
-      londonContentRef.current.style.display = 'none';
-      parisContentRef.current.style.display = 'none';
-      tokyoContentRef.current.style.display = 'none';
-
-      // Show the current tab, and add an "active" class to the button that opened the tab
-      switch (cityName) {
-        case 'London':
-          londonContentRef.current.style.display = 'block';
-          londonTabButtonRef.current.style.disabled = false;
-
-          londonTabButtonRef.current.style.backgroundColor = '#ccc';
-          parisTabButtonRef.current.style.backgroundColor = 'inherit';
-          tokyoTabButtonRef.current.style.backgroundColor = 'inherit';
+      // Show the current tab, and add an 'active' class to the button that opened the tab
+      switch (selectedTabId) {
+        case 'newGameTabSelect':
+          newGamesContentRef.current.style.display = 'block';
+          newGameTabSelectRef.current.style.backgroundColor = '#ccc';
+          inProgressGamesTabSelectRef.current.style.backgroundColor = 'inherit';
           break;
-        case 'Paris':
-          parisContentRef.current.style.display = 'block';
-          // parisTabButtonRef.current.style.disabled = true;
-          parisTabButtonRef.current.style.backgroundColor = 'inherit';
-          break;
-        case 'Tokyo':
-          tokyoContentRef.current.style.display = 'block';
-          tokyoTabButtonRef.current.style.disabled = true;
-          tokyoTabButtonRef.current.style.backgroundColor = 'inherit';
+        case 'inProgressGameTabSelect':
+          inProgressGamesContentRef.current.style.display = 'block';
+          inProgressGamesTabSelectRef.current.style.backgroundColor = '#ccc';
+          newGameTabSelectRef.current.style.backgroundColor = 'inherit';
           break;
         default:
           break;
       }
     }
 
-    const tabContent2: any = tabcontent;
-    tabContent2.color = 'red';
-
-    const londonTabButtonRef = React.createRef<any>();
-    const londonContentRef = React.createRef<any>();
-    const parisTabButtonRef = React.createRef<any>();
-    const parisContentRef = React.createRef<any>();
-    const tokyoTabButtonRef = React.createRef<any>();
-    const tokyoContentRef = React.createRef<any>();
+    const newGameTabSelectRef = React.createRef<any>();
+    const newGamesContentRef = React.createRef<any>();
+    const inProgressGamesTabSelectRef = React.createRef<any>();
+    const inProgressGamesContentRef = React.createRef<any>();
 
     return (
       <div>
-
         <div style={tab}>
-          <button style={tabLinks} onClick={handleOpenCity} id='London' ref={londonTabButtonRef}>London</button>
-          <button style={tabLinks} onClick={handleOpenCity} id='Paris' ref={parisTabButtonRef}>Paris</button>
-          <button style={tabLinks} onClick={handleOpenCity} id='Tokyo' ref={tokyoTabButtonRef}>Tokyo</button>
+          <button style={tabLinks} onClick={handleSelectTab} id='newGameTabSelect' ref={newGameTabSelectRef}>New Games</button>
+          <button style={tabLinks} onClick={handleSelectTab} id='inProgressGameTabSelect' ref={inProgressGamesTabSelectRef}>In Progress Games</button>
         </div>
-        <div id="London" style={tabContent2} ref={londonContentRef}>
-          <h3>London</h3>
-          <p>London is the capital city of England.</p>
+        <div id='newGameContent' style={tabcontent} ref={newGamesContentRef}>
+          <p>New games listed here</p>
         </div>
-
-        <div id="Paris" style={tabcontent} ref={parisContentRef}>
-          <h3>Paris</h3>
-          <p>Paris is the capital of France.</p>
-        </div>
-
-        <div id="Tokyo" style={tabcontent} ref={tokyoContentRef}>
-          <h3>Tokyo</h3>
-          <p>Tokyo is the capital of Japan.</p>
+        <div id='inProgressGamesContent' style={tabcontent} ref={inProgressGamesContentRef}>
+          <p>in progress games listed here.</p>
         </div>
       </div>
     );
