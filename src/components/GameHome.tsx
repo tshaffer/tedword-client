@@ -77,7 +77,7 @@ const GameHome = (props: GameHomeProps) => {
         : 1;
     });
 
-    const boardTitles: string[] = boardEntities.map( (boardEntity) => {
+    const boardTitles: string[] = boardEntities.map((boardEntity) => {
       return boardEntity.title;
     });
 
@@ -182,44 +182,96 @@ const GameHome = (props: GameHomeProps) => {
     const puzzleOptions = getPuzzleOptions(puzzleTitles);
     const boardOptions = getBoardOptions(boardTitles);
 
+    // return (
+    //   <div>
+    //     <p>Select Puzzle</p>
+    //     <select
+    //       tabIndex={-1}
+    //       value={selectedPuzzleTitle}
+    //       onChange={handlePuzzleChange}
+    //     >
+    //       {puzzleOptions}
+    //     </select>
+    //     <p>
+    //       <button
+    //         type="button"
+    //         onClick={handleOpenPuzzle}
+    //       >
+    //         Open Puzzle
+    //       </button>
+    //     </p>
+    //     <p></p>
+    //     <p>Select Board</p>
+    //     <select
+    //       tabIndex={-1}
+    //       value={selectedBoardTitle}
+    //       onChange={handleBoardChange}
+    //     >
+    //       {boardOptions}
+    //     </select>
+    //     <p>
+    //       <button
+    //         type="button"
+    //         onClick={handleOpenBoard}
+    //       >
+    //         Open Board
+    //       </button>
+    //     </p>
+    //   </div>
+    // );
+
+    const tabcontent = {
+      display: 'none',
+      padding: '6px 12px',
+      border: '1px solid #ccc',
+      borderTop: 'none',
+    };
+
+    const tab = {
+      overflow: 'hidden',
+      border: '1px solid #ccc',
+      backgroundColor: '#f1f1f1',
+    };
+
+    const tabLinks = {
+      backgroundColor: 'inherit',
+      // float: 'left',
+      border: 'none',
+      outline: 'none',
+      cursor: 'pointer',
+      padding: '14px 16px',
+      transition: '0.3s'
+    };
+
+    const handleOpenCity = (event: any) => {
+      console.log('open city');
+      console.log(event.target.id);
+    };
+
     return (
       <div>
-        <p>Select Puzzle</p>
-        <select
-          tabIndex={-1}
-          value={selectedPuzzleTitle}
-          onChange={handlePuzzleChange}
-        >
-          {puzzleOptions}
-        </select>
-        <p>
-          <button
-            type="button"
-            onClick={handleOpenPuzzle}
-          >
-            Open Puzzle
-          </button>
-        </p>
-        <p></p>
-        <p>Select Board</p>
-        <select
-          tabIndex={-1}
-          value={selectedBoardTitle}
-          onChange={handleBoardChange}
-        >
-          {boardOptions}
-        </select>
-        <p>
-          <button
-            type="button"
-            onClick={handleOpenBoard}
-          >
-            Open Board
-          </button>
-        </p>
+
+        <div style={tab}>
+          <button style={tabLinks} onClick={handleOpenCity} id='London'>London</button>
+          <button style={tabLinks} onClick={handleOpenCity} id='Paris'>Paris</button>
+          <button style={tabLinks} onClick={handleOpenCity} id='Tokyo'>Tokyo</button>
+        </div>
+        <div id="London" style={tabcontent}>
+          <h3>London</h3>
+          <p>London is the capital city of England.</p>
+        </div>
+
+        <div id="Paris" style={tabcontent}>
+          <h3>Paris</h3>
+          <p>Paris is the capital of France.</p>
+        </div>
+
+        <div id="Tokyo" style={tabcontent}>
+          <h3>Tokyo</h3>
+          <p>Tokyo is the capital of Japan.</p>
+        </div>
       </div>
     );
-
   };
 
   return renderSelectPuzzleOrBoard();
