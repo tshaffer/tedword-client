@@ -2,28 +2,23 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { AppState, PuzzlesMetadataMap, PuzzleMetadata } from '../types';
-import { getAppState, getPuzzlesMetadata } from '../selectors';
-import { setPuzzleId } from '../models';
 import { isEmpty } from 'lodash';
 
+import { PuzzlesMetadataMap, PuzzleMetadata } from '../types';
+import { getPuzzlesMetadata } from '../selectors';
+
 export interface NewGamesPropsFromParent {
-  handleSelectPuzzle: (puzzleId: string) => any;
+  onSelectPuzzle: (puzzleMetadata: PuzzleMetadata) => any;
 }
 
 export interface NewGamesProps extends NewGamesPropsFromParent {
-  appState: AppState,
   puzzlesMetadata: PuzzlesMetadataMap;
-  onSetPuzzleId: (puzzleId: string) => any;
 }
 
 const NewGames = (props: NewGamesProps) => {
 
   const handleSelectPuzzle = (puzzleMetadata: PuzzleMetadata) => {
-    console.log('handleSelectPuzzle');
-    console.log(puzzleMetadata);
-    // props.onSetPuzzleId(puzzleMetadata.id);
-    props.handleSelectPuzzle(puzzleMetadata.id);
+    props.onSelectPuzzle(puzzleMetadata);
   };
 
   const renderPuzzleRow = (puzzleMetadata: PuzzleMetadata) => {
@@ -97,14 +92,12 @@ const NewGames = (props: NewGamesProps) => {
 
 function mapStateToProps(state: any) {
   return {
-    appState: getAppState(state),
     puzzlesMetadata: getPuzzlesMetadata(state),
   };
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
-    onSetPuzzleId: setPuzzleId,
   }, dispatch);
 };
 

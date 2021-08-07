@@ -4,34 +4,21 @@ import { connect } from 'react-redux';
 
 import { isEmpty } from 'lodash';
 
-import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata, BoardEntity, BoardsMap } from '../types';
-import { getAppState, getBoards, getPuzzlesMetadata } from '../selectors';
-import { setBoardId, setPuzzleId, setUiState } from '../models';
+import { BoardEntity, BoardsMap } from '../types';
+import { getBoards } from '../selectors';
 
 export interface ExistingGamesPropsFromParent {
-  handleSelectBoard: (boardId: string) => any;
+  onSelectBoard: (boardEntity: BoardEntity) => any;
 }
 
 export interface ExistingGamesProps extends ExistingGamesPropsFromParent {
-  appState: AppState,
   boardsMap: BoardsMap;
-  puzzlesMetadata: PuzzlesMetadataMap;
-  onSetBoardId: (boardId: string) => any;
-  onSetPuzzleId: (puzzleId: string) => any;
 }
 
 const ExistingGames = (props: ExistingGamesProps) => {
 
   const handleSelectBoard = (boardEntity: BoardEntity) => {
-
-    console.log('handleSelectBoard');
-    console.log(boardEntity);
-
-    props.onSetPuzzleId(boardEntity.puzzleId);
-    props.onSetBoardId(boardEntity.id);
-
-    props.handleSelectBoard(boardEntity.id);
-
+    props.onSelectBoard(boardEntity);
   };
 
   const renderBoardRow = (boardEntity: BoardEntity) => {
@@ -101,16 +88,12 @@ const ExistingGames = (props: ExistingGamesProps) => {
 
 function mapStateToProps(state: any) {
   return {
-    appState: getAppState(state),
     boardsMap: getBoards(state),
-    puzzlesMetadata: getPuzzlesMetadata(state),
   };
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
-    onSetBoardId: setBoardId,
-    onSetPuzzleId: setPuzzleId,
   }, dispatch);
 };
 
