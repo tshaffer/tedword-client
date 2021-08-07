@@ -152,3 +152,17 @@ export interface BoardEntity {
   difficulty: number;
 }
 
+export interface PuzzleSpec {
+  title: string;
+  author: string;
+  copyright: string;
+  note: string;
+  width: number;
+  height: number;
+  clues: string[];
+  solution: string;
+  state: string;
+  hasState: boolean;
+  parsedClues: ParsedClue[];
+}
+

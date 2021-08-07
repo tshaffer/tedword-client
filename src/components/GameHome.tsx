@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata, BoardEntity, BoardsMap } from '../types';
+import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata, BoardEntity, BoardsMap, PuzzleSpec } from '../types';
 import { getAppState, getBoards, getPuzzlesMetadata } from '../selectors';
 import { setBoardId, setPuzzleId, setUiState } from '../models';
 import {
@@ -11,6 +12,9 @@ import {
 
 import NewGames from './NewGames';
 import ExistingGames from './ExistingGames';
+import { isNil } from 'lodash';
+
+const PuzCrossword = require('@confuzzle/puz-crossword').PuzCrossword;
 
 export interface GameHomeProps {
   appState: AppState,
@@ -23,6 +27,8 @@ export interface GameHomeProps {
 }
 
 const GameHome = (props: GameHomeProps) => {
+
+  const [file, setFile] = React.useState(null);
 
   const handleOpenBoard = (boardEntity: BoardEntity) => {
     props.onSetPuzzleId(boardEntity.puzzleId);
@@ -61,6 +67,73 @@ const GameHome = (props: GameHomeProps) => {
       transition: '0.3s'
     };
 
+    const handleSelectFiles = (e) => {
+      if (!isNil(e.target.files)
+        && e.target.files.length > 0) {
+        const targetFileList: FileList = e.target.files;
+        // const { onAddUploadFiles = () => {} } = this.props;
+        const filesToAdd = [];
+        for (let i = 0; i < targetFileList.length; i++) {
+          const targetFile: File = e.target.files[i];
+          filesToAdd.push(targetFile);
+        }
+        // onAddUploadFiles(filesToAdd);
+        console.log(filesToAdd);
+        setFile(filesToAdd[0]);
+      }
+      e.target.value = '';
+    };
+
+    const fileReader: FileReader = new FileReader();
+
+    const arrayBufferToString = (buffer: ArrayBuffer, encoding = 'UTF-8'): Promise<string> => {
+      return new Promise<string>((resolve, reject) => {
+        const blob = new Blob([buffer], { type: 'text/plain' });
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          if (evt.target) {
+            resolve(evt.target.result as string);
+          } else {
+            reject(new Error('Could not convert array to string!'));
+          }
+        };
+        reader.readAsText(blob, encoding);
+      });
+    };
+
+    const handleFileReaderEvent = (event) => {
+      console.log('handleFileReaderEvent');
+      console.log(event);
+
+      if (event.type === 'load') {
+        // console.log(fileReader.result);
+
+        const puzData: Buffer = Buffer.from(fileReader.result as ArrayBuffer);
+        const pc: PuzzleSpec = PuzCrossword.from(puzData);
+        console.log(pc);
+    
+        // arrayBufferToString(fileReader.result as ArrayBuffer)
+        //   .then((fileContents: string) => {
+        //     console.log('fileContents: ');
+        //     console.log(fileContents);
+        //   });
+      }
+    };
+
+    const handleUploadFiles = () => {
+      // props.onUploadFile(file);
+      console.log('uploadFile: ', file);
+
+      fileReader.addEventListener('loadstart', handleFileReaderEvent);
+      fileReader.addEventListener('load', handleFileReaderEvent);
+      fileReader.addEventListener('loadend', handleFileReaderEvent);
+      fileReader.addEventListener('progress', handleFileReaderEvent);
+      fileReader.addEventListener('error', handleFileReaderEvent);
+      fileReader.addEventListener('abort', handleFileReaderEvent);
+
+      fileReader.readAsArrayBuffer(file);
+    };
+
     function handleSelectTab(evt: any) {
 
       const selectedTabId = evt.target.id;
@@ -81,6 +154,11 @@ const GameHome = (props: GameHomeProps) => {
           inProgressGamesTabSelectRef.current.style.backgroundColor = '#ccc';
           newGameTabSelectRef.current.style.backgroundColor = 'inherit';
           break;
+        case 'settingsTabSelect':
+          settingsContentRef.current.style.display = 'block';
+          settingsTabSelectRef.current.style.backgroundColor = '#ccc';
+          inProgressGamesTabSelectRef.current.style.backgroundColor = 'inherit';
+          break;
         default:
           break;
       }
@@ -90,12 +168,15 @@ const GameHome = (props: GameHomeProps) => {
     const newGamesContentRef = React.createRef<any>();
     const inProgressGamesTabSelectRef = React.createRef<any>();
     const inProgressGamesContentRef = React.createRef<any>();
+    const settingsTabSelectRef = React.createRef<any>();
+    const settingsContentRef = React.createRef<any>();
 
     return (
       <div>
         <div style={tab}>
           <button style={tabLinks} onClick={handleSelectTab} id='newGameTabSelect' ref={newGameTabSelectRef}>New Games</button>
           <button style={tabLinks} onClick={handleSelectTab} id='inProgressGameTabSelect' ref={inProgressGamesTabSelectRef}>In Progress Games</button>
+          <button style={tabLinks} onClick={handleSelectTab} id='settingsTabSelect' ref={settingsTabSelectRef}>Settings</button>
         </div>
         <div id='newGameContent' style={tabcontent} ref={newGamesContentRef}>
           <NewGames
@@ -106,6 +187,24 @@ const GameHome = (props: GameHomeProps) => {
           <ExistingGames
             onSelectBoard={handleOpenBoard}
           />
+        </div>
+        <div id='settingsContent' style={tabcontent} ref={settingsContentRef}>
+          <div>
+            <input
+              id="input"
+              type="file"
+              multiple
+              onChange={handleSelectFiles}
+            />
+            <p>
+              <button
+                type='button'
+                onClick={handleUploadFiles}
+              >
+                Upload Files
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     );
