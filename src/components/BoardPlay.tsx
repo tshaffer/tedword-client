@@ -108,9 +108,14 @@ const BoardPlay = (props: BoardPlayProps) => {
 
   console.log('BoardPlay rendering');
 
-  const cellContents: CellContentsMap = props.cellContents;
+  let cellContents: CellContentsMap = props.cellContents;
+
+  console.log('cellContents');
+  console.log(cellContents);
+
   if (isNil(cellContents)) {
-    return null;
+    // return null;
+    cellContents = {};
   }
   
   return (

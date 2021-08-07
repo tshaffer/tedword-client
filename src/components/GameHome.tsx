@@ -10,7 +10,7 @@ import {
   // resumeBoardPlay
 } from '../controllers';
 
-import NewGames from './newGames';
+import NewGames from './NewGames';
 
 export interface GameHomeProps {
   appState: AppState,
@@ -154,7 +154,9 @@ const GameHome = (props: GameHomeProps) => {
     // props.onResumeBoardPlay();
   };
 
-  const handleOpenPuzzle = () => {
+  const handleOpenPuzzle = (puzzleId: string) => {
+    console.log('handleOpenPuzzle');
+    props.onSetPuzzleId(puzzleId);
     props.onCreateBoard();
     props.onSetUiState(UiState.NewBoardPlay);
   };
@@ -282,8 +284,9 @@ const GameHome = (props: GameHomeProps) => {
           <button style={tabLinks} onClick={handleSelectTab} id='inProgressGameTabSelect' ref={inProgressGamesTabSelectRef}>In Progress Games</button>
         </div>
         <div id='newGameContent' style={tabcontent} ref={newGamesContentRef}>
-          <p>New games listed here</p>
-          <NewGames/>
+          <NewGames
+            handleSelectPuzzle={handleOpenPuzzle}
+          />
         </div>
         <div id='inProgressGamesContent' style={tabcontent} ref={inProgressGamesContentRef}>
           <p>in progress games listed here.</p>

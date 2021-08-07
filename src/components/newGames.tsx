@@ -7,7 +7,11 @@ import { getAppState, getPuzzlesMetadata } from '../selectors';
 import { setPuzzleId } from '../models';
 import { isEmpty } from 'lodash';
 
-export interface NewGamesProps {
+export interface NewGamesPropsFromParent {
+  handleSelectPuzzle: (puzzleId: string) => any;
+}
+
+export interface NewGamesProps extends NewGamesPropsFromParent {
   appState: AppState,
   puzzlesMetadata: PuzzlesMetadataMap;
   onSetPuzzleId: (puzzleId: string) => any;
@@ -15,11 +19,28 @@ export interface NewGamesProps {
 
 const NewGames = (props: NewGamesProps) => {
 
+  const handleSelectPuzzle = (puzzleMetadata: PuzzleMetadata) => {
+    console.log('handleSelectPuzzle');
+    console.log(puzzleMetadata);
+    // props.onSetPuzzleId(puzzleMetadata.id);
+    props.handleSelectPuzzle(puzzleMetadata.id);
+  };
+
   const renderPuzzleRow = (puzzleMetadata: PuzzleMetadata) => {
     return (
       <tr key={puzzleMetadata.id}>
         <td>
+          <button
+            onClick={() => handleSelectPuzzle(puzzleMetadata)}
+          >
+            Play Me!
+          </button>
+        </td>
+        <td>
           {puzzleMetadata.title}
+        </td>
+        <td>
+          {puzzleMetadata.author}
         </td>
       </tr>
     );
@@ -53,7 +74,8 @@ const NewGames = (props: NewGamesProps) => {
         <table>
           <thead>
             <tr>
-              <th>Name</th>
+              <th>Title</th>
+              <th>Author</th>
             </tr>
           </thead>
           <tbody>
