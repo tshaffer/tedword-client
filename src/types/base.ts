@@ -1,6 +1,7 @@
 // export const serverUrl = 'http://localhost:8888';
 // export const serverUrl = 'https://damp-falls-28733.herokuapp.com';
 export const serverUrl = 'http://localhost:5000';
+// export const serverUrl = 'http://localhost:8000';
 // export const serverUrl = 'https://tedword.herokuapp.com';
 export const apiUrlFragment = '/api/v1/';
 

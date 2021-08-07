@@ -6,9 +6,10 @@ import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata, BoardEntity, Boa
 import { getAppState, getBoards, getPuzzlesMetadata } from '../selectors';
 import { setBoardId, setPuzzleId, setUiState } from '../models';
 import {
-  createBoard,
+  createBoard, uploadFile,
   // resumeBoardPlay
 } from '../controllers';
+import { isNil } from 'lodash';
 
 export interface GameHomeProps {
   appState: AppState,
@@ -19,9 +20,12 @@ export interface GameHomeProps {
   onSetBoardId: (boardId: string) => any;
   onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
+  onUploadFile: (file: File) => any;
 }
 
 const GameHome = (props: GameHomeProps) => {
+
+  const [file, setFile] = React.useState(null);
 
   const getPuzzleTitles = (): string[] => {
     const puzzleTitles: string[] = [];
@@ -243,6 +247,27 @@ const GameHome = (props: GameHomeProps) => {
       transition: '0.3s'
     };
 
+    const handleSelectFiles = (e) => {
+      if (!isNil(e.target.files)
+        && e.target.files.length > 0) {
+        const targetFileList: FileList = e.target.files;
+        // const { onAddUploadFiles = () => {} } = this.props;
+        const filesToAdd = [];
+        for (let i = 0; i < targetFileList.length; i++) {
+          const targetFile: File = e.target.files[i];
+          filesToAdd.push(targetFile);
+        }
+        // onAddUploadFiles(filesToAdd);
+        console.log(filesToAdd);
+        setFile(filesToAdd[0]);
+      }
+      e.target.value = '';
+    };
+
+    const handleUploadFiles = () => {
+      props.onUploadFile(file);
+    };
+
     function handleSelectTab(evt: any) {
 
       const selectedTabId = evt.target.id;
@@ -263,6 +288,11 @@ const GameHome = (props: GameHomeProps) => {
           inProgressGamesTabSelectRef.current.style.backgroundColor = '#ccc';
           newGameTabSelectRef.current.style.backgroundColor = 'inherit';
           break;
+        case 'settingsTabSelect':
+          settingsContentRef.current.style.display = 'block';
+          settingsTabSelectRef.current.style.backgroundColor = '#ccc';
+          inProgressGamesTabSelectRef.current.style.backgroundColor = 'inherit';
+          break;
         default:
           break;
       }
@@ -272,18 +302,41 @@ const GameHome = (props: GameHomeProps) => {
     const newGamesContentRef = React.createRef<any>();
     const inProgressGamesTabSelectRef = React.createRef<any>();
     const inProgressGamesContentRef = React.createRef<any>();
+    const settingsTabSelectRef = React.createRef<any>();
+    const settingsContentRef = React.createRef<any>();
 
     return (
       <div>
         <div style={tab}>
           <button style={tabLinks} onClick={handleSelectTab} id='newGameTabSelect' ref={newGameTabSelectRef}>New Games</button>
           <button style={tabLinks} onClick={handleSelectTab} id='inProgressGameTabSelect' ref={inProgressGamesTabSelectRef}>In Progress Games</button>
+          <button style={tabLinks} onClick={handleSelectTab} id='settingsTabSelect' ref={settingsTabSelectRef}>Settings</button>
         </div>
         <div id='newGameContent' style={tabcontent} ref={newGamesContentRef}>
           <p>New games listed here</p>
         </div>
         <div id='inProgressGamesContent' style={tabcontent} ref={inProgressGamesContentRef}>
           <p>in progress games listed here.</p>
+        </div>
+        <div id='settingsContent' style={tabcontent} ref={settingsContentRef}>
+          <div>
+            <input
+              id="input"
+              type="file"
+              name="puzzle"
+              multiple
+              onChange={handleSelectFiles}
+              formEncType="multipart/form-data"
+            />
+            <p>
+              <button
+                type='button'
+                onClick={handleUploadFiles}
+              >
+                Upload Files
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -307,6 +360,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetBoardId: setBoardId,
     onSetPuzzleId: setPuzzleId,
     onSetUiState: setUiState,
+    onUploadFile: uploadFile,
   }, dispatch);
 };
 
