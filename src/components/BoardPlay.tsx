@@ -60,7 +60,6 @@ const BoardPlay = (props: BoardPlayProps) => {
     props.onCellChange(getBoardId(), getPuzzleUser(), row, col, typedChar, localChange);
   };
 
-
   const handleFillAllAnswers = React.useCallback((event) => {
     (boardPlayCrossword as any).current.fillAllAnswers();
   }, []);

@@ -10,6 +10,8 @@ import {
   // resumeBoardPlay
 } from '../controllers';
 
+import NewGames from './newGames';
+
 export interface GameHomeProps {
   appState: AppState,
   boardsMap: BoardsMap;
@@ -281,6 +283,7 @@ const GameHome = (props: GameHomeProps) => {
         </div>
         <div id='newGameContent' style={tabcontent} ref={newGamesContentRef}>
           <p>New games listed here</p>
+          <NewGames/>
         </div>
         <div id='inProgressGamesContent' style={tabcontent} ref={inProgressGamesContentRef}>
           <p>in progress games listed here.</p>
