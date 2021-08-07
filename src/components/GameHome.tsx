@@ -11,6 +11,7 @@ import {
 } from '../controllers';
 
 import NewGames from './NewGames';
+import ExistingGames from './ExistingGames';
 
 export interface GameHomeProps {
   appState: AppState,
@@ -289,7 +290,9 @@ const GameHome = (props: GameHomeProps) => {
           />
         </div>
         <div id='inProgressGamesContent' style={tabcontent} ref={inProgressGamesContentRef}>
-          <p>in progress games listed here.</p>
+          <ExistingGames
+            handleSelectBoard={handleOpenBoard}
+          />
         </div>
       </div>
     );
