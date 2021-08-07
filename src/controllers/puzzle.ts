@@ -90,13 +90,14 @@ export const uploadPuzFiles = (puzFiles: File[]) => {
   return (dispatch: any) => {
 
     uploadFiles(puzFiles)
-      .then(() => {
+      .then((puzzleSpecs: PuzzleSpec[]) => {
         console.log('uploadFiles returned from promise');
+        console.log(puzzleSpecs);
       });
   };
 };
 
-const uploadFile = (puzFile: File): Promise<void> => {
+const uploadFile = (puzFile: File): Promise<PuzzleSpec> => {
 
   return new Promise((resolve, reject) => {
 
@@ -109,12 +110,12 @@ const uploadFile = (puzFile: File): Promise<void> => {
 
       console.log(fileReader.result);
       const puzData: Buffer = Buffer.from(fileReader.result as ArrayBuffer);
-      const pc: PuzzleSpec = PuzCrossword.from(puzData);
-      console.log(pc);
+      const puzzleSpec: PuzzleSpec = PuzCrossword.from(puzData);
+      console.log(puzzleSpec);
 
       console.log('return resolve() from uploadFile');
 
-      resolve();
+      resolve(puzzleSpec);
     };
 
     console.log('fileReader.readAsArrayBuffer');
@@ -122,22 +123,25 @@ const uploadFile = (puzFile: File): Promise<void> => {
   });
 };
 
-const uploadFiles = (puzFiles: File[]): Promise<void> => {
+const uploadFiles = (puzFiles: File[]): Promise<PuzzleSpec[]> => {
 
-  const uploadNextFile = (index: number): Promise<void> => {
+  const puzzleSpecs: PuzzleSpec[] = [];
+
+  const uploadNextFile = (index: number): Promise<PuzzleSpec[]> => {
 
     console.log('in uploadNextFile: ' + index);
 
     if (index >= puzFiles.length) {
       console.log('return Promise.resolve() from uploadNextFile');
-      return Promise.resolve();
+      return Promise.resolve(puzzleSpecs);
     }
 
     console.log('invoke uploadFile, index = ', index);
 
     return uploadFile(puzFiles[index])
-      .then( () => {
+      .then( (puzzleSpec: PuzzleSpec) => {
         console.log('uploadFile promise resolved, index = ', index);
+        puzzleSpecs.push(puzzleSpec);
         return uploadNextFile(index + 1);
       });
   };
