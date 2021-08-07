@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FileInput, PuzCrosswordSpec, PuzzleEntity, PuzzleMetadata } from '../types';
+import { FileInput, PuzCrosswordSpec, PuzzleEntity, PuzzleMetadata, PuzzleSpec } from '../types';
 import { addPuzzle, addPuzzleMetadata, setPuzCrosswordSpec, setPuzzleId } from '../models';
 
 import { apiUrlFragment, serverUrl } from '../index';
@@ -85,3 +85,51 @@ export const cellChange = (boardId: string, user: string, row: number, col: numb
 
 };
 
+export const uploadPuzFiles = (puzFiles: File[]) => {
+
+  return (dispatch: any) => {
+
+    uploadFiles(puzFiles)
+      .then(() => {
+        console.log('uploadFiles returned from promise');
+      });
+  };
+};
+
+const uploadFiles = (puzFiles: File[]): Promise<void> => {
+
+  const uploadNextFile = (index: number): Promise<void> => {
+
+    console.log('in uploadNextFile: ' + index);
+
+    if (index >= puzFiles.length) {
+      console.log('return Promise.resolve();');
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+
+      const fileReader: FileReader = new FileReader();
+
+      fileReader.onload = function () {
+
+        console.log('onload event received, index = ', index);
+
+        console.log(fileReader.result);
+        const puzData: Buffer = Buffer.from(fileReader.result as ArrayBuffer);
+        const pc: PuzzleSpec = PuzCrossword.from(puzData);
+        console.log(pc);
+
+        index++;
+        return uploadNextFile(index);
+
+      };
+
+      console.log('fileReader.readAsArrayBuffer');
+      fileReader.readAsArrayBuffer(puzFiles[index]);
+
+    });
+  };
+
+  return uploadNextFile(0);
+};

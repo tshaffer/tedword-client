@@ -8,6 +8,7 @@ import { getAppState, getBoards, getPuzzlesMetadata } from '../selectors';
 import { setBoardId, setPuzzleId, setUiState } from '../models';
 import {
   createBoard,
+  uploadPuzFiles,
 } from '../controllers';
 
 import NewGames from './NewGames';
@@ -24,11 +25,12 @@ export interface GameHomeProps {
   onSetBoardId: (boardId: string) => any;
   onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
+  onUploadPuzFiles: (files: File[]) => any;
 }
 
 const GameHome = (props: GameHomeProps) => {
 
-  const [file, setFile] = React.useState(null);
+  const [files, setFiles] = React.useState<File[]>([]);
 
   const handleOpenBoard = (boardEntity: BoardEntity) => {
     props.onSetPuzzleId(boardEntity.puzzleId);
@@ -67,71 +69,23 @@ const GameHome = (props: GameHomeProps) => {
       transition: '0.3s'
     };
 
-    const handleSelectFiles = (e) => {
+    const handleSelectPuzFiles = (e: { target: { files: string | any[] | FileList; value: string; }; }) => {
       if (!isNil(e.target.files)
         && e.target.files.length > 0) {
-        const targetFileList: FileList = e.target.files;
-        // const { onAddUploadFiles = () => {} } = this.props;
+        const targetFileList: FileList = e.target.files as FileList;
         const filesToAdd = [];
         for (let i = 0; i < targetFileList.length; i++) {
           const targetFile: File = e.target.files[i];
           filesToAdd.push(targetFile);
         }
-        // onAddUploadFiles(filesToAdd);
-        console.log(filesToAdd);
-        setFile(filesToAdd[0]);
+        setFiles(filesToAdd);
       }
+      // TEDTODO - display selected files?
       e.target.value = '';
     };
 
-    const fileReader: FileReader = new FileReader();
-
-    const arrayBufferToString = (buffer: ArrayBuffer, encoding = 'UTF-8'): Promise<string> => {
-      return new Promise<string>((resolve, reject) => {
-        const blob = new Blob([buffer], { type: 'text/plain' });
-        const reader = new FileReader();
-        reader.onload = (evt) => {
-          if (evt.target) {
-            resolve(evt.target.result as string);
-          } else {
-            reject(new Error('Could not convert array to string!'));
-          }
-        };
-        reader.readAsText(blob, encoding);
-      });
-    };
-
-    const handleFileReaderEvent = (event) => {
-      console.log('handleFileReaderEvent');
-      console.log(event);
-
-      if (event.type === 'load') {
-        // console.log(fileReader.result);
-
-        const puzData: Buffer = Buffer.from(fileReader.result as ArrayBuffer);
-        const pc: PuzzleSpec = PuzCrossword.from(puzData);
-        console.log(pc);
-    
-        // arrayBufferToString(fileReader.result as ArrayBuffer)
-        //   .then((fileContents: string) => {
-        //     console.log('fileContents: ');
-        //     console.log(fileContents);
-        //   });
-      }
-    };
-
-    const handleUploadFiles = () => {
-      // props.onUploadFile(file);
-      console.log('uploadFile: ', file);
-
-      fileReader.addEventListener('loadstart', handleFileReaderEvent);
-      fileReader.addEventListener('load', handleFileReaderEvent);
-      fileReader.addEventListener('loadend', handleFileReaderEvent);
-      fileReader.addEventListener('progress', handleFileReaderEvent);
-      fileReader.addEventListener('error', handleFileReaderEvent);
-      fileReader.addEventListener('abort', handleFileReaderEvent);
-
-      fileReader.readAsArrayBuffer(file);
+    const handleUploadPuzFiles = () => {
+      props.onUploadPuzFiles(files);
     };
 
     function handleSelectTab(evt: any) {
@@ -194,12 +148,12 @@ const GameHome = (props: GameHomeProps) => {
               id="input"
               type="file"
               multiple
-              onChange={handleSelectFiles}
+              onChange={handleSelectPuzFiles}
             />
             <p>
               <button
                 type='button'
-                onClick={handleUploadFiles}
+                onClick={handleUploadPuzFiles}
               >
                 Upload Files
               </button>
@@ -227,6 +181,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetBoardId: setBoardId,
     onSetPuzzleId: setPuzzleId,
     onSetUiState: setUiState,
+    onUploadPuzFiles: uploadPuzFiles,
   }, dispatch);
 };
 
