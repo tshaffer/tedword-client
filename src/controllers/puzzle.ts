@@ -96,6 +96,32 @@ export const uploadPuzFiles = (puzFiles: File[]) => {
   };
 };
 
+const uploadFile = (puzFile: File): Promise<void> => {
+
+  return new Promise((resolve, reject) => {
+
+    const fileReader: FileReader = new FileReader();
+
+    // TODO - err event
+    fileReader.onload = function () {
+
+      console.log('onload event received');
+
+      console.log(fileReader.result);
+      const puzData: Buffer = Buffer.from(fileReader.result as ArrayBuffer);
+      const pc: PuzzleSpec = PuzCrossword.from(puzData);
+      console.log(pc);
+
+      console.log('return resolve() from uploadFile');
+
+      resolve();
+    };
+
+    console.log('fileReader.readAsArrayBuffer');
+    fileReader.readAsArrayBuffer(puzFile);
+  });
+};
+
 const uploadFiles = (puzFiles: File[]): Promise<void> => {
 
   const uploadNextFile = (index: number): Promise<void> => {
@@ -103,32 +129,17 @@ const uploadFiles = (puzFiles: File[]): Promise<void> => {
     console.log('in uploadNextFile: ' + index);
 
     if (index >= puzFiles.length) {
-      console.log('return Promise.resolve();');
+      console.log('return Promise.resolve() from uploadNextFile');
       return Promise.resolve();
     }
 
-    return new Promise((resolve, reject) => {
+    console.log('invoke uploadFile, index = ', index);
 
-      const fileReader: FileReader = new FileReader();
-
-      fileReader.onload = function () {
-
-        console.log('onload event received, index = ', index);
-
-        console.log(fileReader.result);
-        const puzData: Buffer = Buffer.from(fileReader.result as ArrayBuffer);
-        const pc: PuzzleSpec = PuzCrossword.from(puzData);
-        console.log(pc);
-
-        index++;
-        return uploadNextFile(index);
-
-      };
-
-      console.log('fileReader.readAsArrayBuffer');
-      fileReader.readAsArrayBuffer(puzFiles[index]);
-
-    });
+    return uploadFile(puzFiles[index])
+      .then( () => {
+        console.log('uploadFile promise resolved, index = ', index);
+        return uploadNextFile(index + 1);
+      });
   };
 
   return uploadNextFile(0);
