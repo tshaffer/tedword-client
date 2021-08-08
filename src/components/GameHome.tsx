@@ -4,9 +4,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata, BoardEntity, BoardsMap, PuzzleSpec } from '../types';
-import { getAppState, getBoards, getPuzzlesMetadata } from '../selectors';
+import { getAppState, getBoards, getCurrentUser, getPuzzlesMetadata } from '../selectors';
 import { setBoardId, setPuzzleId, setUiState } from '../models';
 import {
+  addUserToExistingBoard,
   createBoard,
   uploadPuzFiles,
 } from '../controllers';
@@ -15,12 +16,12 @@ import NewGames from './NewGames';
 import ExistingGames from './ExistingGames';
 import { isNil } from 'lodash';
 
-const PuzCrossword = require('@confuzzle/puz-crossword').PuzCrossword;
-
 export interface GameHomeProps {
   appState: AppState,
   boardsMap: BoardsMap;
+  currentUser: string;
   puzzlesMetadata: PuzzlesMetadataMap;
+  onAddUserToBoard: (id: string, userName: string) => any;
   onCreateBoard: () => any;
   onSetBoardId: (boardId: string) => any;
   onSetPuzzleId: (puzzleId: string) => any;
@@ -32,9 +33,16 @@ const GameHome = (props: GameHomeProps) => {
 
   const [files, setFiles] = React.useState<File[]>([]);
 
+  const userInGame = (boardEntity: BoardEntity): boolean => {
+    return boardEntity.users.includes(props.currentUser);
+  };
+
   const handleOpenBoard = (boardEntity: BoardEntity) => {
     props.onSetPuzzleId(boardEntity.puzzleId);
     props.onSetBoardId(boardEntity.id);
+    if (!userInGame(boardEntity)) {
+      props.onAddUserToBoard(boardEntity.id, props.currentUser);
+    }
     props.onSetUiState(UiState.ExistingBoardPlay);
   };
 
@@ -96,7 +104,7 @@ const GameHome = (props: GameHomeProps) => {
       newGamesContentRef.current.style.display = 'none';
       inProgressGamesContentRef.current.style.display = 'none';
       settingsContentRef.current.style.display = 'none';
-      
+
       // Show the current tab, and add an 'active' class to the button that opened the tab
       switch (selectedTabId) {
         case 'newGameTabSelect':
@@ -172,12 +180,14 @@ function mapStateToProps(state: any) {
   return {
     appState: getAppState(state),
     boardsMap: getBoards(state),
+    currentUser: getCurrentUser(state),
     puzzlesMetadata: getPuzzlesMetadata(state),
   };
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onAddUserToBoard: addUserToExistingBoard,
     onCreateBoard: createBoard,
     onSetBoardId: setBoardId,
     onSetPuzzleId: setPuzzleId,

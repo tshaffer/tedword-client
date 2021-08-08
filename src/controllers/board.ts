@@ -15,9 +15,10 @@ import {
   getBoardId,
   getPuzzlesMetadata
 } from '../selectors';
-import { addBoard, setBoardId, setCellContents } from '../models';
+import { addBoard, addUserToBoard, setBoardId, setCellContents } from '../models';
 import { boardPlayCrossword } from '../components/BoardPlay';
 import { isNil } from 'lodash';
+import { addUser } from 'build/bundle';
 
 // import { boardPlayCrossword } from '../components/BoardPlay';
 
@@ -121,3 +122,29 @@ export const createBoard = () => {
   });
 };
 
+export const addUserToExistingBoard = (id: string, userName: string) => {
+  
+  return ((dispatch: any, getState: any): any => {
+
+    const path = serverUrl + apiUrlFragment + 'addUserToBoard';
+
+    const addUserToBoardBody: any = {
+      boardId: id,
+      userName,
+    };
+
+    return axios.post(
+      path,
+      addUserToBoardBody
+    ).then((response) => {
+      console.log(response);
+      dispatch(addUserToBoard(id, userName));
+      return;
+    }).catch((error) => {
+      console.log('error');
+      console.log(error);
+      return;
+    });
+
+  });
+};

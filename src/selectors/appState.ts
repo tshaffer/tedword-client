@@ -10,3 +10,7 @@ export const getAppState = (state: TedwordState): AppState => {
 export const getBoardId = (state: TedwordState): string => {
   return state.appState.boardId;
 };
+
+export const getCurrentUser = (state: TedwordState): string => {
+  return state.appState.userName;
+};
