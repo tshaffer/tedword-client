@@ -17,6 +17,11 @@ export interface NewGamesProps extends NewGamesPropsFromParent {
 
 const NewGames = (props: NewGamesProps) => {
 
+  const tableColumnSpacing = {
+    padding: '0 15px',
+  };
+
+
   const handleSelectPuzzle = (puzzleMetadata: PuzzleMetadata) => {
     props.onSelectPuzzle(puzzleMetadata);
   };
@@ -24,18 +29,18 @@ const NewGames = (props: NewGamesProps) => {
   const renderPuzzleRow = (puzzleMetadata: PuzzleMetadata) => {
     return (
       <tr key={puzzleMetadata.id}>
-        <td>
+        <td style={tableColumnSpacing}>
+          {puzzleMetadata.title}
+        </td>
+        <td style={tableColumnSpacing}>
+          {puzzleMetadata.author}
+        </td>
+        <td style={tableColumnSpacing}>
           <button
             onClick={() => handleSelectPuzzle(puzzleMetadata)}
           >
             Play Me!
           </button>
-        </td>
-        <td>
-          {puzzleMetadata.title}
-        </td>
-        <td>
-          {puzzleMetadata.author}
         </td>
       </tr>
     );
@@ -71,6 +76,7 @@ const NewGames = (props: NewGamesProps) => {
             <tr>
               <th>Title</th>
               <th>Author</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>

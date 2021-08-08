@@ -111,15 +111,18 @@ const GameHome = (props: GameHomeProps) => {
           newGamesContentRef.current.style.display = 'block';
           newGameTabSelectRef.current.style.backgroundColor = '#ccc';
           inProgressGamesTabSelectRef.current.style.backgroundColor = 'inherit';
+          settingsTabSelectRef.current.style.backgroundColor = 'inherit';
           break;
         case 'inProgressGameTabSelect':
           inProgressGamesContentRef.current.style.display = 'block';
           inProgressGamesTabSelectRef.current.style.backgroundColor = '#ccc';
           newGameTabSelectRef.current.style.backgroundColor = 'inherit';
+          settingsTabSelectRef.current.style.backgroundColor = 'inherit';
           break;
         case 'settingsTabSelect':
           settingsContentRef.current.style.display = 'block';
           settingsTabSelectRef.current.style.backgroundColor = '#ccc';
+          newGameTabSelectRef.current.style.backgroundColor = 'inherit';
           inProgressGamesTabSelectRef.current.style.backgroundColor = 'inherit';
           break;
         default:
