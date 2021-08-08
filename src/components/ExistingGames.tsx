@@ -21,6 +21,18 @@ const ExistingGames = (props: ExistingGamesProps) => {
     props.onSelectBoard(boardEntity);
   };
 
+  const getFormattedUsers = (boardEntity: BoardEntity): string => {
+    let formattedUsers = '';
+    for (let i = 0; i < boardEntity.users.length; i++) {
+      const user = boardEntity.users[i];
+      formattedUsers += user;
+      if (i < (boardEntity.users.length - 1)) {
+        formattedUsers += ', ';
+      }
+    }
+    return formattedUsers;
+  };
+
   const renderBoardRow = (boardEntity: BoardEntity) => {
     return (
       <tr key={boardEntity.id}>
@@ -33,6 +45,12 @@ const ExistingGames = (props: ExistingGamesProps) => {
         </td>
         <td>
           {boardEntity.title}
+        </td>
+        <td>
+          {getFormattedUsers(boardEntity)}
+        </td>
+        <td>
+          {boardEntity.lastPlayedDateTime}
         </td>
       </tr>
     );
@@ -66,7 +84,10 @@ const ExistingGames = (props: ExistingGamesProps) => {
         <table>
           <thead>
             <tr>
+              <th></th>
               <th>Title</th>
+              <th>Users</th>
+              <th>Last Played</th>
             </tr>
           </thead>
           <tbody>

@@ -44,7 +44,7 @@ const GameHome = (props: GameHomeProps) => {
     props.onSetUiState(UiState.NewBoardPlay);
   };
 
-  const renderSelectPuzzleOrBoard = () => {
+  const renderGameHome = () => {
 
     const tabcontent = {
       display: 'none',
@@ -95,7 +95,8 @@ const GameHome = (props: GameHomeProps) => {
       // Hide content divs
       newGamesContentRef.current.style.display = 'none';
       inProgressGamesContentRef.current.style.display = 'none';
-
+      settingsContentRef.current.style.display = 'none';
+      
       // Show the current tab, and add an 'active' class to the button that opened the tab
       switch (selectedTabId) {
         case 'newGameTabSelect':
@@ -130,7 +131,7 @@ const GameHome = (props: GameHomeProps) => {
         <div style={tab}>
           <button style={tabLinks} onClick={handleSelectTab} id='newGameTabSelect' ref={newGameTabSelectRef}>New Games</button>
           <button style={tabLinks} onClick={handleSelectTab} id='inProgressGameTabSelect' ref={inProgressGamesTabSelectRef}>In Progress Games</button>
-          <button style={tabLinks} onClick={handleSelectTab} id='settingsTabSelect' ref={settingsTabSelectRef}>Settings</button>
+          <button style={tabLinks} onClick={handleSelectTab} id='settingsTabSelect' ref={settingsTabSelectRef}>Tools & Settings</button>
         </div>
         <div id='newGameContent' style={tabcontent} ref={newGamesContentRef}>
           <NewGames
@@ -164,7 +165,7 @@ const GameHome = (props: GameHomeProps) => {
     );
   };
 
-  return renderSelectPuzzleOrBoard();
+  return renderGameHome();
 };
 
 function mapStateToProps(state: any) {
