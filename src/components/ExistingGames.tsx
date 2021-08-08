@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 
 import { isEmpty } from 'lodash';
 
-import { BoardEntity, BoardsMap } from '../types';
-import { getBoards } from '../selectors';
+import { BoardEntity, BoardsMap, PuzzlesMetadataMap } from '../types';
+import { getBoards, getPuzzlesMetadata } from '../selectors';
 
 export interface ExistingGamesPropsFromParent {
   onSelectBoard: (boardEntity: BoardEntity) => any;
@@ -13,12 +13,25 @@ export interface ExistingGamesPropsFromParent {
 
 export interface ExistingGamesProps extends ExistingGamesPropsFromParent {
   boardsMap: BoardsMap;
+  puzzlesMetadata: PuzzlesMetadataMap;
 }
 
 const ExistingGames = (props: ExistingGamesProps) => {
 
-  const handleSelectBoard = (boardEntity: BoardEntity) => {
-    props.onSelectBoard(boardEntity);
+  const tableColumnSpacing = {
+    padding: '0 15px',
+  };
+
+  const getFormattedLastPlayedDateTime = (dt: string): string => {
+    return dt;
+  };
+
+  const getPuzzleTitle = (boardEntity: BoardEntity): string => {
+    const puzzleId: string = boardEntity.puzzleId;
+    if (Object.prototype.hasOwnProperty.call(props.puzzlesMetadata, puzzleId)) {
+      return props.puzzlesMetadata[puzzleId].title;
+    }
+    return '';
   };
 
   const getFormattedUsers = (boardEntity: BoardEntity): string => {
@@ -33,24 +46,28 @@ const ExistingGames = (props: ExistingGamesProps) => {
     return formattedUsers;
   };
 
+  const handleSelectBoard = (boardEntity: BoardEntity) => {
+    props.onSelectBoard(boardEntity);
+  };
+
   const renderBoardRow = (boardEntity: BoardEntity) => {
     return (
       <tr key={boardEntity.id}>
-        <td>
+        <td style={tableColumnSpacing}>
+          {getFormattedLastPlayedDateTime(boardEntity.lastPlayedDateTime as unknown as string)}
+        </td>
+        <td style={tableColumnSpacing}>
+          {getPuzzleTitle(boardEntity)}
+        </td>
+        <td style={tableColumnSpacing}>
+          {getFormattedUsers(boardEntity)}
+        </td>
+        <td style={tableColumnSpacing}>
           <button
             onClick={() => handleSelectBoard(boardEntity)}
           >
             Play Me!
           </button>
-        </td>
-        <td>
-          {boardEntity.title}
-        </td>
-        <td>
-          {getFormattedUsers(boardEntity)}
-        </td>
-        <td>
-          {boardEntity.lastPlayedDateTime}
         </td>
       </tr>
     );
@@ -84,10 +101,10 @@ const ExistingGames = (props: ExistingGamesProps) => {
         <table>
           <thead>
             <tr>
-              <th></th>
+              <th>Last Played</th>
               <th>Title</th>
               <th>Users</th>
-              <th>Last Played</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -110,6 +127,7 @@ const ExistingGames = (props: ExistingGamesProps) => {
 function mapStateToProps(state: any) {
   return {
     boardsMap: getBoards(state),
+    puzzlesMetadata: getPuzzlesMetadata(state),
   };
 }
 

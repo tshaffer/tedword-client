@@ -21,7 +21,6 @@ const NewGames = (props: NewGamesProps) => {
     padding: '0 15px',
   };
 
-
   const handleSelectPuzzle = (puzzleMetadata: PuzzleMetadata) => {
     props.onSelectPuzzle(puzzleMetadata);
   };
