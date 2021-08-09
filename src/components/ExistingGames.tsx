@@ -22,8 +22,58 @@ const ExistingGames = (props: ExistingGamesProps) => {
     padding: '0 15px',
   };
 
+  const isToday = (dt: Date): boolean => {
+    const today = new Date();
+    return dt.getDate() == today.getDate() &&
+      dt.getMonth() == today.getMonth() &&
+      dt.getFullYear() == today.getFullYear();
+  };
+
+  const daysSinceToday = (dt: Date): number => {
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const dtNow: number = Date.now();
+    const diffDays = Math.round(Math.abs((dtNow - dt.getTime()) / oneDay));
+    return diffDays;
+  };
+
+  const hoursSinceNow = (dt: Date): number => {
+    const oneHour = 60 * 60 * 1000;
+    const dtNow: number = Date.now();
+    const diffHours = Math.round(Math.abs((dtNow - dt.getTime()) / oneHour));
+    return diffHours;
+  };
+
+  const minutesSinceNow = (dt: Date): number => {
+    const oneMinute = 60 * 1000;
+    const dtNow: number = Date.now();
+    const diffMinutes = Math.round(Math.abs((dtNow - dt.getTime()) / oneMinute));
+    return diffMinutes;
+  };
+
   const getFormattedLastPlayedDateTime = (dt: string): string => {
-    return dt;
+
+    let fullString = '';
+
+    const dtGameLastPlayed: Date = new Date(dt);
+    if (isToday(dtGameLastPlayed)) {
+      const hoursSincePlayed = hoursSinceNow(dtGameLastPlayed);
+      const minutesSincePlayed = minutesSinceNow(dtGameLastPlayed);
+      fullString = 'Played ' + hoursSincePlayed + ' hours, ' + minutesSincePlayed + ' minutes ago';
+
+    } else {
+      const daysSincePlayed = daysSinceToday(dtGameLastPlayed);
+      const dateLastPlayed: string = dtGameLastPlayed.toLocaleDateString(
+        'en',
+        {
+          weekday: 'long',
+          month: 'long',
+          day: 'numeric',
+        }
+      );
+      fullString = 'Played ' + daysSincePlayed + ' days ago on ' + dateLastPlayed;
+    }
+
+    return fullString;
   };
 
   const getPuzzleTitle = (boardEntity: BoardEntity): string => {
