@@ -2,19 +2,30 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata, DisplayedPuzzle, CellContentsMap } from '../types';
-import { 
-  getAppState, 
-  getCellContents, 
-  getDisplayedPuzzle, 
-  getPuzzlesMetadata, 
+import {
+  AppState,
+  UiState,
+  PuzzlesMetadataMap,
+  DisplayedPuzzle,
+  CellContentsMap,
+  BoardEntity,
+  PuzzleSpec,
+  ParsedClue
+} from '../types';
+import {
+  getAppState,
+  getCellContents,
+  getDisplayedPuzzle,
+  getPuzzlesMetadata,
+  getBoard,
+  getPuzzle,
   // getBoardData
- } from '../selectors';
+} from '../selectors';
 import { setPuzzleId, setUiState } from '../models';
-import { 
+import {
   cellChange,
   loadPuzzle
- } from '../controllers';
+} from '../controllers';
 import { isNil } from 'lodash';
 
 export interface BoardPlayProps {
@@ -23,6 +34,7 @@ export interface BoardPlayProps {
   cellContents: CellContentsMap;
   displayedPuzzle: DisplayedPuzzle;
   puzzlesMetadata: PuzzlesMetadataMap;
+  puzzleSpec: PuzzleSpec;
   onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
   onLoadPuzzle: (puzzleId: string) => any;
@@ -87,7 +99,90 @@ const BoardPlay = (props: BoardPlayProps) => {
     console.log(param);
   };
 
+  const handleFocusedCellChange = (row: any, col: any, direction: any) => {
 
+    console.log('handleFocusedCellChange', row, col, direction);
+
+    const parsedClues: ParsedClue[] = props.puzzleSpec.parsedClues;
+
+    const focusedRow = row;
+
+    let rowMatch: any = null;
+    let colMatch: any = null;
+
+    // get match for row
+    while (row >= 0) {
+      for (const parsedClue of parsedClues) {
+        if (parsedClue.row === row && parsedClue.col === col && !parsedClue.isAcross) {
+          rowMatch = {
+            row,
+            col,
+          };
+          break;
+        }
+      }
+      if (!isNil(rowMatch)) {
+        break;
+      }
+      row--;
+    }
+
+    row = focusedRow;
+
+    // get match for col
+    while (col >= 0) {
+      for (const parsedClue of parsedClues) {
+        if (parsedClue.row === row && parsedClue.col === col && parsedClue.isAcross) {
+          colMatch = {
+            row,
+            col,
+          };
+          break;
+        }
+      }
+      if (!isNil(colMatch)) {
+        break;
+      }
+      col--;
+    }
+
+    console.log('rowMatch');
+    if (isNil(rowMatch)) {
+      console.log('none found');
+    } else {
+      console.log(rowMatch);
+    }
+
+    console.log('colMatch');
+    if (isNil(colMatch)) {
+      console.log('none found');
+    } else {
+      console.log(colMatch);
+    }
+
+
+    // let selectedAcrossClue: ParsedClue = null;
+    // let selectedDownClue: ParsedClue =  null;
+
+    // for (const parsedClue of parsedClues) {
+    //   if (parsedClue.row === row && parsedClue.col === col) {
+    //     if (direction === 'across') {
+    //       selectedAcrossClue = parsedClue;
+    //     } else if (direction === 'down') {
+    //       selectedDownClue = parsedClue;
+    //     }
+    //   }  
+    // }
+
+    // if (!isNil(selectedAcrossClue)) {
+    //   console.log('selectedAcrossClue:');
+    //   console.log(selectedAcrossClue);
+    // }
+    // if (!isNil(selectedDownClue)) {
+    //   console.log('selectedDownClue');
+    //   console.log(selectedDownClue);
+    // }
+  };
   /*
       <Crossword
         data={props.displayedPuzzle}
@@ -117,9 +212,8 @@ const BoardPlay = (props: BoardPlayProps) => {
     // return null;
     cellContents = {};
   }
-  
-  return (
-    <div>
+
+  /*
       <p>
         BoardPlay
       </p>
@@ -143,6 +237,12 @@ const BoardPlay = (props: BoardPlayProps) => {
           Set cell remote
         </button>
       </div>
+  */
+
+  return (
+    <div>
+      <p>1A Potato, informally (4)</p>
+      <p>1D Weeps loudly (4)</p>
       <Crossword
         data={displayedPuzzleData}
         tedGuesses={cellContents}
@@ -151,18 +251,24 @@ const BoardPlay = (props: BoardPlayProps) => {
         onCorrect={handleClueCorrect}
         onLoadedCorrect={handleLoadedCorrect}
         onCrosswordCorrect={handleCrosswordCorrect}
+        onFocusedCellChange={handleFocusedCellChange}
       />
     </div>
   );
 };
 
 function mapStateToProps(state: any) {
+  const appState: AppState = getAppState(state);
+  const puzzleId: string = appState.puzzleId;
+  const boardId: string = appState.boardId;
+  const board: BoardEntity = getBoard(state, boardId);
   return {
     puzzlesMetadata: getPuzzlesMetadata(state),
-    appState: getAppState(state),
+    appState,
     displayedPuzzle: getDisplayedPuzzle(state),
     // boardData: getBoardData(state),
     cellContents: getCellContents(state),
+    puzzleSpec: getPuzzle(state, board.puzzleId),
   };
 }
 

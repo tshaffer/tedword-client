@@ -5,6 +5,14 @@ import {
   TedwordState
 } from '../types';
 
+export const getPuzzle = (state: TedwordState, puzzleId: string): PuzzleEntity => {
+  // eslint-disable-next-line no-prototype-builtins
+  if (state.puzzlesState.puzzles.hasOwnProperty(puzzleId)) {
+    return state.puzzlesState.puzzles[puzzleId];
+  }
+  return null;
+};
+
 export const getDisplayedPuzzle = (state: TedwordState): DisplayedPuzzle => {
   
   const displayedPuzzle: DisplayedPuzzle = {
