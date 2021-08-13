@@ -99,6 +99,7 @@ const BoardPlay = (props: BoardPlayProps) => {
     console.log(param);
   };
 
+  // TEDTODO - several ways to improve performance.
   const handleFocusedCellChange = (row: any, col: any, direction: any) => {
 
     console.log('handleFocusedCellChange', row, col, direction);
@@ -107,21 +108,18 @@ const BoardPlay = (props: BoardPlayProps) => {
 
     const focusedRow = row;
 
-    let rowMatch: any = null;
-    let colMatch: any = null;
+    let matchedDownClue: ParsedClue | null = null;
+    let matchedAcrossClue: ParsedClue | null = null;
 
     // get match for row
     while (row >= 0) {
       for (const parsedClue of parsedClues) {
         if (parsedClue.row === row && parsedClue.col === col && !parsedClue.isAcross) {
-          rowMatch = {
-            row,
-            col,
-          };
+          matchedDownClue = parsedClue;
           break;
         }
       }
-      if (!isNil(rowMatch)) {
+      if (!isNil(matchedDownClue)) {
         break;
       }
       row--;
@@ -133,73 +131,32 @@ const BoardPlay = (props: BoardPlayProps) => {
     while (col >= 0) {
       for (const parsedClue of parsedClues) {
         if (parsedClue.row === row && parsedClue.col === col && parsedClue.isAcross) {
-          colMatch = {
-            row,
-            col,
-          };
+          matchedAcrossClue = parsedClue;
           break;
         }
       }
-      if (!isNil(colMatch)) {
+      if (!isNil(matchedAcrossClue)) {
         break;
       }
       col--;
     }
 
-    console.log('rowMatch');
-    if (isNil(rowMatch)) {
+    console.log('downMatch');
+    if (isNil(matchedDownClue)) {
       console.log('none found');
     } else {
-      console.log(rowMatch);
+      console.log(matchedDownClue);
     }
 
-    console.log('colMatch');
-    if (isNil(colMatch)) {
+    console.log('acrossMatch');
+    if (isNil(matchedAcrossClue)) {
       console.log('none found');
     } else {
-      console.log(colMatch);
+      console.log(matchedAcrossClue);
     }
-
-
-    // let selectedAcrossClue: ParsedClue = null;
-    // let selectedDownClue: ParsedClue =  null;
-
-    // for (const parsedClue of parsedClues) {
-    //   if (parsedClue.row === row && parsedClue.col === col) {
-    //     if (direction === 'across') {
-    //       selectedAcrossClue = parsedClue;
-    //     } else if (direction === 'down') {
-    //       selectedDownClue = parsedClue;
-    //     }
-    //   }  
-    // }
-
-    // if (!isNil(selectedAcrossClue)) {
-    //   console.log('selectedAcrossClue:');
-    //   console.log(selectedAcrossClue);
-    // }
-    // if (!isNil(selectedDownClue)) {
-    //   console.log('selectedDownClue');
-    //   console.log(selectedDownClue);
-    // }
   };
-  /*
-      <Crossword
-        data={props.displayedPuzzle}
-        ref={boardPlayCrossword}
-        onCellChange={handleCellChange}
-        onCorrect={handleClueCorrect}
-        onLoadedCorrect={handleLoadedCorrect}
-        onCrosswordCorrect={handleCrosswordCorrect}
-      />
-  */
 
   const displayedPuzzleData: DisplayedPuzzle = props.displayedPuzzle;
-  // if (props.appState.uiState === UiState.NewBoardPlay) {
-  //   displayedPuzzleData = props.boardData;
-  // } else {
-  //   displayedPuzzleData = props.displayedPuzzle;
-  // }
 
   console.log('BoardPlay rendering');
 
@@ -213,31 +170,6 @@ const BoardPlay = (props: BoardPlayProps) => {
     cellContents = {};
   }
 
-  /*
-      <p>
-        BoardPlay
-      </p>
-      <div>
-        <button
-          type="button"
-          onClick={handleFillAllAnswers}
-        >
-          Fill all answers
-        </button>
-        <button
-          type='button'
-          onClick={handleResetPuzzle}
-        >
-          Reset puzzle
-        </button>
-        <button
-          type='button'
-          onClick={handleRemoteSetCell}
-        >
-          Set cell remote
-        </button>
-      </div>
-  */
 
   return (
     <div>
@@ -266,7 +198,6 @@ function mapStateToProps(state: any) {
     puzzlesMetadata: getPuzzlesMetadata(state),
     appState,
     displayedPuzzle: getDisplayedPuzzle(state),
-    // boardData: getBoardData(state),
     cellContents: getCellContents(state),
     puzzleSpec: getPuzzle(state, board.puzzleId),
   };
