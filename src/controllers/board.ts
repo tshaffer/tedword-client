@@ -3,7 +3,6 @@ import axios from 'axios';
 import {
   AppState,
   BoardEntity,
-  CellContentsMap,
   ParsedClue,
   PuzzleMetadata,
   PuzzlesMetadataMap,
@@ -13,11 +12,9 @@ import {
 import { apiUrlFragment, serverUrl } from '../index';
 import {
   getBoard,
-  getBoardId,
   getPuzzlesMetadata
 } from '../selectors';
-import { addBoard, addUserToBoard, setBoardId, setCellContents, setFocusedClues } from '../models';
-import { boardPlayCrossword } from '../components/BoardPlay';
+import { addBoard, addUserToBoard, setBoardId, setFocusedClues } from '../models';
 import { isNil } from 'lodash';
 import { getAppState, getPuzzle } from '../selectors';
 
@@ -161,9 +158,18 @@ export const updateFocusedClues = (
     const state = getState();
 
     const appState: AppState = getAppState(state);
+    if (isNil(appState)) {
+      return;
+    }
     const boardId: string = appState.boardId;
     const board: BoardEntity = getBoard(state, boardId);
+    if (isNil(board)) {
+      return;
+    }
     const puzzleSpec = getPuzzle(state, board.puzzleId);
+    if (isNil(puzzleSpec)) {
+      return null;
+    }
     const parsedClues: ParsedClue[] = puzzleSpec.parsedClues;
 
     const focusedRow = row;
