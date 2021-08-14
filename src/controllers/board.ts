@@ -4,6 +4,7 @@ import {
   AppState,
   BoardEntity,
   CellContentsMap,
+  ParsedClue,
   PuzzleMetadata,
   PuzzlesMetadataMap,
   TedwordState
@@ -15,10 +16,10 @@ import {
   getBoardId,
   getPuzzlesMetadata
 } from '../selectors';
-import { addBoard, addUserToBoard, setBoardId, setCellContents } from '../models';
+import { addBoard, addUserToBoard, setBoardId, setCellContents, setFocusedClues } from '../models';
 import { boardPlayCrossword } from '../components/BoardPlay';
 import { isNil } from 'lodash';
-import { addUser } from 'build/bundle';
+import { getAppState, getPuzzle } from '../selectors';
 
 // import { boardPlayCrossword } from '../components/BoardPlay';
 
@@ -45,7 +46,7 @@ export const loadBoards = () => {
         if (boardEntities.length > 0) {
           dispatch(setBoardId(boardEntities[0].id));
         }
-    
+
       });
   };
 };
@@ -123,7 +124,7 @@ export const createBoard = () => {
 };
 
 export const addUserToExistingBoard = (id: string, userName: string) => {
-  
+
   return ((dispatch: any, getState: any): any => {
 
     const path = serverUrl + apiUrlFragment + 'addUserToBoard';
@@ -146,5 +147,73 @@ export const addUserToExistingBoard = (id: string, userName: string) => {
       return;
     });
 
+  });
+};
+
+// TEDTODO - several ways to improve performance.
+export const updateFocusedClues = (
+  row: number,
+  col: number,
+) => {
+
+  return ((dispatch: any, getState: any): any => {
+
+    const state = getState();
+
+    const appState: AppState = getAppState(state);
+    const boardId: string = appState.boardId;
+    const board: BoardEntity = getBoard(state, boardId);
+    const puzzleSpec = getPuzzle(state, board.puzzleId);
+    const parsedClues: ParsedClue[] = puzzleSpec.parsedClues;
+
+    const focusedRow = row;
+
+    let matchedDownClue: ParsedClue | null = null;
+    let matchedAcrossClue: ParsedClue | null = null;
+
+    // get match for row
+    while (row >= 0) {
+      for (const parsedClue of parsedClues) {
+        if (parsedClue.row === row && parsedClue.col === col && !parsedClue.isAcross) {
+          matchedDownClue = parsedClue;
+          break;
+        }
+      }
+      if (!isNil(matchedDownClue)) {
+        break;
+      }
+      row--;
+    }
+
+    // get match for col
+    row = focusedRow;
+    while (col >= 0) {
+      for (const parsedClue of parsedClues) {
+        if (parsedClue.row === row && parsedClue.col === col && parsedClue.isAcross) {
+          matchedAcrossClue = parsedClue;
+          break;
+        }
+      }
+      if (!isNil(matchedAcrossClue)) {
+        break;
+      }
+      col--;
+    }
+
+    console.log('downMatch');
+    if (isNil(matchedDownClue)) {
+      console.log('none found');
+    } else {
+      console.log(matchedDownClue);
+    }
+
+    console.log('acrossMatch');
+    if (isNil(matchedAcrossClue)) {
+      console.log('none found');
+    } else {
+      console.log(matchedAcrossClue);
+    }
+
+    dispatch(setFocusedClues(matchedAcrossClue, matchedDownClue));
   });
 };

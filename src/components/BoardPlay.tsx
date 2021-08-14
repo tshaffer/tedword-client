@@ -24,7 +24,8 @@ import {
 import { setPuzzleId, setUiState } from '../models';
 import {
   cellChange,
-  loadPuzzle
+  loadPuzzle,
+  updateFocusedClues
 } from '../controllers';
 import { isNil } from 'lodash';
 
@@ -39,6 +40,7 @@ export interface BoardPlayProps {
   onSetUiState: (uiState: UiState) => any;
   onLoadPuzzle: (puzzleId: string) => any;
   onCellChange: (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
+  onUpdateFocusedClues: (row: number, col: number) => any;
 }
 
 // import Crossword from '@jaredreisinger/react-crossword';
@@ -99,61 +101,9 @@ const BoardPlay = (props: BoardPlayProps) => {
     console.log(param);
   };
 
-  // TEDTODO - several ways to improve performance.
   const handleFocusedCellChange = (row: any, col: any, direction: any) => {
-
     console.log('handleFocusedCellChange', row, col, direction);
-
-    const parsedClues: ParsedClue[] = props.puzzleSpec.parsedClues;
-
-    const focusedRow = row;
-
-    let matchedDownClue: ParsedClue | null = null;
-    let matchedAcrossClue: ParsedClue | null = null;
-
-    // get match for row
-    while (row >= 0) {
-      for (const parsedClue of parsedClues) {
-        if (parsedClue.row === row && parsedClue.col === col && !parsedClue.isAcross) {
-          matchedDownClue = parsedClue;
-          break;
-        }
-      }
-      if (!isNil(matchedDownClue)) {
-        break;
-      }
-      row--;
-    }
-
-    row = focusedRow;
-
-    // get match for col
-    while (col >= 0) {
-      for (const parsedClue of parsedClues) {
-        if (parsedClue.row === row && parsedClue.col === col && parsedClue.isAcross) {
-          matchedAcrossClue = parsedClue;
-          break;
-        }
-      }
-      if (!isNil(matchedAcrossClue)) {
-        break;
-      }
-      col--;
-    }
-
-    console.log('downMatch');
-    if (isNil(matchedDownClue)) {
-      console.log('none found');
-    } else {
-      console.log(matchedDownClue);
-    }
-
-    console.log('acrossMatch');
-    if (isNil(matchedAcrossClue)) {
-      console.log('none found');
-    } else {
-      console.log(matchedAcrossClue);
-    }
+    props.onUpdateFocusedClues(row, col);
   };
 
   const displayedPuzzleData: DisplayedPuzzle = props.displayedPuzzle;
@@ -209,6 +159,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetUiState: setUiState,
     onLoadPuzzle: loadPuzzle,
     onCellChange: cellChange,
+    onUpdateFocusedClues: updateFocusedClues,
   }, dispatch);
 };
 

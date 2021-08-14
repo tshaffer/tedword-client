@@ -20,31 +20,17 @@ export interface TedwordState {
   users: UsersMap;
 }
 
-export interface PuzzlesState {
-  puzzlesMetadata: PuzzlesMetadataMap,
-  puzzles: PuzzlesMap;
-}
-
-export interface BoardsState {
-  boards: BoardsMap;
-}
-
-export enum UiState {
-  SelectUser = 'SelectUser',
-  SelectPuzzleOrBoard = 'SelectPuzzleOrBoard',
-  NewBoardPlay = 'NewBoardPlay',
-  ExistingBoardPlay = 'ExistingBoardPlay',
-}
-
 export interface AppState {
   uiState: UiState;
   userName: string;
   puzzleId: string;
   boardId: string;
+  focusedAcrossClue: ParsedClue;
+  focusedDownClue: ParsedClue;
 }
 
-export interface PuzzleSpec {
-  name: string;
+export interface BoardsState {
+  boards: BoardsMap;
 }
 
 export interface PuzCrosswordSpec {
@@ -59,6 +45,26 @@ export interface PuzCrosswordSpec {
   state: string;
   hasState: boolean;
   parsedClues: ParsedClue[];
+}
+
+export interface PuzzlesState {
+  puzzlesMetadata: PuzzlesMetadataMap,
+  puzzles: PuzzlesMap;
+}
+
+export interface UsersMap {
+  [id: string]: User; // userName
+}
+
+export enum UiState {
+  SelectUser = 'SelectUser',
+  SelectPuzzleOrBoard = 'SelectPuzzleOrBoard',
+  NewBoardPlay = 'NewBoardPlay',
+  ExistingBoardPlay = 'ExistingBoardPlay',
+}
+
+export interface PuzzleSpec {
+  name: string;
 }
 
 export interface ParsedClue {
@@ -111,10 +117,6 @@ export interface User {
   password: string;
   email: string;
   cellTextColorPartnerBoard: string;
-}
-
-export interface UsersMap {
-  [id: string]: User; // userName
 }
 
 export interface PuzzleSpec {

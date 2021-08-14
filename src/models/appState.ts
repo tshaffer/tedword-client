@@ -1,4 +1,4 @@
-import { AppState, UiState } from '../types';
+import { AppState, ParsedClue, UiState } from '../types';
 import { TedwordModelBaseAction } from './baseAction';
 
 // ------------------------------------
@@ -8,6 +8,7 @@ export const SET_UI_STATE = 'SET_UI_STATE';
 export const SET_USER_NAME = 'SET_USER_NAME';
 export const SET_PUZZLE_ID = 'SET_PUZZLE_ID';
 export const SET_BOARD_ID = 'SET_BOARD_ID';
+export const SET_FOCUSED_CLUES = 'SET_FOCUSED_CLUES';
 
 // ------------------------------------
 // Actions
@@ -73,6 +74,24 @@ export const setBoardId = (
   };
 };
 
+export interface SetFocusedClues {
+  focusedAcrossClue: ParsedClue;
+  focusedDownClue: ParsedClue;
+}
+
+export const setFocusedClues = (
+  focusedAcrossClue: ParsedClue,
+  focusedDownClue: ParsedClue,
+): any => {
+  return {
+    type: SET_FOCUSED_CLUES,
+    payload: {
+      focusedAcrossClue,
+      focusedDownClue,
+    },
+  };
+};
+
 
 // ------------------------------------
 // Reducer
@@ -83,11 +102,13 @@ const initialState: AppState = {
   userName: '',
   puzzleId: '',
   boardId: '',
+  focusedAcrossClue: null,
+  focusedDownClue: null,
 };
 
 export const appStateReducer = (
   state: AppState = initialState,
-  action: TedwordModelBaseAction<SetUiStatePayload & SetUserNamePayload & SetPuzzleIdPayload & SetBoardIdPayload>
+  action: TedwordModelBaseAction<SetUiStatePayload & SetUserNamePayload & SetPuzzleIdPayload & SetBoardIdPayload & SetFocusedClues>
 ): AppState => {
   switch (action.type) {
     case SET_UI_STATE: {
@@ -102,6 +123,9 @@ export const appStateReducer = (
     case SET_BOARD_ID: {
       return { ...state, boardId: action.payload.boardId };
     }
+    case SET_FOCUSED_CLUES:
+      // return { ...state, focusedAcrossClue: action.payload.focusedAcrossClue, focusedDownClue: action.payload.focusedDownClue };
+      return state;
     default:
       return state;
   }
