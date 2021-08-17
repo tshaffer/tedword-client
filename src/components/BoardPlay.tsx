@@ -7,8 +7,10 @@ import {
   UiState,
   PuzzlesMetadataMap,
   DisplayedPuzzle,
+  DisplayedPuzzleCell,
   CellContentsMap,
-  PuzzleSpec} from '../types';
+  PuzzleSpec
+} from '../types';
 import { setPuzzleId, setUiState } from '../models';
 import {
   cellChange,
@@ -171,11 +173,34 @@ export default React.memo(
       console.log('puzzleSpec different');
       return false;
     }
-    // if (props.displayedPuzzle !== nextProps.displayedPuzzle) {
-    //   console.log('displayedPuzzle different');
-    //   return false;
-    // }
-
-    return true;
+    const displayedPuzzlesIdentical: boolean = displayedPuzzlesEqual(props.displayedPuzzle, nextProps.displayedPuzzle);
+    if (!displayedPuzzlesIdentical) {
+      console.log('displayedPuzzles different');
+      return false;
+    }
+    return displayedPuzzlesIdentical;
   }
 );
+
+const displayedPuzzlesEqual = (dp1: DisplayedPuzzle, dp2: DisplayedPuzzle): boolean => {
+  for (const id in dp1.across) {
+    if (Object.prototype.hasOwnProperty.call(dp1.across, id)) {
+      const displayedPuzzleCell1: DisplayedPuzzleCell = dp1.across[id];
+      if (Object.prototype.hasOwnProperty.call(dp2.across, id)) {
+        const displayedPuzzleCell2: DisplayedPuzzleCell = dp2.across[id];
+        if (!displayedPuzzleCellsEqual(displayedPuzzleCell1, displayedPuzzleCell2)) {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  return true;
+};
+
+const displayedPuzzleCellsEqual = (dpc1: DisplayedPuzzleCell, dpc2: DisplayedPuzzleCell): boolean => {
+  return (dpc1.answer === dpc2.answer) && (dpc1.clue === dpc2.clue) && (dpc1.col === dpc2.col) && (dpc1.row === dpc2.row);
+};
