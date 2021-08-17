@@ -8,17 +8,7 @@ import {
   PuzzlesMetadataMap,
   DisplayedPuzzle,
   CellContentsMap,
-  BoardEntity,
   PuzzleSpec} from '../types';
-import {
-  getAppState,
-  getCellContents,
-  getDisplayedPuzzle,
-  getPuzzlesMetadata,
-  getBoard,
-  getPuzzle,
-  // getBoardData
-} from '../selectors';
 import { setPuzzleId, setUiState } from '../models';
 import {
   cellChange,
@@ -27,13 +17,15 @@ import {
 } from '../controllers';
 import { isNil } from 'lodash';
 
-export interface BoardPlayProps {
+export interface BoardPlayPropsFromParent {
   appState: AppState,
-  // boardData: DisplayedPuzzle,
   cellContents: CellContentsMap;
   displayedPuzzle: DisplayedPuzzle;
   puzzlesMetadata: PuzzlesMetadataMap;
   puzzleSpec: PuzzleSpec;
+}
+
+export interface BoardPlayProps extends BoardPlayPropsFromParent {
   onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
   onLoadPuzzle: (puzzleId: string) => any;
@@ -136,16 +128,13 @@ const BoardPlay = (props: BoardPlayProps) => {
   );
 };
 
-function mapStateToProps(state: any) {
-  const appState: AppState = getAppState(state);
-  const boardId: string = appState.boardId;
-  const board: BoardEntity = getBoard(state, boardId);
+function mapStateToProps(state: any, ownProps: any) {
   return {
-    puzzlesMetadata: getPuzzlesMetadata(state),
-    appState,
-    displayedPuzzle: getDisplayedPuzzle(state),
-    cellContents: getCellContents(state),
-    puzzleSpec: getPuzzle(state, board.puzzleId),
+    puzzlesMetadata: ownProps.puzzleMetadata,
+    appState: ownProps.appState,
+    displayedPuzzle: ownProps.displayedPuzzle,
+    cellContents: ownProps.cellContents,
+    puzzleSpec: ownProps.puzzleSpec,
   };
 }
 
@@ -165,8 +154,28 @@ export default React.memo(
     mapStateToProps,
     mapDispatchToProps
   )(BoardPlay),
-  (props, nextProps) => {
-    console.log('foo');
+  (props: BoardPlayPropsFromParent, nextProps: BoardPlayPropsFromParent) => {
+    if (props.appState !== nextProps.appState) {
+      console.log('appState different');
+      return false;
+    }
+    if (props.cellContents !== nextProps.cellContents) {
+      console.log('cellContents different');
+      return false;
+    }
+    if (props.puzzlesMetadata !== nextProps.puzzlesMetadata) {
+      console.log('puzzlesMetadata different');
+      return false;
+    }
+    if (props.puzzleSpec !== nextProps.puzzleSpec) {
+      console.log('puzzleSpec different');
+      return false;
+    }
+    // if (props.displayedPuzzle !== nextProps.displayedPuzzle) {
+    //   console.log('displayedPuzzle different');
+    //   return false;
+    // }
+
     return true;
   }
 );
