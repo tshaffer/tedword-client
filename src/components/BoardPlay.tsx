@@ -159,5 +159,14 @@ const mapDispatchToProps = (dispatch: any) => {
   }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BoardPlay);
-
+// export default connect(mapStateToProps, mapDispatchToProps)(BoardPlay);
+export default React.memo(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(BoardPlay),
+  (props, nextProps) => {
+    console.log('foo');
+    return true;
+  }
+);

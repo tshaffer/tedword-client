@@ -220,9 +220,10 @@ export const updateFocusedClues = (
       console.log(matchedAcrossClue);
     }
 
+    // dispatch(setFocusedClues(matchedAcrossClue, matchedDownClue));
+    
     // debugger;
 
-    // dispatch(setFocusedClues(matchedAcrossClue, matchedDownClue));
     // dispatch(addUser(
     //   'Fred',
     //   {
