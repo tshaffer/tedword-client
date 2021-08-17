@@ -9,9 +9,7 @@ import {
   DisplayedPuzzle,
   CellContentsMap,
   BoardEntity,
-  PuzzleSpec,
-  ParsedClue
-} from '../types';
+  PuzzleSpec} from '../types';
 import {
   getAppState,
   getCellContents,
@@ -52,6 +50,7 @@ export let boardPlayCrossword: any;
 const BoardPlay = (props: BoardPlayProps) => {
 
   console.log('BoardPlay invoked');
+  console.log(props);
 
   React.useEffect(() => {
     props.onLoadPuzzle(props.appState.puzzleId);
@@ -74,31 +73,31 @@ const BoardPlay = (props: BoardPlayProps) => {
     props.onCellChange(getBoardId(), getPuzzleUser(), row, col, typedChar, localChange);
   };
 
-  const handleFillAllAnswers = React.useCallback((event) => {
-    (boardPlayCrossword as any).current.fillAllAnswers();
-  }, []);
+  // const handleFillAllAnswers = React.useCallback((event) => {
+  //   (boardPlayCrossword as any).current.fillAllAnswers();
+  // }, []);
 
-  const handleResetPuzzle = React.useCallback((event) => {
-    (boardPlayCrossword as any).current.reset();
-  }, []);
+  // const handleResetPuzzle = React.useCallback((event) => {
+  //   (boardPlayCrossword as any).current.reset();
+  // }, []);
 
-  const handleRemoteSetCell = React.useCallback((event) => {
-    (boardPlayCrossword as any).current.remoteSetCell(0, 1, 'X');
-  }, []);
+  // const handleRemoteSetCell = React.useCallback((event) => {
+  //   (boardPlayCrossword as any).current.remoteSetCell(0, 1, 'X');
+  // }, []);
 
   const handleClueCorrect = (direction: string, number: string, answer: string) => {
-    console.log('handleClueCorrect');
-    console.log(direction, number, answer);
+    // console.log('handleClueCorrect');
+    // console.log(direction, number, answer);
   };
 
   const handleLoadedCorrect = (param) => {
-    console.log('handleLoadedCorrect');
-    console.log(param);
+    // console.log('handleLoadedCorrect');
+    // console.log(param);
   };
 
   const handleCrosswordCorrect = (param) => {
-    console.log('handleCrosswordCorrect');
-    console.log(param);
+    // console.log('handleCrosswordCorrect');
+    // console.log(param);
   };
 
   const handleFocusedCellChange = (row: any, col: any, direction: any) => {
@@ -123,8 +122,6 @@ const BoardPlay = (props: BoardPlayProps) => {
 
   return (
     <div>
-      <p>1A Potato, informally (4)</p>
-      <p>1D Weeps loudly (4)</p>
       <Crossword
         data={displayedPuzzleData}
         tedGuesses={cellContents}
@@ -141,7 +138,6 @@ const BoardPlay = (props: BoardPlayProps) => {
 
 function mapStateToProps(state: any) {
   const appState: AppState = getAppState(state);
-  const puzzleId: string = appState.puzzleId;
   const boardId: string = appState.boardId;
   const board: BoardEntity = getBoard(state, boardId);
   return {

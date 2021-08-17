@@ -12,7 +12,7 @@ import { setUiState, setUserName } from '../models';
 
 import Login from './Login';
 import GameHome from './GameHome';
-import BoardPlay from './BoardPlay';
+import BoardTop from './BoardTop';
 
 const Pusher = require('pusher-js');
 
@@ -86,7 +86,7 @@ const Home = (props: HomeProps) => {
     case UiState.NewBoardPlay:
     case UiState.ExistingBoardPlay: {
       return (
-        <BoardPlay/>
+        <BoardTop/>
       );
     }
   }

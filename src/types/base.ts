@@ -15,6 +15,7 @@ export interface FileInput {
 export interface TedwordState {
   appState: AppState;
   boardsState: BoardsState;
+  gameState: GameState;
   puzCrosswordSpec: PuzCrosswordSpec;
   puzzlesState: PuzzlesState,
   users: UsersMap;
@@ -25,6 +26,9 @@ export interface AppState {
   userName: string;
   puzzleId: string;
   boardId: string;
+}
+
+export interface GameState {
   focusedAcrossClue: ParsedClue;
   focusedDownClue: ParsedClue;
 }

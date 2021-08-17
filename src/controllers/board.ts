@@ -14,7 +14,7 @@ import {
   getBoard,
   getPuzzlesMetadata
 } from '../selectors';
-import { addBoard, addUserToBoard, setBoardId, setFocusedClues } from '../models';
+import { addBoard, addUser, addUserToBoard, setBoardId, setFocusedClues } from '../models';
 import { isNil } from 'lodash';
 import { getAppState, getPuzzle } from '../selectors';
 
@@ -220,6 +220,17 @@ export const updateFocusedClues = (
       console.log(matchedAcrossClue);
     }
 
-    dispatch(setFocusedClues(matchedAcrossClue, matchedDownClue));
+    // debugger;
+
+    // dispatch(setFocusedClues(matchedAcrossClue, matchedDownClue));
+    // dispatch(addUser(
+    //   'Fred',
+    //   {
+    //     userName: '',
+    //     password: '',
+    //     email: '',
+    //     cellTextColorPartnerBoard: '',
+    //   }
+    // ));
   });
 };
