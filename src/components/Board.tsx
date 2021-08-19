@@ -17,10 +17,10 @@ const Board = (props: BoardProps) => {
 
   if (!isNil(props.gameState)) {
     if (!isNil(props.gameState.focusedAcrossClue)) {
-      acrossClue = props.gameState.focusedAcrossClue.number.toString() + ' across: ' + props.gameState.focusedAcrossClue.text;
+      acrossClue = props.gameState.focusedAcrossClue.number.toString() + 'a (' + props.gameState.focusedAcrossClue.length.toString() + ')' + props.gameState.focusedAcrossClue.text;
     }
     if (!isNil(props.gameState.focusedAcrossClue)) {
-      downClue = props.gameState.focusedDownClue.number.toString() + ' down: ' + props.gameState.focusedDownClue.text;
+      downClue = props.gameState.focusedDownClue.number.toString() + 'd (' + props.gameState.focusedDownClue.length.toString() + ')' + props.gameState.focusedDownClue.text;
     }
 
   }

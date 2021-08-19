@@ -125,14 +125,23 @@ const ExistingGames = (props: ExistingGamesProps) => {
 
   const renderBoardRows = () => {
 
-    const boardRows: any[] = [];
-
+    const boardEntities: BoardEntity[] = [];
     for (const boardId in props.boardsMap) {
       if (Object.prototype.hasOwnProperty.call(props.boardsMap, boardId)) {
         const boardEntity: BoardEntity = props.boardsMap[boardId];
-        boardRows.push(renderBoardRow(boardEntity));
+        boardEntities.push(boardEntity);
       }
     }
+
+    boardEntities.sort((a: BoardEntity, b: BoardEntity) => {
+      return a.startDateTime > b.startDateTime
+        ? -1
+        : 1;
+    });
+
+    const boardRows = boardEntities.map((boardEntity: BoardEntity) => {
+      return renderBoardRow(boardEntity);
+    });
 
     return boardRows;
   };
