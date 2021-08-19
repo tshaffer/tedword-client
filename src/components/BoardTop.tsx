@@ -17,8 +17,6 @@ export interface BoardTopProps  {
 
 const BoardTop = (props: BoardTopProps) => {
 
-  console.log('BoardTop render');
-
   return (
     <div>
       <Board/>

@@ -43,9 +43,6 @@ export let boardPlayCrossword: any;
 
 const BoardPlay = (props: BoardPlayProps) => {
 
-  console.log('BoardPlay invoked');
-  console.log(props);
-
   React.useEffect(() => {
     props.onLoadPuzzle(props.appState.puzzleId);
   }, []);
@@ -62,57 +59,21 @@ const BoardPlay = (props: BoardPlayProps) => {
   };
 
   const handleCellChange = (row: number, col: number, typedChar: string, localChange: boolean) => {
-    console.log('handleCellChange');
-    console.log(row, col, typedChar);
     props.onCellChange(getBoardId(), getPuzzleUser(), row, col, typedChar, localChange);
   };
 
-  // const handleFillAllAnswers = React.useCallback((event) => {
-  //   (boardPlayCrossword as any).current.fillAllAnswers();
-  // }, []);
-
-  // const handleResetPuzzle = React.useCallback((event) => {
-  //   (boardPlayCrossword as any).current.reset();
-  // }, []);
-
-  // const handleRemoteSetCell = React.useCallback((event) => {
-  //   (boardPlayCrossword as any).current.remoteSetCell(0, 1, 'X');
-  // }, []);
-
-  const handleClueCorrect = (direction: string, number: string, answer: string) => {
-    // console.log('handleClueCorrect');
-    // console.log(direction, number, answer);
-  };
-
-  const handleLoadedCorrect = (param) => {
-    // console.log('handleLoadedCorrect');
-    // console.log(param);
-  };
-
-  const handleCrosswordCorrect = (param) => {
-    // console.log('handleCrosswordCorrect');
-    // console.log(param);
-  };
-
   const handleFocusedCellChange = (row: any, col: any, direction: any) => {
-    console.log('handleFocusedCellChange', row, col, direction);
     props.onUpdateFocusedClues(row, col);
   };
 
   const displayedPuzzleData: DisplayedPuzzle = props.displayedPuzzle;
 
-  console.log('BoardPlay rendering');
 
   let cellContents: CellContentsMap = props.cellContents;
 
-  console.log('cellContents');
-  console.log(cellContents);
-
   if (isNil(cellContents)) {
-    // return null;
     cellContents = {};
   }
-
 
   return (
     <div>
@@ -121,9 +82,6 @@ const BoardPlay = (props: BoardPlayProps) => {
         tedGuesses={cellContents}
         ref={boardPlayCrossword}
         onCellChange={handleCellChange}
-        onCorrect={handleClueCorrect}
-        onLoadedCorrect={handleLoadedCorrect}
-        onCrosswordCorrect={handleCrosswordCorrect}
         onFocusedCellChange={handleFocusedCellChange}
       />
     </div>
@@ -150,7 +108,6 @@ const mapDispatchToProps = (dispatch: any) => {
   }, dispatch);
 };
 
-// export default connect(mapStateToProps, mapDispatchToProps)(BoardPlay);
 export default React.memo(
   connect(
     mapStateToProps,
@@ -158,24 +115,19 @@ export default React.memo(
   )(BoardPlay),
   (props: BoardPlayPropsFromParent, nextProps: BoardPlayPropsFromParent) => {
     if (props.appState !== nextProps.appState) {
-      console.log('appState different');
       return false;
     }
     if (props.cellContents !== nextProps.cellContents) {
-      console.log('cellContents different');
       return false;
     }
     if (props.puzzlesMetadata !== nextProps.puzzlesMetadata) {
-      console.log('puzzlesMetadata different');
       return false;
     }
     if (props.puzzleSpec !== nextProps.puzzleSpec) {
-      console.log('puzzleSpec different');
       return false;
     }
     const displayedPuzzlesIdentical: boolean = displayedPuzzlesEqual(props.displayedPuzzle, nextProps.displayedPuzzle);
     if (!displayedPuzzlesIdentical) {
-      console.log('displayedPuzzles different');
       return false;
     }
     return displayedPuzzlesIdentical;

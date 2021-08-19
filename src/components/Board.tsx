@@ -4,27 +4,30 @@ import { connect } from 'react-redux';
 
 import { GameState} from '../types';
 import { getGameState } from '../selectors';
+import { isNil } from 'lodash';
 
 export interface BoardProps {
   gameState: GameState,
 }
 
-// onFocusedCellChange={handleFocusedCellChange}
-
-const handleFocusedCellChange = (row: any, col: any, direction: any) => {
-  console.log('handleFocusedCellChange', row, col, direction);
-  // props.onUpdateFocusedClues(row, col);
-};
-
 const Board = (props: BoardProps) => {
 
-  console.log('Board render');
-  console.log(props.gameState);
+  let acrossClue: string = '';
+  let downClue: string = '';
 
+  if (!isNil(props.gameState)) {
+    if (!isNil(props.gameState.focusedAcrossClue)) {
+      acrossClue = props.gameState.focusedAcrossClue.number.toString() + ' across: ' + props.gameState.focusedAcrossClue.text;
+    }
+    if (!isNil(props.gameState.focusedAcrossClue)) {
+      downClue = props.gameState.focusedDownClue.number.toString() + ' down: ' + props.gameState.focusedDownClue.text;
+    }
+
+  }
   return (
     <div>
-      <p>1A Potato, informally (4)</p>
-      <p>1D Weeps loudly (4)</p>
+      <p>{acrossClue}</p>
+      <p>{downClue}</p>
     </div>
   );
 };

@@ -27,8 +27,6 @@ export const loadBoards = () => {
 
     return axios.get(path)
       .then((boardsResponse: any) => {
-        console.log('loadBoards response:');
-        console.log(boardsResponse);
         const boardEntities: BoardEntity[] = (boardsResponse as any).data;
         // // TEDTODO - add all in a single call
         for (const boardEntity of boardEntities) {
@@ -108,7 +106,6 @@ export const createBoard = () => {
       path,
       createBoardBody
     ).then((response) => {
-      console.log(response);
       const boardId: string = response.data.data.id;
       dispatch(setBoardId(boardId));
       return;
@@ -135,7 +132,6 @@ export const addUserToExistingBoard = (id: string, userName: string) => {
       path,
       addUserToBoardBody
     ).then((response) => {
-      console.log(response);
       dispatch(addUserToBoard(id, userName));
       return;
     }).catch((error) => {
@@ -206,32 +202,7 @@ export const updateFocusedClues = (
       col--;
     }
 
-    console.log('downMatch');
-    if (isNil(matchedDownClue)) {
-      console.log('none found');
-    } else {
-      console.log(matchedDownClue);
-    }
-
-    console.log('acrossMatch');
-    if (isNil(matchedAcrossClue)) {
-      console.log('none found');
-    } else {
-      console.log(matchedAcrossClue);
-    }
-
     dispatch(setFocusedClues(matchedAcrossClue, matchedDownClue));
     
-    // debugger;
-
-    // dispatch(addUser(
-    //   'Fred',
-    //   {
-    //     userName: '',
-    //     password: '',
-    //     email: '',
-    //     cellTextColorPartnerBoard: '',
-    //   }
-    // ));
   });
 };

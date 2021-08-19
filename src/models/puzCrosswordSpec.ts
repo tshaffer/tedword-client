@@ -52,8 +52,6 @@ export const puzCrosswordSpecReducer = (
 ): PuzCrosswordSpec => {
   switch (action.type) {
     case SET_PUZCROSSWORD_SPEC: {
-      // const newState = cloneDeep(state);
-      // const { puzCrosswordSpec } = action.payload;
       return action.payload;
     }
     default:

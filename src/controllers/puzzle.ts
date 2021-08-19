@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { FileInput, PuzCrosswordSpec, PuzzleEntity, PuzzleMetadata, PuzzleSpec } from '../types';
-import { addPuzzle, addPuzzleMetadata, setPuzCrosswordSpec, setPuzzleId } from '../models';
+import { PuzzleEntity, PuzzleMetadata, PuzzleSpec } from '../types';
+import { addPuzzle, addPuzzleMetadata, setPuzzleId } from '../models';
 
 import { apiUrlFragment, serverUrl } from '../index';
 
@@ -16,13 +16,6 @@ export const loadPuzzle = (id: string) => {
       .then((puzzleResponse: any) => {
         const puzzleEntity: PuzzleEntity = puzzleResponse.data as PuzzleEntity;
         dispatch(addPuzzle(id, puzzleEntity));
-        // // TEDTODO - add all in a single call
-        // for (const puzzleMetadata of puzzlesMetadata) {
-        //   dispatch(addPuzzleMetadata(puzzleMetadata.id, puzzleMetadata));
-        // }
-        // if (puzzlesMetadata.length > 0) {
-        //   dispatch(setPuzzleId(puzzlesMetadata[0].id));
-        // }
       });
   });
 };
@@ -34,11 +27,7 @@ export const loadPuzzlesMetadata = () => {
 
     return axios.get(path)
       .then((puzzlesMetadataResponse: any) => {
-        console.log('loadPuzzlesMetadata response:');
-        console.log(puzzlesMetadataResponse);
         const puzzlesMetadata: PuzzleMetadata[] = (puzzlesMetadataResponse as any).data;
-        console.log('puzzlesMetadata');
-        console.log(puzzlesMetadata);
         // TEDTODO - add all in a single call
         for (const puzzleMetadata of puzzlesMetadata) {
           dispatch(addPuzzleMetadata(puzzleMetadata.id, puzzleMetadata));
@@ -73,7 +62,6 @@ export const cellChange = (boardId: string, user: string, row: number, col: numb
       path,
       cellChangeBody,
     ).then((response) => {
-      console.log(response);
       return;
     }).catch((error) => {
       console.log('error');
@@ -100,7 +88,6 @@ export const uploadPuzFiles = (puzFiles: File[]) => {
           path,
           uploadPuzzlesRequestBody,
         ).then((response) => {
-          console.log(response);
           return;
         }).catch((error) => {
           console.log('error');
@@ -119,10 +106,6 @@ const parsePuzzleFile = (puzFile: File): Promise<PuzzleSpec> => {
 
     // TEDTODO - err event
     fileReader.onload = function () {
-
-      console.log('onload event received');
-
-      console.log(fileReader.result);
       const puzData: Buffer = Buffer.from(fileReader.result as ArrayBuffer);
       const puzzleSpec: PuzzleSpec = PuzCrossword.from(puzData);
       resolve(puzzleSpec);
