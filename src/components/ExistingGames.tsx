@@ -2,7 +2,7 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { isEmpty } from 'lodash';
+import { before, isEmpty } from 'lodash';
 
 import { BoardEntity, BoardsMap, PuzzlesMetadataMap } from '../types';
 import { getBoards, getPuzzlesMetadata } from '../selectors';
@@ -52,14 +52,34 @@ const ExistingGames = (props: ExistingGamesProps) => {
 
   const getFormattedLastPlayedDateTime = (dt: string): string => {
 
-    let fullString = '';
+    let elapsedTimeSincePlayed: string = '';
 
     const dtGameLastPlayed: Date = new Date(dt);
     if (isToday(dtGameLastPlayed)) {
-      const hoursSincePlayed = hoursSinceNow(dtGameLastPlayed);
-      const minutesSincePlayed = minutesSinceNow(dtGameLastPlayed);
-      fullString = 'Played ' + hoursSincePlayed + ' hours, ' + minutesSincePlayed + ' minutes ago';
+      const hoursSincePlayed: number = hoursSinceNow(dtGameLastPlayed);
+      const minutesSincePlayed: number = minutesSinceNow(dtGameLastPlayed) % 60;
 
+      switch (hoursSincePlayed) {
+        case 0:
+          break;
+        case 1:
+          elapsedTimeSincePlayed = 'Played 1 hour ';
+          break;
+        default:
+          elapsedTimeSincePlayed = 'Played ' + hoursSincePlayed + ' hours ';
+          break;
+      }
+      switch (minutesSincePlayed) {
+        case 0:
+          break;
+        case 1:
+          elapsedTimeSincePlayed = elapsedTimeSincePlayed + '1 minute ';
+          break;
+        default:
+          elapsedTimeSincePlayed = elapsedTimeSincePlayed + minutesSincePlayed + ' minutes ';
+          break;
+      }
+      elapsedTimeSincePlayed += 'ago';
     } else {
       const daysSincePlayed = daysSinceToday(dtGameLastPlayed);
       const dateLastPlayed: string = dtGameLastPlayed.toLocaleDateString(
@@ -70,10 +90,10 @@ const ExistingGames = (props: ExistingGamesProps) => {
           day: 'numeric',
         }
       );
-      fullString = 'Played ' + daysSincePlayed + ' days ago on ' + dateLastPlayed;
+      elapsedTimeSincePlayed = 'Played ' + daysSincePlayed + ' days ago on ' + dateLastPlayed;
     }
 
-    return fullString;
+    return elapsedTimeSincePlayed;
   };
 
   const getPuzzleTitle = (boardEntity: BoardEntity): string => {
