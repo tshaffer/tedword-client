@@ -15,7 +15,7 @@ import {
   getBoard,
   getPuzzlesMetadata
 } from '../selectors';
-import { addBoard, addUser, addUserToBoard, setBoardId, setFocusedClues } from '../models';
+import { addBoard, addUser, addUserToBoard, setBoardId, setFocusedClues, updateLastPlayedDateTimeRedux } from '../models';
 import { isNil } from 'lodash';
 import { getAppState, getPuzzle } from '../selectors';
 
@@ -157,6 +157,34 @@ export const addUserToExistingBoard = (id: string, userName: string) => {
   });
 };
 
+export const updateLastPlayedDateTime = (
+  id: string,
+  lastPlayedDateTime: Date,
+): any => {
+  return ((dispatch: any, getState: any): any => {
+
+    const path = serverUrl + apiUrlFragment + 'updateLastPlayedDateTime';
+
+    const updateLastPlayedDateTimeBody: any = {
+      boardId: id,
+      lastPlayedDateTime,
+    };
+
+    return axios.post(
+      path,
+      updateLastPlayedDateTimeBody
+    ).then((response) => {
+      dispatch(updateLastPlayedDateTimeRedux(id, lastPlayedDateTime));
+      return;
+    }).catch((error) => {
+      console.log('error');
+      console.log(error);
+      return;
+    });
+
+  });
+};
+
 // TEDTODO - several ways to improve performance.
 export const updateFocusedClues = (
   row: number,
@@ -220,3 +248,4 @@ export const updateFocusedClues = (
 
   });
 };
+

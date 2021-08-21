@@ -9,6 +9,7 @@ import { setBoardId, setPuzzleId, setUiState } from '../models';
 import {
   addUserToExistingBoard,
   createBoard,
+  updateLastPlayedDateTime,
   uploadPuzFiles,
 } from '../controllers';
 
@@ -26,6 +27,7 @@ export interface GameHomeProps {
   onSetBoardId: (boardId: string) => any;
   onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
+  onUpdateLastPlayedDateTime: (boardId: string, dt: Date) => any;
   onUploadPuzFiles: (files: File[]) => any;
 }
 
@@ -43,6 +45,7 @@ const GameHome = (props: GameHomeProps) => {
     if (!userInGame(boardEntity)) {
       props.onAddUserToBoard(boardEntity.id, props.currentUser);
     }
+    props.onUpdateLastPlayedDateTime(boardEntity.id, new Date(Date()));
     props.onSetUiState(UiState.ExistingBoardPlay);
   };
 
@@ -195,6 +198,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetBoardId: setBoardId,
     onSetPuzzleId: setPuzzleId,
     onSetUiState: setUiState,
+    onUpdateLastPlayedDateTime: updateLastPlayedDateTime,
     onUploadPuzFiles: uploadPuzFiles,
   }, dispatch);
 };

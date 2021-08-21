@@ -8,6 +8,7 @@ import { TedwordModelBaseAction } from './baseAction';
 export const ADD_BOARD = 'ADD_BOARD';
 export const ADD_USER_TO_BOARD = 'ADD_USER_TO_BOARD';
 export const SET_CELL_CONTENTS = 'SET_CELL_CONTENTS';
+export const UPDATE_LAST_PLAYED_DATE_TIME = 'UPDATE_LAST_PLAYED_DATE_TIME';
 
 // ------------------------------------
 // Actions
@@ -67,6 +68,25 @@ export const setCellContents = (
   };
 };
 
+export interface UpdateLastPlayedDateTimePayload {
+  id: string;
+  lastPlayedDateTime: Date;
+}
+
+export const updateLastPlayedDateTimeRedux = (
+  id: string,
+  lastPlayedDateTime: Date,
+): any => {
+  return {
+    type: UPDATE_LAST_PLAYED_DATE_TIME,
+    payload: {
+      id,
+      lastPlayedDateTime,
+    }
+  };
+};
+
+
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -78,7 +98,7 @@ const initialState: BoardsState =
 
 export const boardsStateReducer = (
   state: BoardsState = initialState,
-  action: TedwordModelBaseAction<AddBoardPayload & AddUserToBoardPayload & SetCellContentsPayload>
+  action: TedwordModelBaseAction<AddBoardPayload & AddUserToBoardPayload & SetCellContentsPayload & UpdateLastPlayedDateTimePayload>
 ): BoardsState => {
   switch (action.type) {
     case ADD_BOARD: {
@@ -96,6 +116,12 @@ export const boardsStateReducer = (
       const newState = cloneDeep(state) as BoardsState;
       const boardEntity: BoardEntity = newState.boards[action.payload.id];
       boardEntity.cellContents = action.payload.cellContents;
+      return newState;
+    }
+    case UPDATE_LAST_PLAYED_DATE_TIME: {
+      const newState = cloneDeep(state) as BoardsState;
+      const boardEntity: BoardEntity = newState.boards[action.payload.id];
+      boardEntity.lastPlayedDateTime = action.payload.lastPlayedDateTime;
       return newState;
     }
     default:

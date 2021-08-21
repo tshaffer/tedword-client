@@ -2,7 +2,7 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { before, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 
 import { BoardEntity, BoardsMap, PuzzlesMetadataMap } from '../types';
 import { getBoards, getPuzzlesMetadata } from '../selectors';
@@ -59,27 +59,31 @@ const ExistingGames = (props: ExistingGamesProps) => {
       const hoursSincePlayed: number = hoursSinceNow(dtGameLastPlayed);
       const minutesSincePlayed: number = minutesSinceNow(dtGameLastPlayed) % 60;
 
-      switch (hoursSincePlayed) {
-        case 0:
-          break;
-        case 1:
-          elapsedTimeSincePlayed = 'Played 1 hour ';
-          break;
-        default:
-          elapsedTimeSincePlayed = 'Played ' + hoursSincePlayed + ' hours ';
-          break;
+      if (hoursSincePlayed === 0 && minutesSincePlayed === 0) {
+        elapsedTimeSincePlayed = 'Just now';
+      } else {
+        switch (hoursSincePlayed) {
+          case 0:
+            break;
+          case 1:
+            elapsedTimeSincePlayed = 'Played 1 hour ';
+            break;
+          default:
+            elapsedTimeSincePlayed = 'Played ' + hoursSincePlayed + ' hours ';
+            break;
+        }
+        switch (minutesSincePlayed) {
+          case 0:
+            break;
+          case 1:
+            elapsedTimeSincePlayed = elapsedTimeSincePlayed + '1 minute ';
+            break;
+          default:
+            elapsedTimeSincePlayed = elapsedTimeSincePlayed + minutesSincePlayed + ' minutes ';
+            break;
+        }
+        elapsedTimeSincePlayed += 'ago';
       }
-      switch (minutesSincePlayed) {
-        case 0:
-          break;
-        case 1:
-          elapsedTimeSincePlayed = elapsedTimeSincePlayed + '1 minute ';
-          break;
-        default:
-          elapsedTimeSincePlayed = elapsedTimeSincePlayed + minutesSincePlayed + ' minutes ';
-          break;
-      }
-      elapsedTimeSincePlayed += 'ago';
     } else {
       const daysSincePlayed = daysSinceToday(dtGameLastPlayed);
       const dateLastPlayed: string = dtGameLastPlayed.toLocaleDateString(
@@ -154,7 +158,7 @@ const ExistingGames = (props: ExistingGamesProps) => {
     }
 
     boardEntities.sort((a: BoardEntity, b: BoardEntity) => {
-      return a.startDateTime > b.startDateTime
+      return a.lastPlayedDateTime > b.lastPlayedDateTime
         ? -1
         : 1;
     });
