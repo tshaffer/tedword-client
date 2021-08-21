@@ -19,11 +19,16 @@ const Board = (props: BoardProps) => {
     if (!isNil(props.gameState.focusedAcrossClue)) {
       acrossClue = props.gameState.focusedAcrossClue.number.toString() + 'a (' + props.gameState.focusedAcrossClue.length.toString() + ')' + props.gameState.focusedAcrossClue.text;
     }
-    if (!isNil(props.gameState.focusedAcrossClue)) {
+    if (!isNil(props.gameState.focusedDownClue)) {
       downClue = props.gameState.focusedDownClue.number.toString() + 'd (' + props.gameState.focusedDownClue.length.toString() + ')' + props.gameState.focusedDownClue.text;
     }
-
   }
+  
+  if (acrossClue === '') {
+    acrossClue = 'A bug that nothing is displayed here';
+    downClue = 'Working on it, harder than I thought';
+  }
+
   return (
     <div>
       <p>{acrossClue}</p>

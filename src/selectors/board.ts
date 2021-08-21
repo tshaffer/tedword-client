@@ -27,12 +27,8 @@ export const getBoard = (state: TedwordState, boardId: string): BoardEntity => {
 };
 
 export const getCellContents = (state: TedwordState): CellContentsMap => {
-  console.log('getCellContents');
-  console.log(state);
   const boardId: string = getBoardId(state);
-  console.log(boardId);
   const boardsMap: BoardsMap = getBoards(state);
-  console.log(boardsMap);
   if (boardsMap.hasOwnProperty(boardId)) {
     return boardsMap[boardId].cellContents;
   }

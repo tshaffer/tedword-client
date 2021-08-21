@@ -4,6 +4,7 @@ import {
   AppState,
   BoardEntity,
   ParsedClue,
+  PuzzleEntity,
   PuzzleMetadata,
   PuzzlesMetadataMap,
   TedwordState
@@ -107,6 +108,19 @@ export const createBoard = () => {
       createBoardBody
     ).then((response) => {
       const boardId: string = response.data.data.id;
+      const newBoard: BoardEntity = {
+        id: boardId,
+        puzzleId,
+        title,
+        users: [appState.userName],
+        startDateTime: currentDate,
+        lastPlayedDateTime: currentDate,
+        elapsedTime: 0,
+        solved: false,
+        difficulty: 0,
+        cellContents: {},
+      };
+      dispatch(addBoard(boardId, newBoard));
       dispatch(setBoardId(boardId));
       return;
     }).catch((error) => {
@@ -162,7 +176,7 @@ export const updateFocusedClues = (
     if (isNil(board)) {
       return;
     }
-    const puzzleSpec = getPuzzle(state, board.puzzleId);
+    const puzzleSpec: PuzzleEntity = getPuzzle(state, board.puzzleId);
     if (isNil(puzzleSpec)) {
       return null;
     }
@@ -203,6 +217,6 @@ export const updateFocusedClues = (
     }
 
     dispatch(setFocusedClues(matchedAcrossClue, matchedDownClue));
-    
+
   });
 };
