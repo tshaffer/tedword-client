@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { PuzzleEntity, PuzzleMetadata, PuzzleSpec } from '../types';
-import { addPuzzle, addPuzzleMetadata, setPuzzleId } from '../models';
+import { addPuzzle, addPuzzleMetadata, setFileUploadStatus, setPuzzleId } from '../models';
 
 import { apiUrlFragment, serverUrl } from '../index';
 
@@ -88,10 +88,12 @@ export const uploadPuzFiles = (puzFiles: File[]) => {
           path,
           uploadPuzzlesRequestBody,
         ).then((response) => {
+          dispatch(setFileUploadStatus('Upload successful'));
           return;
         }).catch((error) => {
           console.log('error');
           console.log(error);
+          dispatch(setFileUploadStatus('Upload failed: ' + error.toString()));
           return;
         });
       });

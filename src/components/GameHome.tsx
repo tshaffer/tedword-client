@@ -3,9 +3,9 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata, BoardEntity, BoardsMap, PuzzleSpec } from '../types';
+import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata, BoardEntity, BoardsMap } from '../types';
 import { getAppState, getBoards, getCurrentUser, getPuzzlesMetadata } from '../selectors';
-import { setBoardId, setPuzzleId, setUiState } from '../models';
+import { setBoardId, setPuzzleId, setUiState, setFileUploadStatus } from '../models';
 import {
   addUserToExistingBoard,
   createBoard,
@@ -15,7 +15,6 @@ import {
 
 import NewGames from './NewGames';
 import ExistingGames from './ExistingGames';
-import { isNil } from 'lodash';
 
 export interface GameHomeProps {
   appState: AppState,
@@ -25,6 +24,7 @@ export interface GameHomeProps {
   onAddUserToBoard: (id: string, userName: string) => any;
   onCreateBoard: () => any;
   onSetBoardId: (boardId: string) => any;
+  onSetFileUploadStatus: (fileUploadState: string) => any;
   onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
   onUpdateLastPlayedDateTime: (boardId: string, dt: Date) => any;
@@ -32,8 +32,6 @@ export interface GameHomeProps {
 }
 
 const GameHome = (props: GameHomeProps) => {
-
-  const [files, setFiles] = React.useState<File[]>([]);
 
   const userInGame = (boardEntity: BoardEntity): boolean => {
     return boardEntity.users.includes(props.currentUser);
@@ -82,6 +80,7 @@ const GameHome = (props: GameHomeProps) => {
 
     const handleUploadPuzFiles = () => {
       const files: File[] = fileInputRef.current.files;
+      props.onSetFileUploadStatus('Uploading files...');
       props.onUploadPuzFiles(files);
     };
 
@@ -109,6 +108,7 @@ const GameHome = (props: GameHomeProps) => {
           settingsTabSelectRef.current.style.backgroundColor = 'inherit';
           break;
         case 'settingsTabSelect':
+          props.onSetFileUploadStatus('');
           settingsContentRef.current.style.display = 'block';
           settingsTabSelectRef.current.style.backgroundColor = '#ccc';
           newGameTabSelectRef.current.style.backgroundColor = 'inherit';
@@ -162,6 +162,9 @@ const GameHome = (props: GameHomeProps) => {
                 Upload Files
               </button>
             </p>
+            <p>
+              {props.appState.fileUploadStatus}
+            </p>
           </div>
         </div>
       </div>
@@ -185,6 +188,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onAddUserToBoard: addUserToExistingBoard,
     onCreateBoard: createBoard,
     onSetBoardId: setBoardId,
+    onSetFileUploadStatus: setFileUploadStatus,
     onSetPuzzleId: setPuzzleId,
     onSetUiState: setUiState,
     onUpdateLastPlayedDateTime: updateLastPlayedDateTime,

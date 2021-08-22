@@ -25,6 +25,7 @@ export interface AppState {
   userName: string;
   puzzleId: string;
   boardId: string;
+  fileUploadStatus: string;
 }
 
 export interface GameState {
