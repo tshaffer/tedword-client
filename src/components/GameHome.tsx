@@ -80,22 +80,8 @@ const GameHome = (props: GameHomeProps) => {
       transition: '0.3s'
     };
 
-    const handleSelectPuzFiles = (e: { target: { files: string | any[] | FileList; value: string; }; }) => {
-      if (!isNil(e.target.files)
-        && e.target.files.length > 0) {
-        const targetFileList: FileList = e.target.files as FileList;
-        const filesToAdd = [];
-        for (let i = 0; i < targetFileList.length; i++) {
-          const targetFile: File = e.target.files[i];
-          filesToAdd.push(targetFile);
-        }
-        setFiles(filesToAdd);
-      }
-      // TEDTODO - display selected files?
-      e.target.value = '';
-    };
-
     const handleUploadPuzFiles = () => {
+      const files: File[] = fileInputRef.current.files;
       props.onUploadPuzFiles(files);
     };
 
@@ -140,6 +126,8 @@ const GameHome = (props: GameHomeProps) => {
     const settingsTabSelectRef = React.createRef<any>();
     const settingsContentRef = React.createRef<any>();
 
+    const fileInputRef = React.createRef<any>();
+
     return (
       <div>
         <div style={tab}>
@@ -160,10 +148,11 @@ const GameHome = (props: GameHomeProps) => {
         <div id='settingsContent' style={tabcontent} ref={settingsContentRef}>
           <div>
             <input
-              id="input"
+              id="file"
               type="file"
               multiple
-              onChange={handleSelectPuzFiles}
+              name='file'
+              ref={fileInputRef}
             />
             <p>
               <button
