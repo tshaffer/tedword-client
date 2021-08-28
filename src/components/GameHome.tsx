@@ -78,10 +78,18 @@ const GameHome = (props: GameHomeProps) => {
       transition: '0.3s'
     };
 
+    const displayNone = {
+      display: 'none',
+    };
+
     const handleUploadPuzFiles = () => {
       const files: File[] = fileInputRef.current.files;
       props.onSetFileUploadStatus('Uploading files...');
       props.onUploadPuzFiles(files);
+    };
+
+    const handleDisplayFileSelect = () => {
+      fileSelectRef.current.click();
     };
 
     function handleSelectTab(evt: any) {
@@ -127,6 +135,7 @@ const GameHome = (props: GameHomeProps) => {
     const settingsContentRef = React.createRef<any>();
 
     const fileInputRef = React.createRef<any>();
+    const fileSelectRef = React.createRef<any>();
 
     return (
       <div>
@@ -146,6 +155,23 @@ const GameHome = (props: GameHomeProps) => {
           />
         </div>
         <div id='settingsContent' style={tabcontent} ref={settingsContentRef}>
+          <div>
+            <input
+              type="file"
+              id="fileElem"
+              multiple
+              style={displayNone}
+              ref={fileSelectRef}
+            />
+            <button
+              id="fileSelect"
+              onClick={handleDisplayFileSelect}
+            >
+              Select some files
+            </button>
+          </div>
+
+          
           <div>
             <input
               id="file"
