@@ -153,14 +153,19 @@ const GameHome = (props: GameHomeProps) => {
 
     const fileSelectRef = React.createRef<any>();
 
-    let filesLabel: string = '';
-    if (files.length === 0) {
-      filesLabel = 'No file chosen';
-    } else if (files.length === 1) {
-      filesLabel = files[0].name;
-    } else {
-      filesLabel = files.length.toString() + ' files';
-    }
+    const getFilesLabel = () => {
+      let filesLabel: string = '';
+      if (files.length === 0) {
+        filesLabel = 'No file chosen';
+      } else if (files.length === 1) {
+        filesLabel = files[0].name;
+      } else {
+        for (const file of files) {
+          filesLabel += file.name + ' ';
+        }
+      }
+      return filesLabel;
+    };
 
     return (
       <div>
@@ -195,7 +200,18 @@ const GameHome = (props: GameHomeProps) => {
             >
               Choose Files
             </button>
-            <label>{filesLabel}</label>            
+            <label>{getFilesLabel()}</label>
+
+            <p>New files</p>
+            <ul>
+              <li>newFile1.puz</li>
+              <li>newFile2.puz</li>
+            </ul>
+            <p>Existing files</p>
+            <ul>
+              <li>existingFile1.puz</li>
+              <li>existingFile2.puz</li>
+            </ul>
           </div>
           <div>
             <p>
@@ -203,7 +219,13 @@ const GameHome = (props: GameHomeProps) => {
                 type='button'
                 onClick={handleUploadPuzFiles}
               >
-                Upload Files
+                Upload New Files
+              </button>
+              <button
+                type='button'
+                onClick={handleUploadPuzFiles}
+              >
+                Upload All Files
               </button>
             </p>
             <p>
