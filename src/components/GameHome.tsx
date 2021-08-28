@@ -15,6 +15,7 @@ import {
 
 import NewGames from './NewGames';
 import ExistingGames from './ExistingGames';
+import { isNil } from 'lodash';
 
 export interface GameHomeProps {
   appState: AppState,
@@ -32,6 +33,8 @@ export interface GameHomeProps {
 }
 
 const GameHome = (props: GameHomeProps) => {
+
+  const [files, setFiles] = React.useState<File[]>([]);
 
   const userInGame = (boardEntity: BoardEntity): boolean => {
     return boardEntity.users.includes(props.currentUser);
@@ -83,7 +86,6 @@ const GameHome = (props: GameHomeProps) => {
     };
 
     const handleUploadPuzFiles = () => {
-      const files: File[] = fileInputRef.current.files;
       props.onSetFileUploadStatus('Uploading files...');
       props.onUploadPuzFiles(files);
     };
@@ -92,12 +94,19 @@ const GameHome = (props: GameHomeProps) => {
       fileSelectRef.current.click();
     };
 
-    const handleSelectFiles = () => {
-      console.log('handleSelectFiles invoked');
-      const files: File[] = fileSelectRef.current.files;
-      // props.onSetFileUploadStatus('Uploading files...');
-      console.log('selected files ', files);
-      // props.onUploadPuzFiles(files);
+    const handleSelectPuzFiles = (e: { target: { files: string | any[] | FileList; value: string; }; }) => {
+      if (!isNil(e.target.files)
+        && e.target.files.length > 0) {
+        const targetFileList: FileList = e.target.files as FileList;
+        const filesToAdd = [];
+        for (let i = 0; i < targetFileList.length; i++) {
+          const targetFile: File = e.target.files[i];
+          filesToAdd.push(targetFile);
+        }
+        setFiles(filesToAdd);
+      }
+      e.target.value = '';
+      props.onSetFileUploadStatus('Upload pending...');
     };
 
     function handleSelectTab(evt: any) {
@@ -142,8 +151,16 @@ const GameHome = (props: GameHomeProps) => {
     const settingsTabSelectRef = React.createRef<any>();
     const settingsContentRef = React.createRef<any>();
 
-    const fileInputRef = React.createRef<any>();
     const fileSelectRef = React.createRef<any>();
+
+    let filesLabel: string = '';
+    if (files.length === 0) {
+      filesLabel = 'No file chosen';
+    } else if (files.length === 1) {
+      filesLabel = files[0].name;
+    } else {
+      filesLabel = files.length.toString() + ' files';
+    }
 
     return (
       <div>
@@ -170,25 +187,17 @@ const GameHome = (props: GameHomeProps) => {
               multiple
               style={displayNone}
               ref={fileSelectRef}
-              onChange={handleSelectFiles}
+              onChange={handleSelectPuzFiles}
             />
             <button
               id="fileSelect"
               onClick={handleDisplayFileSelect}
             >
-              Select some files
+              Choose Files
             </button>
+            <label>{filesLabel}</label>            
           </div>
-
-
           <div>
-            <input
-              id="file"
-              type="file"
-              multiple
-              name='file'
-              ref={fileInputRef}
-            />
             <p>
               <button
                 type='button'
