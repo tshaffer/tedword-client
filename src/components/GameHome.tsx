@@ -92,6 +92,14 @@ const GameHome = (props: GameHomeProps) => {
       fileSelectRef.current.click();
     };
 
+    const handleSelectFiles = () => {
+      console.log('handleSelectFiles invoked');
+      const files: File[] = fileSelectRef.current.files;
+      // props.onSetFileUploadStatus('Uploading files...');
+      console.log('selected files ', files);
+      // props.onUploadPuzFiles(files);
+    };
+
     function handleSelectTab(evt: any) {
 
       const selectedTabId = evt.target.id;
@@ -162,6 +170,7 @@ const GameHome = (props: GameHomeProps) => {
               multiple
               style={displayNone}
               ref={fileSelectRef}
+              onChange={handleSelectFiles}
             />
             <button
               id="fileSelect"
@@ -171,7 +180,7 @@ const GameHome = (props: GameHomeProps) => {
             </button>
           </div>
 
-          
+
           <div>
             <input
               id="file"
