@@ -41,6 +41,7 @@ export interface PuzCrosswordSpec {
   title: string;
   author: string;
   copyright: string;
+  sourceFileName: string;
   note: string;
   width: number;
   height: number;
@@ -100,6 +101,7 @@ export interface DisplayedPuzzle {
 
 export interface PuzzleMetadata {
   id: string;
+  sourceFileName: string;
   author: string;
   title: string;
 }
@@ -127,6 +129,7 @@ export interface PuzzleSpec {
   title: string;
   author: string;
   copyright: string;
+  sourceFileName: string;
   note: string;
   width: number;
   height: number;
@@ -162,6 +165,7 @@ export interface PuzzleSpec {
   title: string;
   author: string;
   copyright: string;
+  sourceFileName: string;
   note: string;
   width: number;
   height: number;

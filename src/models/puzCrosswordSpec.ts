@@ -36,6 +36,7 @@ const initialState: PuzCrosswordSpec = {
   title: '',
   author: '',
   copyright: '',
+  sourceFileName: '',
   note: '',
   width: 0,
   height: 0,
