@@ -55,6 +55,7 @@ export interface PuzCrosswordSpec {
 export interface PuzzlesState {
   puzzlesMetadata: PuzzlesMetadataMap,
   puzzles: PuzzlesMap;
+  puzzlesByFileName: PuzzleExistsByFileNameMap;
 }
 
 export interface UsersMap {
@@ -112,6 +113,10 @@ export interface PuzzlesMetadataMap {
 
 export interface PuzzlesMap {
   [id: string]: PuzzleEntity; // puzzle id
+}
+
+export interface PuzzleExistsByFileNameMap {
+  [id: string]: boolean; // sourceFileName
 }
 
 export interface BoardsMap {

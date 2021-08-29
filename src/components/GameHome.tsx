@@ -3,8 +3,8 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata, BoardEntity, BoardsMap } from '../types';
-import { getAppState, getBoards, getCurrentUser, getPuzzlesMetadata } from '../selectors';
+import { AppState, UiState, PuzzlesMetadataMap, PuzzleMetadata, BoardEntity, BoardsMap, PuzzleExistsByFileNameMap } from '../types';
+import { getAppState, getBoards, getCurrentUser, getPuzzlesMetadata, getPuzzleExistsByFileNameMap } from '../selectors';
 import { setBoardId, setPuzzleId, setUiState, setFileUploadStatus } from '../models';
 import {
   addUserToExistingBoard,
@@ -22,6 +22,7 @@ export interface GameHomeProps {
   boardsMap: BoardsMap;
   currentUser: string;
   puzzlesMetadata: PuzzlesMetadataMap;
+  puzzleExistsByFileName: PuzzleExistsByFileNameMap;
   onAddUserToBoard: (id: string, userName: string) => any;
   onCreateBoard: () => any;
   onSetBoardId: (boardId: string) => any;
@@ -144,46 +145,73 @@ const GameHome = (props: GameHomeProps) => {
       }
     }
 
-    const newGameTabSelectRef = React.createRef<any>();
-    const newGamesContentRef = React.createRef<any>();
-    const inProgressGamesTabSelectRef = React.createRef<any>();
-    const inProgressGamesContentRef = React.createRef<any>();
-    const settingsTabSelectRef = React.createRef<any>();
-    const settingsContentRef = React.createRef<any>();
+    const renderFilesList = () => {
 
-    const fileSelectRef = React.createRef<any>();
+      // return (
+      //   <div>pizza</div>
+      // );
 
-    const getFilesLabel = () => {
-      let filesLabel: string = '';
-      if (files.length === 0) {
-        filesLabel = 'No file chosen';
-      } else if (files.length === 1) {
-        filesLabel = files[0].name;
-      } else {
-        for (const file of files) {
-          filesLabel += file.name + ' ';
+      if (files.length == 0) {
+        return (
+          <div>
+            <p>No file chosen</p>
+          </div>
+        );
+      }
+
+      const existingFiles: string[] = [];
+      const newFiles: string[] = [];
+
+      for (const file of files) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (props.puzzleExistsByFileName.hasOwnProperty(file.name)) {
+          existingFiles.push(file.name);
+        } else {
+          newFiles.push(file.name);
         }
       }
-      return filesLabel;
+
+      const newFilesListItems = newFiles.map((newFile) =>
+        <li key={newFile}>{newFile}</li>
+      );
+      const existingFilesListItems = newFiles.map((existingFile) =>
+        <li key={existingFile}>{existingFile}</li>
+      );
+
+      if (existingFilesListItems.length === 0) {
+        return (
+          <div>
+            <ul>{newFilesListItems}</ul>
+          </div>
+        );
+      }
+      else if (newFilesListItems.length === 0) {
+        return (
+          <div>
+            <p>Existing files</p>
+            <ul>{existingFilesListItems}</ul>
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <p>New files</p>
+            <ul>{newFilesListItems}</ul>
+            <p>Existing files</p>
+            <ul>{existingFilesListItems}</ul>
+          </div>
+        );
+      }
     };
 
-    return (
-      <div>
-        <div style={tab}>
-          <button style={tabLinks} onClick={handleSelectTab} id='newGameTabSelect' ref={newGameTabSelectRef}>New Games</button>
-          <button style={tabLinks} onClick={handleSelectTab} id='inProgressGameTabSelect' ref={inProgressGamesTabSelectRef}>In Progress Games</button>
-          <button style={tabLinks} onClick={handleSelectTab} id='settingsTabSelect' ref={settingsTabSelectRef}>Tools & Settings</button>
-        </div>
-        <div id='newGameContent' style={tabcontent} ref={newGamesContentRef}>
-          <NewGames
-            onSelectPuzzle={handleOpenPuzzle}
-          />
-        </div>
-        <div id='inProgressGamesContent' style={tabcontent} ref={inProgressGamesContentRef}>
-          <ExistingGames
-            onSelectBoard={handleOpenBoard}
-          />
-        </div>
+    //             {renderFilesList}
+    // <p>pizza</p>
+
+    const renderSettingsTab = () => {
+
+      const filesList = renderFilesList();
+
+      return (
         <div id='settingsContent' style={tabcontent} ref={settingsContentRef}>
           <div>
             <input
@@ -200,18 +228,9 @@ const GameHome = (props: GameHomeProps) => {
             >
               Choose Files
             </button>
-            <label>{getFilesLabel()}</label>
-
-            <p>New files</p>
-            <ul>
-              <li>newFile1.puz</li>
-              <li>newFile2.puz</li>
-            </ul>
-            <p>Existing files</p>
-            <ul>
-              <li>existingFile1.puz</li>
-              <li>existingFile2.puz</li>
-            </ul>
+          </div>
+          <div>
+            {filesList}
           </div>
           <div>
             <p>
@@ -233,6 +252,36 @@ const GameHome = (props: GameHomeProps) => {
             </p>
           </div>
         </div>
+      );
+    };
+
+    const newGameTabSelectRef = React.createRef<any>();
+    const newGamesContentRef = React.createRef<any>();
+    const inProgressGamesTabSelectRef = React.createRef<any>();
+    const inProgressGamesContentRef = React.createRef<any>();
+    const settingsTabSelectRef = React.createRef<any>();
+    const settingsContentRef = React.createRef<any>();
+
+    const fileSelectRef = React.createRef<any>();
+
+    return (
+      <div>
+        <div style={tab}>
+          <button style={tabLinks} onClick={handleSelectTab} id='newGameTabSelect' ref={newGameTabSelectRef}>New Games</button>
+          <button style={tabLinks} onClick={handleSelectTab} id='inProgressGameTabSelect' ref={inProgressGamesTabSelectRef}>In Progress Games</button>
+          <button style={tabLinks} onClick={handleSelectTab} id='settingsTabSelect' ref={settingsTabSelectRef}>Tools & Settings</button>
+        </div>
+        <div id='newGameContent' style={tabcontent} ref={newGamesContentRef}>
+          <NewGames
+            onSelectPuzzle={handleOpenPuzzle}
+          />
+        </div>
+        <div id='inProgressGamesContent' style={tabcontent} ref={inProgressGamesContentRef}>
+          <ExistingGames
+            onSelectBoard={handleOpenBoard}
+          />
+        </div>
+        {renderSettingsTab()}
       </div>
     );
   };
@@ -246,6 +295,7 @@ function mapStateToProps(state: any) {
     boardsMap: getBoards(state),
     currentUser: getCurrentUser(state),
     puzzlesMetadata: getPuzzlesMetadata(state),
+    puzzleExistsByFileName: getPuzzleExistsByFileNameMap(state),
   };
 }
 
