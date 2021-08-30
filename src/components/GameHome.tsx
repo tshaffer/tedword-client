@@ -86,6 +86,10 @@ const GameHome = (props: GameHomeProps) => {
       display: 'none',
     };
 
+    const padded = {
+      margin: '4px',
+    };
+
     const handleUploadPuzFiles = () => {
       props.onSetFileUploadStatus('Uploading files...');
       props.onUploadPuzFiles(files);
@@ -145,19 +149,7 @@ const GameHome = (props: GameHomeProps) => {
       }
     }
 
-    const renderFilesList = () => {
-
-      // return (
-      //   <div>pizza</div>
-      // );
-
-      if (files.length == 0) {
-        return (
-          <div>
-            <p>No file chosen</p>
-          </div>
-        );
-      }
+    const getFilesLists = () => {
 
       const existingFiles: string[] = [];
       const newFiles: string[] = [];
@@ -171,41 +163,102 @@ const GameHome = (props: GameHomeProps) => {
         }
       }
 
+      return {
+        newFiles,
+        existingFiles,
+      };
+    };
+
+    const renderSingleUploadButton = () => {
+      return (
+        <div>
+          <p>
+            <button
+              type='button'
+              style={padded}
+              onClick={handleUploadPuzFiles}
+            >
+              Upload Files
+            </button>
+          </p>
+        </div>
+      );
+    };
+
+    const renderBothUploadButtons = () => {
+      return (
+        <div>
+          <p>
+            <button
+              type='button'
+              style={padded}
+              onClick={handleUploadPuzFiles}
+            >
+              Upload New Files
+            </button>
+            <button
+              type='button'
+              style={padded}
+              onClick={handleUploadPuzFiles}
+            >
+              Upload All Files
+            </button>
+          </p>
+        </div>
+      );
+    };
+
+    const renderFilesList = () => {
+
+      if (files.length == 0) {
+        return (
+          <div>
+            <p>No file chosen</p>
+          </div>
+        );
+      }
+
+      const filesLists = getFilesLists();
+      const { existingFiles, newFiles } = filesLists;
+
       const newFilesListItems = newFiles.map((newFile) =>
         <li key={newFile}>{newFile}</li>
       );
-      const existingFilesListItems = newFiles.map((existingFile) =>
+      const existingFilesListItems = existingFiles.map((existingFile) =>
         <li key={existingFile}>{existingFile}</li>
       );
 
       if (existingFilesListItems.length === 0) {
+        const singleUploadButton = renderSingleUploadButton();
         return (
           <div>
             <ul>{newFilesListItems}</ul>
+            {singleUploadButton}
           </div>
         );
       }
       else if (newFilesListItems.length === 0) {
+        const singleUploadButton = renderSingleUploadButton();
         return (
           <div>
             <p>Existing files</p>
             <ul>{existingFilesListItems}</ul>
+            {singleUploadButton}
           </div>
         );
       } else {
+        const bothUploadButtons = renderBothUploadButtons();
         return (
           <div>
             <p>New files</p>
             <ul>{newFilesListItems}</ul>
             <p>Existing files</p>
             <ul>{existingFilesListItems}</ul>
+            {bothUploadButtons}
           </div>
         );
       }
     };
-
-    //             {renderFilesList}
-    // <p>pizza</p>
 
     const renderSettingsTab = () => {
 
@@ -224,6 +277,7 @@ const GameHome = (props: GameHomeProps) => {
             />
             <button
               id="fileSelect"
+              style={padded}
               onClick={handleDisplayFileSelect}
             >
               Choose Files
@@ -233,20 +287,6 @@ const GameHome = (props: GameHomeProps) => {
             {filesList}
           </div>
           <div>
-            <p>
-              <button
-                type='button'
-                onClick={handleUploadPuzFiles}
-              >
-                Upload New Files
-              </button>
-              <button
-                type='button'
-                onClick={handleUploadPuzFiles}
-              >
-                Upload All Files
-              </button>
-            </p>
             <p>
               {props.appState.fileUploadStatus}
             </p>
