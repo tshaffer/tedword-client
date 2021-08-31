@@ -194,14 +194,7 @@ const GameHome = (props: GameHomeProps) => {
               style={padded}
               onClick={handleUploadPuzFiles}
             >
-              Upload New Files
-            </button>
-            <button
-              type='button'
-              style={padded}
-              onClick={handleUploadPuzFiles}
-            >
-              Upload All Files
+              Upload Files
             </button>
           </p>
         </div>
@@ -241,7 +234,7 @@ const GameHome = (props: GameHomeProps) => {
         const singleUploadButton = renderSingleUploadButton();
         return (
           <div>
-            <p>Existing files</p>
+            <p>Existing files (will not be uploaded)</p>
             <ul>{existingFilesListItems}</ul>
             {singleUploadButton}
           </div>
