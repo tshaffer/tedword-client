@@ -111,7 +111,12 @@ const GameHome = (props: GameHomeProps) => {
         setFiles(filesToAdd);
       }
       e.target.value = '';
-      props.onSetFileUploadStatus('Upload pending...');
+
+      if (e.target.files.length > 0) {
+        props.onSetFileUploadStatus('Upload pending...');
+      } else {
+        props.onSetFileUploadStatus('');
+      }
     };
 
     function handleSelectTab(evt: any) {
