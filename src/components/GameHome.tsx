@@ -169,34 +169,53 @@ const GameHome = (props: GameHomeProps) => {
       };
     };
 
-    const renderSingleUploadButton = () => {
+    const renderUploadButton = (newFiles: any[]) => {
+
+      return newFiles.length === 0
+        ? null
+        : (
+          <div>
+            <p>
+              <button
+                type='button'
+                style={padded}
+                onClick={handleUploadPuzFiles}
+              >
+                Upload Files
+              </button>
+            </p>
+          </div>
+        );
+    };
+
+    const getNewFilesList = (newFiles: any[]) => {
+
+      if (newFiles.length === 0) {
+        return null;
+      }
+      const newFilesListItems = newFiles.map((newFile) =>
+        <li key={newFile}>{newFile}</li>
+      );
       return (
         <div>
-          <p>
-            <button
-              type='button'
-              style={padded}
-              onClick={handleUploadPuzFiles}
-            >
-              Upload Files
-            </button>
-          </p>
+          <p>New files</p>
+          <ul>{newFilesListItems}</ul>
         </div>
       );
     };
 
-    const renderBothUploadButtons = () => {
+    const getExistingFilesList = (existingFiles: any[]) => {
+
+      if (existingFiles.length === 0) {
+        return null;
+      }
+      const existingFilesListItems = existingFiles.map((existingFile) =>
+        <li key={existingFile}>{existingFile}</li>
+      );
       return (
         <div>
-          <p>
-            <button
-              type='button'
-              style={padded}
-              onClick={handleUploadPuzFiles}
-            >
-              Upload Files
-            </button>
-          </p>
+          <p>Existing files (will not be uploaded)</p>
+          <ul>{existingFilesListItems}</ul>
         </div>
       );
     };
@@ -206,7 +225,7 @@ const GameHome = (props: GameHomeProps) => {
       if (files.length == 0) {
         return (
           <div>
-            <p>No file chosen</p>
+            <p>No files chosen</p>
           </div>
         );
       }
@@ -214,43 +233,18 @@ const GameHome = (props: GameHomeProps) => {
       const filesLists = getFilesLists();
       const { existingFiles, newFiles } = filesLists;
 
-      const newFilesListItems = newFiles.map((newFile) =>
-        <li key={newFile}>{newFile}</li>
-      );
-      const existingFilesListItems = existingFiles.map((existingFile) =>
-        <li key={existingFile}>{existingFile}</li>
-      );
+      const uploadButton = renderUploadButton(newFiles);
 
-      if (existingFilesListItems.length === 0) {
-        const singleUploadButton = renderSingleUploadButton();
-        return (
-          <div>
-            <ul>{newFilesListItems}</ul>
-            {singleUploadButton}
-          </div>
-        );
-      }
-      else if (newFilesListItems.length === 0) {
-        const singleUploadButton = renderSingleUploadButton();
-        return (
-          <div>
-            <p>Existing files (will not be uploaded)</p>
-            <ul>{existingFilesListItems}</ul>
-            {singleUploadButton}
-          </div>
-        );
-      } else {
-        const bothUploadButtons = renderBothUploadButtons();
-        return (
-          <div>
-            <p>New files</p>
-            <ul>{newFilesListItems}</ul>
-            <p>Existing files</p>
-            <ul>{existingFilesListItems}</ul>
-            {bothUploadButtons}
-          </div>
-        );
-      }
+      const newFilesList = getNewFilesList(newFiles);
+      const existingFilesList = getExistingFilesList(existingFiles);
+
+      return (
+        <div>
+          {newFilesList}
+          {existingFilesList}
+          {uploadButton}
+        </div>
+      );
     };
 
     const renderSettingsTab = () => {
