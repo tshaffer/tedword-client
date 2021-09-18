@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as React from 'react';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -32,6 +32,7 @@ const defaultTheme = {
 
 export interface CrosswordPropsFromParent {
   onUpdateGuess: (row: number, col: number, char: string) => any;
+  onFocusedCellChange: (row: any, col: any, direction: any) => any;
 }
 
 export interface CrosswordProps extends CrosswordPropsFromParent {
@@ -51,6 +52,9 @@ const Crossword = (props: CrosswordProps) => {
   const [currentNumber, setCurrentNumber] = useState('1');
 
   React.useEffect(() => {
+    if (props.onFocusedCellChange) {
+      props.onFocusedCellChange(0, 0, 'across');
+    }
     setFocusedRow(0);
     setFocusedCol(0);
     setCurrentDirection('across');
@@ -98,6 +102,10 @@ const Crossword = (props: CrosswordProps) => {
 
     setCurrentNumber(cellData[direction]);
 
+    if (props.onFocusedCellChange) {
+      props.onFocusedCellChange(row, col, direction);
+    }
+
     focus();
   };
 
@@ -130,6 +138,9 @@ const Crossword = (props: CrosswordProps) => {
       direction = otherDirection(direction);
     }
 
+    if (props.onFocusedCellChange) {
+      props.onFocusedCellChange(row, col, direction);
+    }
     setFocusedRow(row);
     setFocusedCol(col);
     setCurrentDirection(direction);

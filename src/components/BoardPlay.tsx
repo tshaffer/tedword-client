@@ -102,6 +102,7 @@ const BoardPlay = (props: BoardPlayProps) => {
     <div>
       <Crossword
         onUpdateGuess={handleUpdateGuess}
+        onFocusedCellChange={handleFocusedCellChange}
       />
     </div>
   );
