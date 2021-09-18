@@ -1,6 +1,20 @@
 import axios from 'axios';
-import { PuzzleEntity, PuzzleMetadata, PuzzleSpec } from '../types';
-import { addPuzzle, addPuzzleMetadata, setFileUploadStatus, setPuzzleId } from '../models';
+import { CluesByDirection, DerivedCrosswordData, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec } from '../types';
+import {
+  addPuzzle,
+  addPuzzleMetadata,
+  initializeGuesses,
+  setClues,
+  setCrosswordClues,
+  setFileUploadStatus,
+  setGridData,
+  setPuzzleId,
+  setSize
+} from '../models';
+import {
+  createEmptyGuessesGrid, createGridData
+} from '../utilities';
+
 
 import { apiUrlFragment, serverUrl } from '../index';
 
@@ -9,15 +23,67 @@ const PuzCrossword = require('@confuzzle/puz-crossword').PuzCrossword;
 
 export const loadPuzzle = (id: string) => {
   return ((dispatch: any, getState: any): any => {
-    // const path = 'http://localhost:8888/api/v1/puzzle?id=' + id;
     const path = serverUrl + apiUrlFragment + 'puzzle?id=' + id;
 
     return axios.get(path)
       .then((puzzleResponse: any) => {
         const puzzleEntity: PuzzleEntity = puzzleResponse.data as PuzzleEntity;
         dispatch(addPuzzle(id, puzzleEntity));
+
+        const derivedCrosswordData: DerivedCrosswordData = generateDerivedCrosswordData(puzzleEntity);
+
+        // not the correct way to do this, in my opinion. it should be done when the user chooses
+        // to play the game
+        dispatch(setCrosswordClues(derivedCrosswordData.cluesByDirection));
+        dispatch(setSize(derivedCrosswordData.size));
+        dispatch(setGridData(derivedCrosswordData.gridData));
+        dispatch(setClues(derivedCrosswordData.clues));
+
+        const guesses = createEmptyGuessesGrid(derivedCrosswordData.cluesByDirection);
+        dispatch(initializeGuesses(guesses));
       });
   });
+};
+
+export const generateDerivedCrosswordData = (puzzleEntity: PuzzleEntity): DerivedCrosswordData => {
+  const crosswordClues: CluesByDirection = buildDisplayedPuzzle(puzzleEntity);
+  const { size, gridData, clues } = createGridData(crosswordClues);
+  return {
+    size,
+    gridData,
+    cluesByDirection: crosswordClues,
+    clues,
+  };
+};
+
+export const buildDisplayedPuzzle = (puzzleEntity: PuzzleEntity): CluesByDirection => {
+
+  const cluesByDirection: CluesByDirection = {
+    across: {},
+    down: {},
+  };
+
+  const parsedClues: ParsedClue[] = puzzleEntity.parsedClues;
+  for (const parsedClue of parsedClues) {
+    const { col, isAcross, row, solution, text } = parsedClue;
+    if (isAcross) {
+      cluesByDirection.across[parsedClue.number] = {
+        clue: text,
+        answer: solution,
+        row,
+        col,
+      };
+    } else {
+      cluesByDirection.down[parsedClue.number] = {
+        clue: text,
+        answer: solution,
+        row,
+        col,
+      };
+    }
+  }
+
+  return cluesByDirection;
 };
 
 export const loadPuzzlesMetadata = () => {
