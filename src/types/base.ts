@@ -18,6 +18,10 @@ export interface TedwordState {
   puzCrosswordSpec: PuzCrosswordSpec;
   puzzlesState: PuzzlesState,
   users: UsersMap;
+
+  derivedCrosswordData: DerivedCrosswordData | null;
+  guessesState: GuessesState;
+
 }
 
 export interface AppState {
@@ -181,3 +185,73 @@ export interface PuzzleSpec {
   parsedClues: ParsedClue[];
 }
 
+
+
+export interface Guess {
+  value: string;
+  guessIsRemote: boolean;
+  remoteUser: string | null;
+}
+
+export interface ClueAtLocation {
+  clue: string;
+  answer: string;
+  row: number;
+  col: number;
+}
+
+export interface CluesByNumber {
+  [id: number]: ClueAtLocation;
+}
+
+export interface CluesByDirection {
+  across: CluesByNumber;
+  down: CluesByNumber;
+}
+
+export interface Clue {
+  value: string;
+  numericLabel: string;
+}
+
+export interface Clues {
+  across: Clue[];
+  down: Clue[];
+}
+
+export interface Guess {
+  value: string;
+  guessIsRemote: boolean;
+  remoteUser: string | null;
+}
+
+export type RowOfGuesses = Guess[];
+export type GuessesGrid = RowOfGuesses[];
+
+export interface GridSquareSpec {
+  used: boolean;
+  number: string;
+  answer: string;
+  locked: boolean;
+  row: number | null;
+  col: number | null;
+  across: boolean;
+  down: boolean;
+}
+export type RowOfGridSquareSpecs = GridSquareSpec[];
+export type GridSpec = RowOfGridSquareSpecs[];
+
+export interface GridSquare extends GridSquareSpec {
+  guess: string;
+}
+
+export interface DerivedCrosswordData {
+  size: number;
+  gridData: GridSpec;
+  cluesByDirection: CluesByDirection | null;
+  clues: Clues;
+}
+
+export interface GuessesState {
+  guessesGrid: GuessesGrid | null;
+}

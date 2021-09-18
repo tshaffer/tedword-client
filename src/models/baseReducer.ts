@@ -8,6 +8,8 @@ import { usersReducer } from './users';
 import { appStateReducer } from './appState';
 import { boardsStateReducer } from './boards';
 import { gameStateReducer } from './gameState';
+import { guessesStateReducer } from './guessesState';
+import { derivedCrosswordDataReducer } from './derivedCrosswordData';
 
 // -----------------------------------------------------------------------
 // Reducers
@@ -19,6 +21,10 @@ export const rootReducer = combineReducers<TedwordState>({
   puzzlesState: puzzlesStateReducer,
   appState: appStateReducer,
   gameState: gameStateReducer,
+
+  derivedCrosswordData: derivedCrosswordDataReducer,
+  guessesState: guessesStateReducer,
+
 });
 
 // -----------------------------------------------------------------------

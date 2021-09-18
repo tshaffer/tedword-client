@@ -2,6 +2,10 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import Crossword from './Crossword/Crossword';
+
+import { updateGuess } from '../models';
+
 import {
   AppState,
   UiState,
@@ -9,7 +13,8 @@ import {
   DisplayedPuzzle,
   DisplayedPuzzleCell,
   CellContentsMap,
-  PuzzleSpec
+  PuzzleSpec,
+  Guess
 } from '../types';
 import { setPuzzleId, setUiState } from '../models';
 import {
@@ -33,11 +38,11 @@ export interface BoardPlayProps extends BoardPlayPropsFromParent {
   onLoadPuzzle: (puzzleId: string) => any;
   onCellChange: (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
   onUpdateFocusedClues: (row: number, col: number) => any;
+
+  onUpdateGuess: (row: number, col: number, puzzleGuess: Guess) => any;
+
 }
 
-// import Crossword from '@jaredreisinger/react-crossword';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const Crossword = require('@jaredreisinger/react-crossword').Crossword;
 
 export let boardPlayCrossword: any;
 
@@ -66,6 +71,14 @@ const BoardPlay = (props: BoardPlayProps) => {
     props.onUpdateFocusedClues(row, col);
   };
 
+  const handleUpdateGuess = (row: number, col: number, char: string) => {
+    props.onUpdateGuess(row, col, {
+      value: char,
+      guessIsRemote: false,
+      remoteUser: null,
+    });
+  };
+
   const displayedPuzzleData: DisplayedPuzzle = props.displayedPuzzle;
 
 
@@ -75,14 +88,20 @@ const BoardPlay = (props: BoardPlayProps) => {
     cellContents = {};
   }
 
-  return (
-    <div>
+  /*
       <Crossword
         data={displayedPuzzleData}
         tedGuesses={cellContents}
         ref={boardPlayCrossword}
         onCellChange={handleCellChange}
         onFocusedCellChange={handleFocusedCellChange}
+      />
+  */
+
+  return (
+    <div>
+      <Crossword
+        onUpdateGuess={handleUpdateGuess}
       />
     </div>
   );
@@ -105,6 +124,9 @@ const mapDispatchToProps = (dispatch: any) => {
     onLoadPuzzle: loadPuzzle,
     onCellChange: cellChange,
     onUpdateFocusedClues: updateFocusedClues,
+
+    onUpdateGuess: updateGuess,
+
   }, dispatch);
 };
 
