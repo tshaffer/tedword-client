@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CluesByDirection, DerivedCrosswordData, Guess, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, TedwordState } from '../types';
+import { CellContentsMap, CluesByDirection, DerivedCrosswordData, Guess, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, TedwordState } from '../types';
 import {
   addPuzzle,
   addPuzzleMetadata,
@@ -17,7 +17,9 @@ import {
 } from '../utilities';
 import {
   getBoardId,
+  getCellContents,
   getCurrentUser,
+
 } from '../selectors';
 
 import { apiUrlFragment, serverUrl } from '../index';
@@ -45,6 +47,27 @@ export const loadPuzzle = (id: string) => {
 
         const guesses = createEmptyGuessesGrid(derivedCrosswordData.cluesByDirection);
         dispatch(initializeGuesses(guesses));
+
+        const state = getState();
+        console.log('loadPuzzle', state);
+
+        const cellContents: CellContentsMap = getCellContents(state);
+
+        for (const cellContentsKey in cellContents) {
+          if (Object.prototype.hasOwnProperty.call(cellContents, cellContentsKey)) {
+            const cellPosition = cellContentsKey.split('_');
+            const row: number = parseInt(cellPosition[0], 10);
+            const col: number = parseInt(cellPosition[1], 10);
+            const guessValue: string = cellContents[cellContentsKey];
+            const guess: Guess = {
+              value: guessValue,
+              guessIsRemote: false,
+              remoteUser: null,
+            };
+            dispatch(updateGuess(row, col, guess));
+          }
+        }
+
       });
   });
 };
@@ -113,14 +136,14 @@ export const processInputEvent = (row: number, col: number, typedChar: string) =
   return (dispatch: any, getState: any) => {
 
     const state: TedwordState = getState();
-    
-    const guess: Guess =  {
+
+    const guess: Guess = {
       value: typedChar,
       guessIsRemote: false,
       remoteUser: null,
     };
     dispatch(updateGuess(row, col, guess));
-    
+
     const path = serverUrl + apiUrlFragment + 'cellChange';
 
     const cellChangeBody: any = {

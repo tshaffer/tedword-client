@@ -48,15 +48,7 @@ const BoardPlay = (props: BoardPlayProps) => {
 
   boardPlayCrossword = React.useRef();
 
-  const getBoardId = (): string => {
-    return props.appState.boardId;
-  };
-
-  const getPuzzleUser = (): string => {
-    return props.appState.userName;
-  };
-
-  const handleFocusedCellChange = (row: any, col: any, direction: any) => {
+  const handleFocusedCellChange = (row: any, col: any) => {
     props.onUpdateFocusedClues(row, col);
   };
 
@@ -64,7 +56,6 @@ const BoardPlay = (props: BoardPlayProps) => {
     props.onInputEvent(row, col, char);
   };
 
-  const displayedPuzzleData: DisplayedPuzzle = props.displayedPuzzle;
 
 
   let cellContents: CellContentsMap = props.cellContents;
