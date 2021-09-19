@@ -18,7 +18,7 @@ import {
 } from '../types';
 import { setPuzzleId, setUiState } from '../models';
 import {
-  cellChange,
+  processInputEvent,
   loadPuzzle,
   updateFocusedClues
 } from '../controllers';
@@ -40,7 +40,7 @@ export interface BoardPlayProps extends BoardPlayPropsFromParent {
   onUpdateFocusedClues: (row: number, col: number) => any;
 
   // onCellChange: (row: number, col: number, puzzleGuess: Guess) => any;
-  onCellChange: (row: number, col: number, char: string) => any;
+  onInputEvent: (row: number, col: number, char: string) => any;
 
 }
 
@@ -68,20 +68,20 @@ const BoardPlay = (props: BoardPlayProps) => {
   const handleCellChange = (row: number, col: number, typedChar: string) => {
     // props.onCellChange(getBoardId(), getPuzzleUser(), row, col, typedChar, localChange);
     // props.onCellChange(getBoardId(), getPuzzleUser(), row, col, typedChar);
-    props.onCellChange(row, col, typedChar);
+    props.onInputEvent(row, col, typedChar);
   };
 
   const handleFocusedCellChange = (row: any, col: any, direction: any) => {
     props.onUpdateFocusedClues(row, col);
   };
 
-  const handleUpdateGuess = (row: number, col: number, char: string) => {
+  const handleInputEvent = (row: number, col: number, char: string) => {
     // props.onCellChange(row, col, {
     //   value: char,
     //   guessIsRemote: false,
     //   remoteUser: null,
     // });
-    props.onCellChange(row, col, char);
+    props.onInputEvent(row, col, char);
   };
 
   const displayedPuzzleData: DisplayedPuzzle = props.displayedPuzzle;
@@ -106,7 +106,7 @@ const BoardPlay = (props: BoardPlayProps) => {
   return (
     <div>
       <Crossword
-        onCellChange={handleUpdateGuess}
+        onInput={handleInputEvent}
         onFocusedCellChange={handleFocusedCellChange}
       />
     </div>
@@ -128,7 +128,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetPuzzleId: setPuzzleId,
     onSetUiState: setUiState,
     onLoadPuzzle: loadPuzzle,
-    onCellChange: cellChange,
+    onInputEvent: processInputEvent,
     onUpdateFocusedClues: updateFocusedClues,
   }, dispatch);
 };

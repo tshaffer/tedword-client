@@ -31,7 +31,7 @@ const defaultTheme = {
 };
 
 export interface CrosswordPropsFromParent {
-  onCellChange: (row: number, col: number, char: string) => any;
+  onInput: (row: number, col: number, char: string) => any;
   onFocusedCellChange: (row: any, col: any, direction: any) => any;
 }
 
@@ -221,7 +221,7 @@ const Crossword = (props: CrosswordProps) => {
       // Delete:    delete the current cell, but don't move
       case 'Backspace':
       case 'Delete': {
-        props.onCellChange(focusedRow, focusedCol, '');
+        props.onInput(focusedRow, focusedCol, '');
         if (key === 'Backspace') {
           moveBackward();
         }
@@ -259,7 +259,7 @@ const Crossword = (props: CrosswordProps) => {
           break;
         }
 
-        props.onCellChange(focusedRow, focusedCol, key.toUpperCase());
+        props.onInput(focusedRow, focusedCol, key.toUpperCase());
         moveForward();
 
         break;

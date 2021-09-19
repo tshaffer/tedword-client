@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CluesByDirection, DerivedCrosswordData, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec } from '../types';
+import { CluesByDirection, DerivedCrosswordData, Guess, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, TedwordState } from '../types';
 import {
   addPuzzle,
   addPuzzleMetadata,
@@ -9,12 +9,16 @@ import {
   setFileUploadStatus,
   setGridData,
   setPuzzleId,
-  setSize
+  setSize,
+  updateGuess
 } from '../models';
 import {
   createEmptyGuessesGrid, createGridData
 } from '../utilities';
-
+import {
+  getBoardId,
+  getCurrentUser,
+} from '../selectors';
 
 import { apiUrlFragment, serverUrl } from '../index';
 
@@ -107,37 +111,43 @@ export const loadPuzzlesMetadata = () => {
 
 // export const cellChange = (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => {
 // export const cellChange = (boardId: string, user: string, row: number, col: number, typedChar: string) => {
-export const cellChange = (row: number, col: number, typedChar: string) => {
-  return (dispatch: any) => {
+export const processInputEvent = (row: number, col: number, typedChar: string) => {
+  return (dispatch: any, getState: any) => {
 
-    return Promise.resolve();
-
+    const state: TedwordState = getState();
+    
+    const guess: Guess =  {
+      value: typedChar,
+      guessIsRemote: false,
+      remoteUser: null,
+    };
+    dispatch(updateGuess(row, col, guess));
+    
     // if (!localChange) {
     //   console.log('cellChange - remote change - server update not required');
     //   return;
     // }
 
-    // const path = 'http://localhost:8888/api/v1/cellChange';
-    // const path = serverUrl + apiUrlFragment + 'cellChange';
+    const path = serverUrl + apiUrlFragment + 'cellChange';
 
-    // const cellChangeBody: any = {
-    //   boardId,
-    //   user,
-    //   row,
-    //   col,
-    //   typedChar,
-    // };
+    const cellChangeBody: any = {
+      boardId: getBoardId(state),
+      user: getCurrentUser(state),
+      row,
+      col,
+      typedChar,
+    };
 
-    // return axios.post(
-    //   path,
-    //   cellChangeBody,
-    // ).then((response) => {
-    //   return;
-    // }).catch((error) => {
-    //   console.log('error');
-    //   console.log(error);
-    //   return;
-    // });
+    return axios.post(
+      path,
+      cellChangeBody,
+    ).then((response) => {
+      return;
+    }).catch((error) => {
+      console.log('error');
+      console.log(error);
+      return;
+    });
 
   };
 

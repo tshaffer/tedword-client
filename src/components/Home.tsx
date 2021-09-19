@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { isNil } from 'lodash';
 
 import { AppState, DisplayedPuzzle, UiState, UsersMap } from '../types';
-import { cellChange, loadBoards, loadPuzzlesMetadata, loadUsers } from '../controllers';
+import { processInputEvent, loadBoards, loadPuzzlesMetadata, loadUsers } from '../controllers';
 import { getAppState, getDisplayedPuzzle, getUsers } from '../selectors';
 import { setUiState, setUserName } from '../models';
 
@@ -108,7 +108,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onLoadBoards: loadBoards,
     onLoadPuzzlesMetadata: loadPuzzlesMetadata,
     onLoadUsers: loadUsers,
-    onCellChange: cellChange,
+    onCellChange: processInputEvent,
   }, dispatch);
 };
 
