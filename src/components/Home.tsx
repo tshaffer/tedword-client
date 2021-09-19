@@ -27,7 +27,8 @@ export interface HomeProps {
   onLoadBoards: () => any;
   onLoadPuzzlesMetadata: () => any;
   onLoadUsers: () => any;
-  onCellChange: (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
+  // onCellChange: (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
+  onCellChange: (row: number, col: number, typedChar: string) => any;
 }
 
 let homeProps;

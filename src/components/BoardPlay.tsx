@@ -36,10 +36,11 @@ export interface BoardPlayProps extends BoardPlayPropsFromParent {
   onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
   onLoadPuzzle: (puzzleId: string) => any;
-  onCellChange: (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
+  // onCellChange: (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
   onUpdateFocusedClues: (row: number, col: number) => any;
 
-  onUpdateGuess: (row: number, col: number, puzzleGuess: Guess) => any;
+  // onCellChange: (row: number, col: number, puzzleGuess: Guess) => any;
+  onCellChange: (row: number, col: number, char: string) => any;
 
 }
 
@@ -63,8 +64,11 @@ const BoardPlay = (props: BoardPlayProps) => {
     return props.appState.userName;
   };
 
-  const handleCellChange = (row: number, col: number, typedChar: string, localChange: boolean) => {
-    props.onCellChange(getBoardId(), getPuzzleUser(), row, col, typedChar, localChange);
+  // const handleCellChange = (row: number, col: number, typedChar: string, localChange: boolean) => {
+  const handleCellChange = (row: number, col: number, typedChar: string) => {
+    // props.onCellChange(getBoardId(), getPuzzleUser(), row, col, typedChar, localChange);
+    // props.onCellChange(getBoardId(), getPuzzleUser(), row, col, typedChar);
+    props.onCellChange(row, col, typedChar);
   };
 
   const handleFocusedCellChange = (row: any, col: any, direction: any) => {
@@ -72,11 +76,12 @@ const BoardPlay = (props: BoardPlayProps) => {
   };
 
   const handleUpdateGuess = (row: number, col: number, char: string) => {
-    props.onUpdateGuess(row, col, {
-      value: char,
-      guessIsRemote: false,
-      remoteUser: null,
-    });
+    // props.onCellChange(row, col, {
+    //   value: char,
+    //   guessIsRemote: false,
+    //   remoteUser: null,
+    // });
+    props.onCellChange(row, col, char);
   };
 
   const displayedPuzzleData: DisplayedPuzzle = props.displayedPuzzle;
@@ -101,7 +106,7 @@ const BoardPlay = (props: BoardPlayProps) => {
   return (
     <div>
       <Crossword
-        onUpdateGuess={handleUpdateGuess}
+        onCellChange={handleUpdateGuess}
         onFocusedCellChange={handleFocusedCellChange}
       />
     </div>
@@ -125,9 +130,6 @@ const mapDispatchToProps = (dispatch: any) => {
     onLoadPuzzle: loadPuzzle,
     onCellChange: cellChange,
     onUpdateFocusedClues: updateFocusedClues,
-
-    onUpdateGuess: updateGuess,
-
   }, dispatch);
 };
 

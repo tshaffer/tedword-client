@@ -105,35 +105,39 @@ export const loadPuzzlesMetadata = () => {
   };
 };
 
-export const cellChange = (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => {
+// export const cellChange = (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => {
+// export const cellChange = (boardId: string, user: string, row: number, col: number, typedChar: string) => {
+export const cellChange = (row: number, col: number, typedChar: string) => {
   return (dispatch: any) => {
 
-    if (!localChange) {
-      console.log('cellChange - remote change - server update not required');
-      return;
-    }
+    return Promise.resolve();
+
+    // if (!localChange) {
+    //   console.log('cellChange - remote change - server update not required');
+    //   return;
+    // }
 
     // const path = 'http://localhost:8888/api/v1/cellChange';
-    const path = serverUrl + apiUrlFragment + 'cellChange';
+    // const path = serverUrl + apiUrlFragment + 'cellChange';
 
-    const cellChangeBody: any = {
-      boardId,
-      user,
-      row,
-      col,
-      typedChar,
-    };
+    // const cellChangeBody: any = {
+    //   boardId,
+    //   user,
+    //   row,
+    //   col,
+    //   typedChar,
+    // };
 
-    return axios.post(
-      path,
-      cellChangeBody,
-    ).then((response) => {
-      return;
-    }).catch((error) => {
-      console.log('error');
-      console.log(error);
-      return;
-    });
+    // return axios.post(
+    //   path,
+    //   cellChangeBody,
+    // ).then((response) => {
+    //   return;
+    // }).catch((error) => {
+    //   console.log('error');
+    //   console.log(error);
+    //   return;
+    // });
 
   };
 
