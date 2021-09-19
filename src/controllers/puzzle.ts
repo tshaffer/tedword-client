@@ -109,8 +109,6 @@ export const loadPuzzlesMetadata = () => {
   };
 };
 
-// export const cellChange = (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => {
-// export const cellChange = (boardId: string, user: string, row: number, col: number, typedChar: string) => {
 export const processInputEvent = (row: number, col: number, typedChar: string) => {
   return (dispatch: any, getState: any) => {
 
@@ -123,11 +121,6 @@ export const processInputEvent = (row: number, col: number, typedChar: string) =
     };
     dispatch(updateGuess(row, col, guess));
     
-    // if (!localChange) {
-    //   console.log('cellChange - remote change - server update not required');
-    //   return;
-    // }
-
     const path = serverUrl + apiUrlFragment + 'cellChange';
 
     const cellChangeBody: any = {

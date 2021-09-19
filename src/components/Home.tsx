@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { isNil } from 'lodash';
 
 import { AppState, DisplayedPuzzle, Guess, UiState, UsersMap } from '../types';
-import { processInputEvent, loadBoards, loadPuzzlesMetadata, loadUsers } from '../controllers';
+import { loadBoards, loadPuzzlesMetadata, loadUsers } from '../controllers';
 import { getAppState, getDisplayedPuzzle, getUsers } from '../selectors';
 import { setUiState, setUserName, updateGuess } from '../models';
 
@@ -15,8 +15,6 @@ import GameHome from './GameHome';
 import BoardTop from './BoardTop';
 
 const Pusher = require('pusher-js');
-
-import { boardPlayCrossword } from './BoardPlay';
 
 export interface HomeProps {
   appState: AppState,
@@ -27,8 +25,6 @@ export interface HomeProps {
   onLoadBoards: () => any;
   onLoadPuzzlesMetadata: () => any;
   onLoadUsers: () => any;
-  // onCellChange: (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
-  onCellChange: (row: number, col: number, typedChar: string) => any;
   onUpdateGuess: (row: number, col: number, puzzleGuess: Guess) => any;
 }
 
@@ -62,7 +58,6 @@ const Home = (props: HomeProps) => {
   
       const externalEvent: boolean = homeProps.appState.userName !== user;
       if (externalEvent) {
-        // (boardPlayCrossword as any).current.remoteSetCell(row, col, typedChar);
         const guess: Guess = {
           value: typedChar,
           guessIsRemote: true,
@@ -115,7 +110,6 @@ const mapDispatchToProps = (dispatch: any) => {
     onLoadBoards: loadBoards,
     onLoadPuzzlesMetadata: loadPuzzlesMetadata,
     onLoadUsers: loadUsers,
-    onCellChange: processInputEvent,
     onUpdateGuess: updateGuess,
   }, dispatch);
 };

@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 
 import Crossword from './Crossword/Crossword';
 
-import { updateGuess } from '../models';
-
 import {
   AppState,
   UiState,
@@ -13,9 +11,7 @@ import {
   DisplayedPuzzle,
   DisplayedPuzzleCell,
   CellContentsMap,
-  PuzzleSpec,
-  Guess
-} from '../types';
+  PuzzleSpec} from '../types';
 import { setPuzzleId, setUiState } from '../models';
 import {
   processInputEvent,
@@ -36,12 +32,8 @@ export interface BoardPlayProps extends BoardPlayPropsFromParent {
   onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
   onLoadPuzzle: (puzzleId: string) => any;
-  // onCellChange: (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
   onUpdateFocusedClues: (row: number, col: number) => any;
-
-  // onCellChange: (row: number, col: number, puzzleGuess: Guess) => any;
   onInputEvent: (row: number, col: number, char: string) => any;
-
 }
 
 
@@ -64,23 +56,11 @@ const BoardPlay = (props: BoardPlayProps) => {
     return props.appState.userName;
   };
 
-  // const handleCellChange = (row: number, col: number, typedChar: string, localChange: boolean) => {
-  const handleCellChange = (row: number, col: number, typedChar: string) => {
-    // props.onCellChange(getBoardId(), getPuzzleUser(), row, col, typedChar, localChange);
-    // props.onCellChange(getBoardId(), getPuzzleUser(), row, col, typedChar);
-    props.onInputEvent(row, col, typedChar);
-  };
-
   const handleFocusedCellChange = (row: any, col: any, direction: any) => {
     props.onUpdateFocusedClues(row, col);
   };
 
   const handleInputEvent = (row: number, col: number, char: string) => {
-    // props.onCellChange(row, col, {
-    //   value: char,
-    //   guessIsRemote: false,
-    //   remoteUser: null,
-    // });
     props.onInputEvent(row, col, char);
   };
 
