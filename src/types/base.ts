@@ -73,10 +73,6 @@ export enum UiState {
   ExistingBoardPlay = 'ExistingBoardPlay',
 }
 
-export interface PuzzleSpec {
-  name: string;
-}
-
 export interface ParsedClue {
   col: number;
   isAcross: boolean;
@@ -169,23 +165,6 @@ export interface BoardEntity {
   solved: boolean;
   difficulty: number;
 }
-
-export interface PuzzleSpec {
-  title: string;
-  author: string;
-  copyright: string;
-  sourceFileName: string;
-  note: string;
-  width: number;
-  height: number;
-  clues: string[];
-  solution: string;
-  state: string;
-  hasState: boolean;
-  parsedClues: ParsedClue[];
-}
-
-
 
 export interface Guess {
   value: string;
