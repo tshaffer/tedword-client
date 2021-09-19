@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 
 import { isNil } from 'lodash';
 
-import { AppState, DisplayedPuzzle, UiState, UsersMap } from '../types';
+import { AppState, DisplayedPuzzle, Guess, UiState, UsersMap } from '../types';
 import { processInputEvent, loadBoards, loadPuzzlesMetadata, loadUsers } from '../controllers';
 import { getAppState, getDisplayedPuzzle, getUsers } from '../selectors';
-import { setUiState, setUserName } from '../models';
+import { setUiState, setUserName, updateGuess } from '../models';
 
 import Login from './Login';
 import GameHome from './GameHome';
@@ -29,6 +29,7 @@ export interface HomeProps {
   onLoadUsers: () => any;
   // onCellChange: (boardId: string, user: string, row: number, col: number, typedChar: string, localChange: boolean) => any;
   onCellChange: (row: number, col: number, typedChar: string) => any;
+  onUpdateGuess: (row: number, col: number, puzzleGuess: Guess) => any;
 }
 
 let homeProps;
@@ -61,7 +62,13 @@ const Home = (props: HomeProps) => {
   
       const externalEvent: boolean = homeProps.appState.userName !== user;
       if (externalEvent) {
-        (boardPlayCrossword as any).current.remoteSetCell(row, col, typedChar);
+        // (boardPlayCrossword as any).current.remoteSetCell(row, col, typedChar);
+        const guess: Guess = {
+          value: typedChar,
+          guessIsRemote: true,
+          remoteUser: user,
+        };
+        homeProps.onUpdateGuess(row, col, guess);
       }
     });
   };
@@ -109,6 +116,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onLoadPuzzlesMetadata: loadPuzzlesMetadata,
     onLoadUsers: loadUsers,
     onCellChange: processInputEvent,
+    onUpdateGuess: updateGuess,
   }, dispatch);
 };
 
