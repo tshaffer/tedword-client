@@ -6,5 +6,4 @@ export * from './derivedCrosswordData';
 export * from './gameState';
 export * from './guessesState';
 export * from './puzzles';
-export * from './puzCrosswordSpec';
 export * from './users';

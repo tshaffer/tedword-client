@@ -15,7 +15,6 @@ export interface TedwordState {
   appState: AppState;
   boardsState: BoardsState;
   gameState: GameState;
-  puzCrosswordSpec: PuzCrosswordSpec;
   puzzlesState: PuzzlesState,
   users: UsersMap;
 
@@ -39,21 +38,6 @@ export interface GameState {
 
 export interface BoardsState {
   boards: BoardsMap;
-}
-
-export interface PuzCrosswordSpec {
-  title: string;
-  author: string;
-  copyright: string;
-  sourceFileName: string;
-  note: string;
-  width: number;
-  height: number;
-  clues: string[];
-  solution: string;
-  state: string;
-  hasState: boolean;
-  parsedClues: ParsedClue[];
 }
 
 export interface PuzzlesState {
