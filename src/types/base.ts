@@ -133,8 +133,13 @@ export interface PuzzleEntity extends PuzzleSpec {
   id: string;
 }
 
+export interface CellContentsValue {
+  user: string;
+  typedChar: string;
+}
+
 export interface CellContentsMap {
-  [id: string]: string;
+  [id: string]: CellContentsValue;
 }
 
 export interface BoardEntity {

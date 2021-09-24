@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CellContentsMap, CluesByDirection, DerivedCrosswordData, Guess, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, TedwordState } from '../types';
+import { CellContentsMap, CellContentsValue, CluesByDirection, DerivedCrosswordData, Guess, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, TedwordState } from '../types';
 import {
   addPuzzle,
   addPuzzleMetadata,
@@ -51,6 +51,8 @@ export const loadPuzzle = (id: string) => {
         const state = getState();
         console.log('loadPuzzle', state);
 
+        // TEDTODO - why is this getting loaded here? Shouldn't it get loaded when Board is opened?
+        // maybe it is - why is this called loadPuzzle?
         const cellContents: CellContentsMap = getCellContents(state);
 
         for (const cellContentsKey in cellContents) {
@@ -58,16 +60,24 @@ export const loadPuzzle = (id: string) => {
             const cellPosition = cellContentsKey.split('_');
             const row: number = parseInt(cellPosition[0], 10);
             const col: number = parseInt(cellPosition[1], 10);
-            const guessValue: string = cellContents[cellContentsKey];
+            const cellContentsValue: CellContentsValue = cellContents[cellContentsKey];
+            const guessValue: string = cellContentsValue.typedChar;
+            const user: string = cellContentsValue.user;
+            const currentUser: string = getCurrentUser(state);
+            
+            const guessIsRemote = user.toString() !== currentUser.toString();
+            const remoteUser = guessIsRemote
+              ? cellContentsValue.user
+              : null;
+
             const guess: Guess = {
               value: guessValue,
-              guessIsRemote: false,
-              remoteUser: null,
+              guessIsRemote,
+              remoteUser,
             };
             dispatch(updateGuess(row, col, guess));
           }
         }
-
       });
   });
 };

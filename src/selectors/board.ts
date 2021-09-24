@@ -3,16 +3,12 @@ import {
   BoardEntity,
   BoardsMap,
   CellContentsMap,
-  DisplayedPuzzle,
-  ParsedClue,
-  PuzzleEntity,
   TedwordState
 } from '../types';
 import {
   getBoardId
 } from '../selectors';
 
-import { boardPlayCrossword } from '../components/BoardPlay';
 
 export const getBoards = (state: TedwordState): BoardsMap => {
   return state.boardsState.boards;
