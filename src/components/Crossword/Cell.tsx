@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { ThemeContext } from 'styled-components';
 import { CrosswordSizeContext } from './context';
 
+import { Guess } from '../../types';
+
 export interface CellPropsFromParent {
   onClick: (cellData: any) => any;
 }
@@ -13,7 +15,7 @@ export interface CellPropsFromParent {
 export interface CellProps extends CellPropsFromParent {
   row: number,
   col: number,
-  guess: string,
+  guess: Guess,
   number: string,
   focus: boolean,
   highlight: boolean,
@@ -28,6 +30,7 @@ const Cell = (props: CellProps) => {
     cellBackground,
     cellBorder,
     textColor,
+    remoteGuessTextColor,
     numberColor,
     focusBackground,
     highlightBackground,
@@ -38,7 +41,12 @@ const Cell = (props: CellProps) => {
   const x = col * cellSize;
   const y = row * cellSize;
 
-  const cellTextColor = textColor;
+  let cellTextColor;
+  if (guess.guessIsRemote) {
+    cellTextColor = remoteGuessTextColor;
+  } else {
+    cellTextColor = textColor;
+  }
 
   const fillStyle = {
     fill: cellTextColor
@@ -90,7 +98,7 @@ const Cell = (props: CellProps) => {
         dominantBaseline="middle"
         style={cellStyle}
       >
-        {guess}
+        {guess.value}
       </text>
     </g>
   );

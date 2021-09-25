@@ -210,7 +210,7 @@ export type RowOfGridSquareSpecs = GridSquareSpec[];
 export type GridSpec = RowOfGridSquareSpecs[];
 
 export interface GridSquare extends GridSquareSpec {
-  guess: string;
+  guess: Guess;
 }
 
 export interface DerivedCrosswordData {

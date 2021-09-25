@@ -356,7 +356,7 @@ const Crossword = (props: CrosswordProps) => {
           col: gridSquareSpec.col,
           across: gridSquareSpec.across,
           down: gridSquareSpec.down,
-          guess: guess.value,
+          guess: guess,
         };
 
         if (!gridSquare.used) {
