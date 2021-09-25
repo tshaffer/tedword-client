@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { CellContentsMap, CellContentsValue, ClueAtLocation, Clues, CluesByDirection, CluesByNumber, DerivedCrosswordData, Guess, GuessesGrid, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, TedwordState } from '../types';
+import { CellContentsMap, CellContentsValue, ClueAtLocation, CluesByDirection, CluesByNumber, DerivedCrosswordData, Guess, GuessesGrid, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, TedwordState } from '../types';
 import {
   addPuzzle,
   addPuzzleMetadata,
   initializeGuesses,
-  setClues,
   setCrosswordClues,
   setFileUploadStatus,
   setGridData,
@@ -19,7 +18,6 @@ import {
 import {
   getBoardId,
   getCellContents,
-  getClues,
   getCurrentUser,
 
 } from '../selectors';
@@ -47,7 +45,6 @@ export const loadPuzzle = (id: string) => {
         dispatch(setCrosswordClues(derivedCrosswordData.cluesByDirection));
         dispatch(setSize(derivedCrosswordData.size));
         dispatch(setGridData(derivedCrosswordData.gridData));
-        dispatch(setClues(derivedCrosswordData.clues));
 
         const guesses = createEmptyGuessesGrid(derivedCrosswordData.cluesByDirection);
         dispatch(initializeGuesses(guesses));
@@ -95,7 +92,6 @@ export const generateDerivedCrosswordData = (puzzleEntity: PuzzleEntity): Derive
     size,
     gridData,
     cluesByDirection: crosswordClues,
-    clues,
   };
 };
 
@@ -195,9 +191,8 @@ const refreshCompletedClues = () => {
     const crosswordClues: CluesByDirection | null = getCrosswordClues(state);
     if (!isNil(crosswordClues)) {
       const guesses: GuessesGrid = getGuesses(state);
-      const clues: Clues = getClues(state);
       dispatch(resetCompletedClues(crosswordClues));
-      dispatch(buildCompletedClues(crosswordClues, guesses, clues));
+      dispatch(buildCompletedClues(crosswordClues, guesses));
     }
   });
 };
@@ -225,14 +220,14 @@ const resetCluesInDirection = (cluesByNumber: CluesByNumber, direction: string) 
   });
 };
 
-const buildCompletedClues = (cluesByDirection: CluesByDirection, guesses: GuessesGrid, clues: Clues) => {
+const buildCompletedClues = (cluesByDirection: CluesByDirection, guesses: GuessesGrid) => {
   return ((dispatch: any, getState: any): any => {
-    dispatch(buildCluesInDirection(cluesByDirection, 'across', guesses, clues));
-    dispatch(buildCluesInDirection(cluesByDirection, 'down', guesses, clues));
+    dispatch(buildCluesInDirection(cluesByDirection, 'across', guesses));
+    dispatch(buildCluesInDirection(cluesByDirection, 'down', guesses));
   });
 };
 
-const buildCluesInDirection = (cluesByDirection: CluesByDirection, direction: string, guesses: GuessesGrid, clues: Clues) => {
+const buildCluesInDirection = (cluesByDirection: CluesByDirection, direction: string, guesses: GuessesGrid) => {
   return ((dispatch: any): any => {
     const cluesByNumber: CluesByNumber = cluesByDirection[direction];
     for (const clueNumber in cluesByNumber) {

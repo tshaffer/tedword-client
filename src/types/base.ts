@@ -179,18 +179,6 @@ export interface CluesByDirection {
   down: CluesByNumber;
 }
 
-export interface Clue {
-  clue: string;
-  number: string;
-}
-
-export type CluesArray = Clue[];
-
-export interface Clues {
-  across: Clue[];
-  down: Clue[];
-}
-
 export interface Guess {
   value: string;
   guessIsRemote: boolean;
@@ -221,7 +209,6 @@ export interface DerivedCrosswordData {
   size: number;
   gridData: GridSpec;
   cluesByDirection: CluesByDirection | null;
-  clues: Clues;
 }
 
 export interface GuessesState {

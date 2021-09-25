@@ -7,9 +7,7 @@ import {
   GridSpec,
   GuessesGrid,
   RowOfGuesses,
-  Clues,
   ClueAtLocation,
-  Clue
 } from '../types';
 
 // TEDTODO types
@@ -94,15 +92,14 @@ function byNumber(a, b) {
   return aNum - bNum;
 }
 
-function fillClues(gridData: GridSpec, clues: Clues, data: CluesByDirection, direction: string): void {
+function fillClues(gridData: GridSpec, data: CluesByDirection, direction: string): void {
 
   // TEDTODO type
   const dir = directionInfo[direction];
 
   Object.entries(data[direction]).forEach(([number, info]) => {
-
     const clueAtLocation: ClueAtLocation = info as ClueAtLocation;
-    const { row: rowStart, col: colStart, clue, answer } = clueAtLocation;
+    const { row: rowStart, col: colStart, answer } = clueAtLocation;
     for (let i = 0; i < answer.length; i++) {
       const row = rowStart + (dir.primary === 'row' ? i : 0);
       const col = colStart + (dir.primary === 'col' ? i : 0);
@@ -118,18 +115,8 @@ function fillClues(gridData: GridSpec, clues: Clues, data: CluesByDirection, dir
         cellData.number = number;
       }
     }
-
-    const simpleClue: Clue = {
-      clue,
-      number,
-    };
-    
-    clueAtLocation.clueIndex = clues[direction].length;
-
-    clues[direction].push(simpleClue);
   });
 
-  clues[direction].sort(byNumber);
 }
 
 export const createGridData = (data: CluesByDirection): any => {
@@ -143,19 +130,12 @@ export const createGridData = (data: CluesByDirection): any => {
 
   const gridData: GridSpec = createEmptyGrid(size);
 
-  // Now fill with answers... and also collect the clues
-  const clues: Clues = {
-    across: [],
-    down: [],
-  };
-
-  fillClues(gridData, clues, data, 'across');
-  fillClues(gridData, clues, data, 'down');
+  fillClues(gridData, data, 'across');
+  fillClues(gridData, data, 'down');
 
   return {
     size,
     gridData,
-    clues
   };
 };
 

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { Guess, CluesByDirection, GuessesGrid, GridSquare, GridSquareSpec, GridSpec, Clues } from '../../types';
+import { Guess, CluesByDirection, GuessesGrid, GridSquare, GridSquareSpec, GridSpec } from '../../types';
 
 import { ThemeContext, ThemeProvider } from 'styled-components';
 
@@ -16,7 +16,7 @@ import { bothDirections, isAcross, otherDirection } from '../../utilities';
 import { isNil } from 'lodash';
 
 import { CrosswordContext, CrosswordSizeContext } from './context';
-import { getSize, getGridData, getClues } from '../../selectors';
+import { getSize, getGridData } from '../../selectors';
 
 const defaultTheme = {
   columnBreakpoint: '768px',
@@ -39,7 +39,6 @@ export interface CrosswordProps extends CrosswordPropsFromParent {
   cluesByDirection: CluesByDirection;
   size: number;
   gridData: GridSpec;
-  clues: Clues;
   guesses: GuessesGrid;
 }
 
@@ -60,7 +59,7 @@ const Crossword = (props: CrosswordProps) => {
     setCurrentDirection('across');
     setCurrentNumber('1');
 
-  }, [props.cluesByDirection, props.size, props.gridData, props.clues]);
+  }, [props.cluesByDirection, props.size, props.gridData]);
 
   const inputRef = React.useRef();
 
@@ -326,11 +325,11 @@ const Crossword = (props: CrosswordProps) => {
   const cells = [];
   if (props.gridData) {
 
-    bothDirections.every((direction) =>
-      props.clues[direction].every((clueInfo) => {
-        return clueInfo.correct;
-      })
-    );
+    // bothDirections.every((direction) =>
+    //   props.clues[direction].every((clueInfo) => {
+    //     return clueInfo.correct;
+    //   })
+    // );
 
     props.gridData.forEach((rowData, row) => {
 
@@ -439,15 +438,13 @@ const Crossword = (props: CrosswordProps) => {
               </div>
             </div >
             <div style={{ padding: '0 1em', flex: '1 2 25%' }}>
-              {props.clues &&
-                bothDirections.map((direction) => (
-                  <DirectionClues
-                    key={direction}
-                    direction={direction}
-                    clues={props.clues[direction]}
-                    cluesByNumber={props.cluesByDirection[direction]}
-                  />
-                ))}
+              {bothDirections.map((direction) => (
+                <DirectionClues
+                  key={direction}
+                  direction={direction}
+                  cluesByNumber={props.cluesByDirection[direction]}
+                />
+              ))}
 
             </div>
           </div>
@@ -463,7 +460,6 @@ function mapStateToProps(state: any) {
     guesses: getGuesses(state),
     size: getSize(state),
     gridData: getGridData(state),
-    clues: getClues(state),
   };
 }
 

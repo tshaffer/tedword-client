@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { ClueAtLocation, Clues, CluesByDirection, DerivedCrosswordData, GridSpec } from '../types';
+import { ClueAtLocation, CluesByDirection, DerivedCrosswordData, GridSpec } from '../types';
 import { TedwordModelBaseAction } from './baseAction';
 
 // ------------------------------------
@@ -8,7 +8,6 @@ import { TedwordModelBaseAction } from './baseAction';
 export const SET_GRID_DATA = 'SET_GRID_DATA';
 export const SET_SIZE = 'SET_SIZE';
 export const SET_CROSSSWORD_CLUES = 'SET_CROSSSWORD_CLUES';
-export const SET_CLUES = 'SET_CLUES';
 export const SET_ACTIVE_PUZZLE = 'SET_ACTIVE_PUZZLE';
 export const UPDATE_COMPLETELY_FILLED_IN = 'UPDATE_COMPLETELY_FILLED_IN';
 
@@ -61,21 +60,6 @@ export const setCrosswordClues = (
   };
 };
 
-export interface SetCluesPayload {
-  clues: Clues | null;
-}
-
-export const setClues = (
-  clues: Clues | null,
-): any => {
-  return {
-    type: SET_CLUES,
-    payload: {
-      clues,
-    }
-  };
-};
-
 export interface UpdateCompletelyFilledInPayload {
   direction: string,
   clueNumber: number,
@@ -105,15 +89,11 @@ const initialState: DerivedCrosswordData = {
   size: 0,
   gridData: [],
   cluesByDirection: null,
-  clues: {
-    across: [],
-    down: [],
-  },
 };
 
 export const derivedCrosswordDataReducer = (
   state: DerivedCrosswordData = initialState,
-  action: TedwordModelBaseAction<SetSizePayload & SetGridDataPayload & SetCrosswordCluesPayload & SetCluesPayload & UpdateCompletelyFilledInPayload>
+  action: TedwordModelBaseAction<SetSizePayload & SetGridDataPayload & SetCrosswordCluesPayload & UpdateCompletelyFilledInPayload>
 ): DerivedCrosswordData => {
   switch (action.type) {
     case SET_SIZE: {
@@ -124,9 +104,6 @@ export const derivedCrosswordDataReducer = (
     }
     case SET_CROSSSWORD_CLUES: {
       return { ...state, cluesByDirection: action.payload.crosswordClues };
-    }
-    case SET_CLUES: {
-      return { ...state, clues: action.payload.clues };
     }
     case UPDATE_COMPLETELY_FILLED_IN: {
       const { direction, clueNumber, completelyFilledIn } = action.payload;

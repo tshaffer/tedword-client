@@ -4,11 +4,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Clue from './Clue';
-import { ClueAtLocation, CluesArray, CluesByNumber } from '../../types';
+import { ClueAtLocation, CluesByNumber } from '../../types';
 
 export interface DirectionClueProps {
   direction: string;
-  clues: CluesArray;
   cluesByNumber: CluesByNumber;
 }
 
