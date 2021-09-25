@@ -10,58 +10,20 @@ export interface DirectionClueProps {
   direction: string;
   clues: CluesArray;
   cluesByNumber: CluesByNumber;
-  // number
-  // clue
-  // correct
 }
-
-/*
-  .direction {
-    margin-bottom: 2em;
-    ** padding: 0 1em;
-    flex: 1 1 20%; **
-
-    .header {
-      margin-top: 0;
-      margin-bottom: 0.5em;
-    }
-
-    div {
-      margin-top: 0.5em;
-    }
-  }
-*/
 
 const DirectionClues = (props: DirectionClueProps) => {
 
-  /* {props.clues.map(({ number, clue, correct }) => ( */
-
-  console.log('DirectionClues render');
-  console.log(props.direction);
   const clueData: any[] = [];
   for (const clueNumber in props.cluesByNumber) {
     if (Object.prototype.hasOwnProperty.call(props.cluesByNumber, clueNumber)) {
       const clueAtLocation: ClueAtLocation = props.cluesByNumber[clueNumber];
-      console.log(clueNumber, props.direction, clueAtLocation.clue);
       clueData.push({
         number: clueNumber,
         clue: clueAtLocation.clue
       });
     }
   }
-
-  /*
-        {props.clues.map(({ number, clue }) => (
-        <Clue
-          key={number}
-          direction={props.direction}
-          number={number}
-          // correct={correct}
-          clueText={clue}
-        />
-      ))}
-
-  */
 
   return (
     <div style={{ marginBottom: '2em' }}>

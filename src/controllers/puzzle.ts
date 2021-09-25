@@ -10,6 +10,7 @@ import {
   setGridData,
   setPuzzleId,
   setSize,
+  updateCompletelyFilledIn,
   updateGuess
 } from '../models';
 import {
@@ -51,7 +52,7 @@ export const loadPuzzle = (id: string) => {
         const guesses = createEmptyGuessesGrid(derivedCrosswordData.cluesByDirection);
         dispatch(initializeGuesses(guesses));
 
-        let state = getState();
+        const state = getState();
         console.log('loadPuzzle', state);
 
         // TEDTODO - why is this getting loaded here? Shouldn't it get loaded when Board is opened?
@@ -67,7 +68,7 @@ export const loadPuzzle = (id: string) => {
             const guessValue: string = cellContentsValue.typedChar;
             const user: string = cellContentsValue.user;
             const currentUser: string = getCurrentUser(state);
-            
+
             const guessIsRemote = user.toString() !== currentUser.toString();
             const remoteUser = guessIsRemote
               ? cellContentsValue.user
@@ -82,8 +83,7 @@ export const loadPuzzle = (id: string) => {
           }
         }
 
-        state = getState();
-        refreshCompletedClues(state);
+        dispatch(refreshCompletedClues());
       });
   });
 };
@@ -189,126 +189,85 @@ export const processInputEvent = (row: number, col: number, typedChar: string) =
 
 };
 
-const refreshCompletedClues = (state: any) => {
-
-  const crosswordClues: CluesByDirection | null = getCrosswordClues(state);
-  if (!isNil(crosswordClues)) {
-    const guesses: GuessesGrid = getGuesses(state);
-    const clues: Clues = getClues(state);
-    resetCompletedClues(crosswordClues);
-    buildCompletedClues(crosswordClues, guesses, clues);
-    // getCompletedAnswers(tsGridData, 'across');
-    // getCompletedAnswers(tsGridData, 'down');
-    // setGridData(tsGridData);
-      
-  }
+const refreshCompletedClues = () => {
+  return ((dispatch: any, getState: any): any => {
+    const state = getState();
+    const crosswordClues: CluesByDirection | null = getCrosswordClues(state);
+    if (!isNil(crosswordClues)) {
+      const guesses: GuessesGrid = getGuesses(state);
+      const clues: Clues = getClues(state);
+      dispatch(resetCompletedClues(crosswordClues));
+      dispatch(buildCompletedClues(crosswordClues, guesses, clues));
+    }
+  });
 };
 
 const resetCompletedClues = (cluesByDirection: CluesByDirection) => {
-  resetCluesInDirection(cluesByDirection['across']);
-  resetCluesInDirection(cluesByDirection['down']);
+  return ((dispatch: any): any => {
+    dispatch(resetCluesInDirection(cluesByDirection['across'], 'across'));
+    dispatch(resetCluesInDirection(cluesByDirection['down'], 'down'));
+  });
 };
 
-const resetCluesInDirection = (cluesByNumber: CluesByNumber) => {
-  for (const clueNumber in cluesByNumber) {
-    if (Object.prototype.hasOwnProperty.call(cluesByNumber, clueNumber)) {
-      const cluesAtLocation: ClueAtLocation = cluesByNumber[clueNumber];
-      cluesAtLocation.completelyFilledIn = false;
+const resetCluesInDirection = (cluesByNumber: CluesByNumber, direction: string) => {
+  return ((dispatch: any): any => {
+    for (const clueNumber in cluesByNumber) {
+      if (Object.prototype.hasOwnProperty.call(cluesByNumber, clueNumber)) {
+        const clueAtLocation: ClueAtLocation = cluesByNumber[clueNumber];
+        clueAtLocation.completelyFilledIn = false;
+        dispatch(updateCompletelyFilledIn(
+          direction,
+          parseInt(clueNumber, 10),
+          false,
+        ));
+      }
     }
-  }
+  });
 };
 
 const buildCompletedClues = (cluesByDirection: CluesByDirection, guesses: GuessesGrid, clues: Clues) => {
-  buildCluesInDirection(cluesByDirection, 'across', guesses, clues);
-  buildCluesInDirection(cluesByDirection, 'down', guesses, clues);
+  return ((dispatch: any, getState: any): any => {
+    dispatch(buildCluesInDirection(cluesByDirection, 'across', guesses, clues));
+    dispatch(buildCluesInDirection(cluesByDirection, 'down', guesses, clues));
+  });
 };
 
 const buildCluesInDirection = (cluesByDirection: CluesByDirection, direction: string, guesses: GuessesGrid, clues: Clues) => {
-  const cluesByNumber: CluesByNumber = cluesByDirection[direction];
-  for (const clueNumber in cluesByNumber) {
-    if (Object.prototype.hasOwnProperty.call(cluesByNumber, clueNumber)) {
-      const clueAtLocation: ClueAtLocation = cluesByNumber[clueNumber];
-      const { answer, row, col } = clueAtLocation;
-    
-      let completelyFilledIn = true;
-      if (direction === 'across') {
-        const startingCol = col;
-        for (let j = 0; j < answer.length; j++) {
-          const guess: Guess = guesses[row][startingCol + j];
-          if (guess.value === '') {
-            completelyFilledIn = false;
+  return ((dispatch: any): any => {
+    const cluesByNumber: CluesByNumber = cluesByDirection[direction];
+    for (const clueNumber in cluesByNumber) {
+      if (Object.prototype.hasOwnProperty.call(cluesByNumber, clueNumber)) {
+        const clueAtLocation: ClueAtLocation = cluesByNumber[clueNumber];
+        const { answer, row, col } = clueAtLocation;
+
+        let completelyFilledIn = true;
+        if (direction === 'across') {
+          const startingCol = col;
+          for (let j = 0; j < answer.length; j++) {
+            const guess: Guess = guesses[row][startingCol + j];
+            if (guess.value === '') {
+              completelyFilledIn = false;
+            }
+          }
+        } else {
+          const startingRow = row;
+          for (let j = 0; j < answer.length; j++) {
+            const guess: Guess = guesses[startingRow + j][col];
+            if (guess.value === '') {
+              completelyFilledIn = false;
+            }
           }
         }
-      } else {
-        const startingRow = row;
-        for (let j = 0; j < answer.length; j++) {
-          const guess: Guess = guesses[startingRow + j][col];
-          if (guess.value === '') {
-            completelyFilledIn = false;
-          }
-        }
+
+        dispatch(updateCompletelyFilledIn(
+          direction,
+          parseInt(clueNumber, 10),
+          completelyFilledIn,
+        ));
       }
-
-      // if (completelyFilledIn) {
-      //   debugger;
-      // }
-      // set completelyFilledIn on current
-      // implement the line below using a redux action
-      // clues[direction][clueAtLocation.clueIndex].completelyFilledIn = completelyFilledIn;
     }
-  }
+  });
 };
-
-// const getCompletedAnswers = (myGridData, direction) => {
-
-//   // data AKA cluesByDirection
-//   // gridData is a two dimensional array of rows & columns and reflects the cells in the board
-
-//   const tsDirection = data[direction];
-//   const keys = Object.keys(tsDirection);
-//   for (let i = 0; i < keys.length; i++) {
-//     const tsKey = keys[i];
-//     const tsDirectionalEntry = tsDirection[tsKey];
-//     const tsAnswer = tsDirectionalEntry.answer;
-//     const tsAnswerLength = tsAnswer.length;
-//     const { row, col } = tsDirectionalEntry;
-//     let completelyFilledIn = true;
-//     if (direction === 'across') {
-//       const startingCol = col;
-//       for (let j = 0; j < tsAnswerLength; j++) {
-//         const tsCell = myGridData[row][startingCol + j];
-//         if (tsCell.guess === '') {
-//           completelyFilledIn = false;
-//           break;
-//         }
-//       }
-//       if (completelyFilledIn) {
-//         for (let j = 0; j < tsAnswerLength; j++) {
-//           const tsCell = myGridData[row][startingCol + j];
-//           tsCell.inFullAnswer = true;
-//         }
-//       }
-//     } else {
-//       const startingRow = row;
-//       for (let j = 0; j < tsAnswerLength; j++) {
-//         const tsCell = myGridData[startingRow + j][col];
-//         if (tsCell.guess === '') {
-//           completelyFilledIn = false;
-//           break;
-//         }
-//       }
-//       if (completelyFilledIn) {
-//         for (let j = 0; j < tsAnswerLength; j++) {
-//           const tsCell = myGridData[startingRow + j][col];
-//           tsCell.inFullAnswer = true;
-//         }
-//       }
-//     }
-//   }
-//   // TEDTODO - I think the following is inconsistent with calling setGridData at the end of refreshCompletedAnswers
-//   setGridData(myGridData);
-// }
-
 
 export const uploadPuzFiles = (puzFiles: File[]) => {
 
