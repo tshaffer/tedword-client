@@ -20,7 +20,8 @@ const DirectionClues = (props: DirectionClueProps) => {
       const clueAtLocation: ClueAtLocation = props.cluesByNumber[clueNumber];
       clueData.push({
         number: clueNumber,
-        clue: clueAtLocation.clue
+        clue: clueAtLocation.clue,
+        completelyFilledIn: clueAtLocation.completelyFilledIn,
       });
     }
   }
@@ -28,12 +29,13 @@ const DirectionClues = (props: DirectionClueProps) => {
   return (
     <div style={{ marginBottom: '2em' }}>
       <h3 style={{ marginTop: 0, marginBottom: '0.5em' }}>{props.direction.toUpperCase()}</h3>
-      {clueData.map(({ number, clue }) => (
+      {clueData.map(({ number, clue, completelyFilledIn }) => (
         <Clue
           key={number}
           direction={props.direction}
           number={number}
           clueText={clue}
+          completelyFilledIn={completelyFilledIn}
         />
       ))}
     </div>

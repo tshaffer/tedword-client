@@ -2,24 +2,15 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import styled, { ThemeContext } from 'styled-components';
+import { ThemeContext } from 'styled-components';
 import { CrosswordContext } from './context';
 import { isNil } from 'lodash';
-/*
-const ClueWrapper = styled.div.attrs((props) => ({
-  className: `clue${props.correct ? ' correct' : ''}`,
-}))`
-  cursor: default;
-  background-color: ${(props) =>
-    props.highlight ? props.highlightBackground : 'transparent'};
-`;
-*/
 
 export interface ClueProps {
   direction: string,
   number: string;
-  // correct: boolean;
   clueText: string;
+  completelyFilledIn: boolean;
 }
 
 const Clue = (props: ClueProps) => {
@@ -33,52 +24,40 @@ const Clue = (props: ClueProps) => {
   } = React.useContext(CrosswordContext);
 
   const handleClick = (event) => {
-    console.log('Clue component - handleClick');
-    console.log(event);
     event.preventDefault();
     if (!isNil(onClueSelected)) {
       onClueSelected(props.direction, props.number);
     }
-
   };
-
-  /*
-const ClueWrapper = styled.div.attrs((props) => ({
-  className: `clue${props.correct ? ' correct' : ''}`,
-}))`
-  cursor: default;
-  background-color: ${(props) =>
-    props.highlight ? props.highlightBackground : 'transparent'};
-`;
-  */
 
   const isFocused = focused && props.direction === selectedDirection && props.number === selectedNumber;
   const backgroundColor = isFocused ? highlightBackground : 'transparent';
 
+  const innerStyle: any = {
+    cursor: 'default',
+    backgroundColor,
+    marginTop: '0.5em'
+  };
+  let textDecorationStyle;
+  if (props.completelyFilledIn) {
+    textDecorationStyle = {
+      textDecoration: 'line-through'
+    };
+  } else {
+    textDecorationStyle = {
+      textDecoration: 'none'
+    };
+  }
+
   return (
     <div
-      style={{ cursor: 'default', backgroundColor, marginTop: '0.5em' }}
+      style={innerStyle}
       onClick={handleClick}
     >
-      {props.number}: {props.clueText}
+      {props.number}: <span style={textDecorationStyle}>{props.clueText}</span>
     </div>
   );
 };
-
-/*
-    <ClueWrapper
-      highlightBackground={highlightBackground}
-      highlight={
-        focused && direction === selectedDirection && number === selectedNumber
-      }
-      correct={correct}
-      {...props}
-      onClick={handleClick}
-      aria-label={`clue-${number}-${direction}`}
-    >
-      {number}: {children}
-    </ClueWrapper>
-*/
 
 function mapStateToProps(state: any) {
   return {
