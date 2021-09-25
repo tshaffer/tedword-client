@@ -18,7 +18,7 @@ const ClueWrapper = styled.div.attrs((props) => ({
 export interface ClueProps {
   direction: string,
   number: string;
-  correct: boolean;
+  // correct: boolean;
   clueText: string;
 }
 

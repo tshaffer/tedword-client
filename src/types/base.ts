@@ -166,6 +166,7 @@ export interface ClueAtLocation {
   answer: string;
   row: number;
   col: number;
+  clueIndex: number;
   completelyFilledIn: boolean;
 }
 
@@ -182,6 +183,8 @@ export interface Clue {
   clue: string;
   number: string;
 }
+
+export type CluesArray = Clue[];
 
 export interface Clues {
   across: Clue[];

@@ -100,7 +100,9 @@ function fillClues(gridData: GridSpec, clues: Clues, data: CluesByDirection, dir
   const dir = directionInfo[direction];
 
   Object.entries(data[direction]).forEach(([number, info]) => {
-    const { row: rowStart, col: colStart, clue, answer } = info as ClueAtLocation;
+
+    const clueAtLocation: ClueAtLocation = info as ClueAtLocation;
+    const { row: rowStart, col: colStart, clue, answer } = clueAtLocation;
     for (let i = 0; i < answer.length; i++) {
       const row = rowStart + (dir.primary === 'row' ? i : 0);
       const col = colStart + (dir.primary === 'col' ? i : 0);
@@ -122,6 +124,8 @@ function fillClues(gridData: GridSpec, clues: Clues, data: CluesByDirection, dir
       number,
     };
     
+    clueAtLocation.clueIndex = clues[direction].length;
+
     clues[direction].push(simpleClue);
   });
 

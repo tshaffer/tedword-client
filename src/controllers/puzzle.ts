@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CellContentsMap, CellContentsValue, ClueAtLocation, CluesByDirection, CluesByNumber, DerivedCrosswordData, Guess, GuessesGrid, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, TedwordState } from '../types';
+import { CellContentsMap, CellContentsValue, ClueAtLocation, Clues, CluesByDirection, CluesByNumber, DerivedCrosswordData, Guess, GuessesGrid, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, TedwordState } from '../types';
 import {
   addPuzzle,
   addPuzzleMetadata,
@@ -18,6 +18,7 @@ import {
 import {
   getBoardId,
   getCellContents,
+  getClues,
   getCurrentUser,
 
 } from '../selectors';
@@ -50,7 +51,7 @@ export const loadPuzzle = (id: string) => {
         const guesses = createEmptyGuessesGrid(derivedCrosswordData.cluesByDirection);
         dispatch(initializeGuesses(guesses));
 
-        const state = getState();
+        let state = getState();
         console.log('loadPuzzle', state);
 
         // TEDTODO - why is this getting loaded here? Shouldn't it get loaded when Board is opened?
@@ -80,6 +81,9 @@ export const loadPuzzle = (id: string) => {
             dispatch(updateGuess(row, col, guess));
           }
         }
+
+        state = getState();
+        refreshCompletedClues(state);
       });
   });
 };
@@ -112,6 +116,7 @@ export const buildDisplayedPuzzle = (puzzleEntity: PuzzleEntity): CluesByDirecti
         row,
         col,
         completelyFilledIn: false,
+        clueIndex: -1,
       };
     } else {
       cluesByDirection.down[parsedClue.number] = {
@@ -120,6 +125,7 @@ export const buildDisplayedPuzzle = (puzzleEntity: PuzzleEntity): CluesByDirecti
         row,
         col,
         completelyFilledIn: false,
+        clueIndex: -1,
       };
     }
   }
@@ -188,8 +194,9 @@ const refreshCompletedClues = (state: any) => {
   const crosswordClues: CluesByDirection | null = getCrosswordClues(state);
   if (!isNil(crosswordClues)) {
     const guesses: GuessesGrid = getGuesses(state);
+    const clues: Clues = getClues(state);
     resetCompletedClues(crosswordClues);
-    buildCompletedClues(crosswordClues, guesses);
+    buildCompletedClues(crosswordClues, guesses, clues);
     // getCompletedAnswers(tsGridData, 'across');
     // getCompletedAnswers(tsGridData, 'down');
     // setGridData(tsGridData);
@@ -211,17 +218,17 @@ const resetCluesInDirection = (cluesByNumber: CluesByNumber) => {
   }
 };
 
-const buildCompletedClues = (cluesByDirection: CluesByDirection, guesses: GuessesGrid) => {
-  buildCluesInDirection(cluesByDirection, 'across', guesses);
-  buildCluesInDirection(cluesByDirection, 'down', guesses);
+const buildCompletedClues = (cluesByDirection: CluesByDirection, guesses: GuessesGrid, clues: Clues) => {
+  buildCluesInDirection(cluesByDirection, 'across', guesses, clues);
+  buildCluesInDirection(cluesByDirection, 'down', guesses, clues);
 };
 
-const buildCluesInDirection = (cluesByDirection: CluesByDirection, direction: string, guesses: GuessesGrid) => {
+const buildCluesInDirection = (cluesByDirection: CluesByDirection, direction: string, guesses: GuessesGrid, clues: Clues) => {
   const cluesByNumber: CluesByNumber = cluesByDirection[direction];
   for (const clueNumber in cluesByNumber) {
     if (Object.prototype.hasOwnProperty.call(cluesByNumber, clueNumber)) {
-      const cluesAtLocation: ClueAtLocation = cluesByNumber[clueNumber];
-      const { answer, row, col } = cluesAtLocation;
+      const clueAtLocation: ClueAtLocation = cluesByNumber[clueNumber];
+      const { answer, row, col } = clueAtLocation;
     
       let completelyFilledIn = true;
       if (direction === 'across') {
@@ -242,7 +249,12 @@ const buildCluesInDirection = (cluesByDirection: CluesByDirection, direction: st
         }
       }
 
+      // if (completelyFilledIn) {
+      //   debugger;
+      // }
       // set completelyFilledIn on current
+      // implement the line below using a redux action
+      // clues[direction][clueAtLocation.clueIndex].completelyFilledIn = completelyFilledIn;
     }
   }
 };
