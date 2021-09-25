@@ -166,6 +166,7 @@ export interface ClueAtLocation {
   answer: string;
   row: number;
   col: number;
+  completelyFilledIn: boolean;
 }
 
 export interface CluesByNumber {
@@ -178,8 +179,8 @@ export interface CluesByDirection {
 }
 
 export interface Clue {
-  value: string;
-  numericLabel: string;
+  clue: string;
+  number: string;
 }
 
 export interface Clues {
@@ -199,8 +200,8 @@ export type GuessesGrid = RowOfGuesses[];
 export interface GridSquareSpec {
   used: boolean;
   number: string;
-  answer: string;
-  locked: boolean;
+  // answer: string;
+  // locked: boolean;
   row: number | null;
   col: number | null;
   across: boolean;

@@ -8,7 +8,8 @@ import {
   GuessesGrid,
   RowOfGuesses,
   Clues,
-  ClueAtLocation
+  ClueAtLocation,
+  Clue
 } from '../types';
 
 // TEDTODO types
@@ -60,8 +61,8 @@ export function calculateExtents(data: CluesByDirection, direction: string) {
 const emptyCellData: GridSquareSpec = {
   used: false,
   number: null,
-  answer: '',
-  locked: false,
+  // answer: '',
+  // locked: false,
   across: null,
   down: null,
   row: null,
@@ -107,7 +108,7 @@ function fillClues(gridData: GridSpec, clues: Clues, data: CluesByDirection, dir
 
       // TODO?: check to ensure the answer is the same if it's already set?
       cellData.used = true;
-      cellData.answer = answer[i];
+      // cellData.answer = answer[i];
       cellData[direction] = number;
 
       if (i === 0) {
@@ -116,7 +117,12 @@ function fillClues(gridData: GridSpec, clues: Clues, data: CluesByDirection, dir
       }
     }
 
-    clues[direction].push({ number, clue });
+    const simpleClue: Clue = {
+      clue,
+      number,
+    };
+    
+    clues[direction].push(simpleClue);
   });
 
   clues[direction].sort(byNumber);

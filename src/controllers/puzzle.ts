@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CellContentsMap, CellContentsValue, CluesByDirection, DerivedCrosswordData, Guess, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, TedwordState } from '../types';
+import { CellContentsMap, CellContentsValue, ClueAtLocation, CluesByDirection, CluesByNumber, DerivedCrosswordData, Guess, GuessesGrid, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, TedwordState } from '../types';
 import {
   addPuzzle,
   addPuzzleMetadata,
@@ -23,6 +23,8 @@ import {
 } from '../selectors';
 
 import { apiUrlFragment, serverUrl } from '../index';
+import { getCrosswordClues, getGuesses } from '../selectors';
+import { isNil } from 'lodash';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const PuzCrossword = require('@confuzzle/puz-crossword').PuzCrossword;
@@ -109,6 +111,7 @@ export const buildDisplayedPuzzle = (puzzleEntity: PuzzleEntity): CluesByDirecti
         answer: solution,
         row,
         col,
+        completelyFilledIn: false,
       };
     } else {
       cluesByDirection.down[parsedClue.number] = {
@@ -116,6 +119,7 @@ export const buildDisplayedPuzzle = (puzzleEntity: PuzzleEntity): CluesByDirecti
         answer: solution,
         row,
         col,
+        completelyFilledIn: false,
       };
     }
   }
@@ -178,6 +182,121 @@ export const processInputEvent = (row: number, col: number, typedChar: string) =
   };
 
 };
+
+const refreshCompletedClues = (state: any) => {
+
+  const crosswordClues: CluesByDirection | null = getCrosswordClues(state);
+  if (!isNil(crosswordClues)) {
+    const guesses: GuessesGrid = getGuesses(state);
+    resetCompletedClues(crosswordClues);
+    buildCompletedClues(crosswordClues, guesses);
+    // getCompletedAnswers(tsGridData, 'across');
+    // getCompletedAnswers(tsGridData, 'down');
+    // setGridData(tsGridData);
+      
+  }
+};
+
+const resetCompletedClues = (cluesByDirection: CluesByDirection) => {
+  resetCluesInDirection(cluesByDirection['across']);
+  resetCluesInDirection(cluesByDirection['down']);
+};
+
+const resetCluesInDirection = (cluesByNumber: CluesByNumber) => {
+  for (const clueNumber in cluesByNumber) {
+    if (Object.prototype.hasOwnProperty.call(cluesByNumber, clueNumber)) {
+      const cluesAtLocation: ClueAtLocation = cluesByNumber[clueNumber];
+      cluesAtLocation.completelyFilledIn = false;
+    }
+  }
+};
+
+const buildCompletedClues = (cluesByDirection: CluesByDirection, guesses: GuessesGrid) => {
+  buildCluesInDirection(cluesByDirection, 'across', guesses);
+  buildCluesInDirection(cluesByDirection, 'down', guesses);
+};
+
+const buildCluesInDirection = (cluesByDirection: CluesByDirection, direction: string, guesses: GuessesGrid) => {
+  const cluesByNumber: CluesByNumber = cluesByDirection[direction];
+  for (const clueNumber in cluesByNumber) {
+    if (Object.prototype.hasOwnProperty.call(cluesByNumber, clueNumber)) {
+      const cluesAtLocation: ClueAtLocation = cluesByNumber[clueNumber];
+      const { answer, row, col } = cluesAtLocation;
+    
+      let completelyFilledIn = true;
+      if (direction === 'across') {
+        const startingCol = col;
+        for (let j = 0; j < answer.length; j++) {
+          const guess: Guess = guesses[row][startingCol + j];
+          if (guess.value === '') {
+            completelyFilledIn = false;
+          }
+        }
+      } else {
+        const startingRow = row;
+        for (let j = 0; j < answer.length; j++) {
+          const guess: Guess = guesses[startingRow + j][col];
+          if (guess.value === '') {
+            completelyFilledIn = false;
+          }
+        }
+      }
+
+      // set completelyFilledIn on current
+    }
+  }
+};
+
+// const getCompletedAnswers = (myGridData, direction) => {
+
+//   // data AKA cluesByDirection
+//   // gridData is a two dimensional array of rows & columns and reflects the cells in the board
+
+//   const tsDirection = data[direction];
+//   const keys = Object.keys(tsDirection);
+//   for (let i = 0; i < keys.length; i++) {
+//     const tsKey = keys[i];
+//     const tsDirectionalEntry = tsDirection[tsKey];
+//     const tsAnswer = tsDirectionalEntry.answer;
+//     const tsAnswerLength = tsAnswer.length;
+//     const { row, col } = tsDirectionalEntry;
+//     let completelyFilledIn = true;
+//     if (direction === 'across') {
+//       const startingCol = col;
+//       for (let j = 0; j < tsAnswerLength; j++) {
+//         const tsCell = myGridData[row][startingCol + j];
+//         if (tsCell.guess === '') {
+//           completelyFilledIn = false;
+//           break;
+//         }
+//       }
+//       if (completelyFilledIn) {
+//         for (let j = 0; j < tsAnswerLength; j++) {
+//           const tsCell = myGridData[row][startingCol + j];
+//           tsCell.inFullAnswer = true;
+//         }
+//       }
+//     } else {
+//       const startingRow = row;
+//       for (let j = 0; j < tsAnswerLength; j++) {
+//         const tsCell = myGridData[startingRow + j][col];
+//         if (tsCell.guess === '') {
+//           completelyFilledIn = false;
+//           break;
+//         }
+//       }
+//       if (completelyFilledIn) {
+//         for (let j = 0; j < tsAnswerLength; j++) {
+//           const tsCell = myGridData[startingRow + j][col];
+//           tsCell.inFullAnswer = true;
+//         }
+//       }
+//     }
+//   }
+//   // TEDTODO - I think the following is inconsistent with calling setGridData at the end of refreshCompletedAnswers
+//   setGridData(myGridData);
+// }
+
 
 export const uploadPuzFiles = (puzFiles: File[]) => {
 

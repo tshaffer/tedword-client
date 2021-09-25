@@ -350,8 +350,8 @@ const Crossword = (props: CrosswordProps) => {
         const gridSquare: GridSquare = {
           used: gridSquareSpec.used,
           number: gridSquareSpec.number,
-          answer: gridSquareSpec.answer,
-          locked: gridSquareSpec.locked,
+          // answer: gridSquareSpec.answer,
+          // locked: gridSquareSpec.locked,
           row: gridSquareSpec.row,
           col: gridSquareSpec.col,
           across: gridSquareSpec.across,
