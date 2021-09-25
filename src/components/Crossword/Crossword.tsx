@@ -445,6 +445,7 @@ const Crossword = (props: CrosswordProps) => {
                     key={direction}
                     direction={direction}
                     clues={props.clues[direction]}
+                    cluesByNumber={props.cluesByDirection[direction]}
                   />
                 ))}
 

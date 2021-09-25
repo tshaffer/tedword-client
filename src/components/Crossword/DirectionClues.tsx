@@ -4,11 +4,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Clue from './Clue';
-import { CluesArray } from '../../types';
+import { ClueAtLocation, CluesArray, CluesByNumber } from '../../types';
 
 export interface DirectionClueProps {
   direction: string;
   clues: CluesArray;
+  cluesByNumber: CluesByNumber;
   // number
   // clue
   // correct
@@ -35,15 +36,41 @@ const DirectionClues = (props: DirectionClueProps) => {
 
   /* {props.clues.map(({ number, clue, correct }) => ( */
 
-  return (
-    <div style={{ marginBottom: '2em' }}>
-      <h3 style={{ marginTop: 0, marginBottom: '0.5em' }}>{props.direction.toUpperCase()}</h3>
-      {props.clues.map(({ number, clue }) => (
+  console.log('DirectionClues render');
+  console.log(props.direction);
+  const clueData: any[] = [];
+  for (const clueNumber in props.cluesByNumber) {
+    if (Object.prototype.hasOwnProperty.call(props.cluesByNumber, clueNumber)) {
+      const clueAtLocation: ClueAtLocation = props.cluesByNumber[clueNumber];
+      console.log(clueNumber, props.direction, clueAtLocation.clue);
+      clueData.push({
+        number: clueNumber,
+        clue: clueAtLocation.clue
+      });
+    }
+  }
+
+  /*
+        {props.clues.map(({ number, clue }) => (
         <Clue
           key={number}
           direction={props.direction}
           number={number}
           // correct={correct}
+          clueText={clue}
+        />
+      ))}
+
+  */
+
+  return (
+    <div style={{ marginBottom: '2em' }}>
+      <h3 style={{ marginTop: 0, marginBottom: '0.5em' }}>{props.direction.toUpperCase()}</h3>
+      {clueData.map(({ number, clue }) => (
+        <Clue
+          key={number}
+          direction={props.direction}
+          number={number}
           clueText={clue}
         />
       ))}

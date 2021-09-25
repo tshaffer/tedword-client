@@ -47,8 +47,5 @@ export const getDisplayedPuzzle = (state: TedwordState): DisplayedPuzzle => {
     }
   }
   
-  console.log('displayedPuzzle');
-  console.log(displayedPuzzle);
-  
   return displayedPuzzle;
 };
