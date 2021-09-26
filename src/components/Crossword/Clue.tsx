@@ -9,6 +9,7 @@ export interface ClueProps {
   number: string;
   clueText: string;
   completelyFilledIn: boolean;
+  onClueSelected: (direction: string, number: string) => any;
 }
 
 const Clue = (props: ClueProps) => {
@@ -18,13 +19,12 @@ const Clue = (props: ClueProps) => {
     focused,
     selectedDirection,
     selectedNumber,
-    onClueSelected,
   } = React.useContext(CrosswordContext);
 
   const handleClick = (event) => {
     event.preventDefault();
-    if (!isNil(onClueSelected)) {
-      onClueSelected(props.direction, props.number);
+    if (!isNil(props.onClueSelected)) {
+      props.onClueSelected(props.direction, props.number);
     }
   };
 

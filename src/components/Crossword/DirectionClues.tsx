@@ -6,9 +6,14 @@ import { ClueAtLocation, CluesByNumber } from '../../types';
 export interface DirectionClueProps {
   direction: string;
   cluesByNumber: CluesByNumber;
+  onClueSelected: (direction: string, number: string) => any;
 }
 
 const DirectionClues = (props: DirectionClueProps) => {
+
+  const handleClueSelected = (direction, number) => {
+    props.onClueSelected(direction, number);
+  };
 
   const clueData: any[] = [];
   for (const clueNumber in props.cluesByNumber) {
@@ -32,6 +37,7 @@ const DirectionClues = (props: DirectionClueProps) => {
           number={number}
           clueText={clue}
           completelyFilledIn={completelyFilledIn}
+          onClueSelected={handleClueSelected}
         />
       ))}
     </div>

@@ -316,7 +316,6 @@ const Crossword = (props: CrosswordProps) => {
     focused,
     selectedDirection: currentDirection,
     selectedNumber: currentNumber,
-    onClueSelected: handleClueSelected,
   };
   const finalTheme = { ...defaultTheme, ...(contextTheme as any) };
 
@@ -434,6 +433,7 @@ const Crossword = (props: CrosswordProps) => {
                   key={direction}
                   direction={direction}
                   cluesByNumber={props.cluesByDirection[direction]}
+                  onClueSelected={handleClueSelected}
                 />
               ))}
 
