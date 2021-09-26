@@ -59,7 +59,7 @@ const Crossword = (props: CrosswordProps) => {
     setCurrentDirection('across');
     setCurrentNumber('1');
 
-  }, [props.cluesByDirection, props.size, props.gridData]);
+  }, [props.size, props.gridData]);
 
   const inputRef = React.useRef();
 
