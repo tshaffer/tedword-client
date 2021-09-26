@@ -9,7 +9,7 @@ import {
   setGridData,
   setPuzzleId,
   setSize,
-  updateCompletelyFilledIn,
+  // updateCompletelyFilledIn,
   updateGuess
 } from '../models';
 import {
@@ -19,12 +19,11 @@ import {
   getBoardId,
   getCellContents,
   getCurrentUser,
-
 } from '../selectors';
 
 import { apiUrlFragment, serverUrl } from '../index';
 import { getCrosswordClues, getGuesses } from '../selectors';
-import { isNil } from 'lodash';
+import { isNil, cloneDeep } from 'lodash';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const PuzCrossword = require('@confuzzle/puz-crossword').PuzCrossword;
@@ -159,6 +158,7 @@ export const processInputEvent = (row: number, col: number, typedChar: string) =
       remoteUser: null,
     };
     dispatch(updateGuess(row, col, guess));
+    dispatch(refreshCompletedClues());
 
     const path = serverUrl + apiUrlFragment + 'cellChange';
 
@@ -188,11 +188,12 @@ export const processInputEvent = (row: number, col: number, typedChar: string) =
 const refreshCompletedClues = () => {
   return ((dispatch: any, getState: any): any => {
     const state = getState();
-    const crosswordClues: CluesByDirection | null = getCrosswordClues(state);
+    const crosswordClues: CluesByDirection | null = cloneDeep(getCrosswordClues(state));
     if (!isNil(crosswordClues)) {
       const guesses: GuessesGrid = getGuesses(state);
       dispatch(resetCompletedClues(crosswordClues));
       dispatch(buildCompletedClues(crosswordClues, guesses));
+      dispatch(setCrosswordClues(crosswordClues));
     }
   });
 };
@@ -210,11 +211,11 @@ const resetCluesInDirection = (cluesByNumber: CluesByNumber, direction: string) 
       if (Object.prototype.hasOwnProperty.call(cluesByNumber, clueNumber)) {
         const clueAtLocation: ClueAtLocation = cluesByNumber[clueNumber];
         clueAtLocation.completelyFilledIn = false;
-        dispatch(updateCompletelyFilledIn(
-          direction,
-          parseInt(clueNumber, 10),
-          false,
-        ));
+        // dispatch(updateCompletelyFilledIn(
+        //   direction,
+        //   parseInt(clueNumber, 10),
+        //   false,
+        // ));
       }
     }
   });
@@ -254,11 +255,12 @@ const buildCluesInDirection = (cluesByDirection: CluesByDirection, direction: st
           }
         }
 
-        dispatch(updateCompletelyFilledIn(
-          direction,
-          parseInt(clueNumber, 10),
-          completelyFilledIn,
-        ));
+        clueAtLocation.completelyFilledIn = completelyFilledIn;
+        // dispatch(updateCompletelyFilledIn(
+        //   direction,
+        //   parseInt(clueNumber, 10),
+        //   completelyFilledIn,
+        // ));
       }
     }
   });
