@@ -392,6 +392,7 @@ const Crossword = (props: CrosswordProps) => {
                   {cells}
                 </svg>
                 <input
+                  ref={inputRef}
                   aria-label="crossword-input"
                   type="text"
                   onChange={handleInputChange}
