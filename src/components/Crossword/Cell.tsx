@@ -5,17 +5,14 @@ import { CrosswordSizeContext } from './context';
 
 import { Guess } from '../../types';
 
-export interface CellPropsFromParent {
-  onClick: (cellData: any) => any;
-}
-
-export interface CellProps extends CellPropsFromParent {
+export interface CellProps {
   row: number,
   col: number,
   guess: Guess,
   number: string,
   focus: boolean,
   highlight: boolean,
+  onClick: (cellData: any) => any;
 }
 
 const Cell = (props: CellProps) => {
