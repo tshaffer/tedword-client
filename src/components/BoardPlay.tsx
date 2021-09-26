@@ -56,23 +56,11 @@ const BoardPlay = (props: BoardPlayProps) => {
     props.onInputEvent(row, col, char);
   };
 
-
-
   let cellContents: CellContentsMap = props.cellContents;
 
   if (isNil(cellContents)) {
     cellContents = {};
   }
-
-  /*
-      <Crossword
-        data={displayedPuzzleData}
-        tedGuesses={cellContents}
-        ref={boardPlayCrossword}
-        onCellChange={handleCellChange}
-        onFocusedCellChange={handleFocusedCellChange}
-      />
-  */
 
   return (
     <div>
