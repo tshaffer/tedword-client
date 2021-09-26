@@ -9,7 +9,6 @@ export const SET_GRID_DATA = 'SET_GRID_DATA';
 export const SET_SIZE = 'SET_SIZE';
 export const SET_CROSSSWORD_CLUES = 'SET_CROSSSWORD_CLUES';
 export const SET_ACTIVE_PUZZLE = 'SET_ACTIVE_PUZZLE';
-export const UPDATE_COMPLETELY_FILLED_IN = 'UPDATE_COMPLETELY_FILLED_IN';
 
 // ------------------------------------
 // Actions
@@ -60,27 +59,6 @@ export const setCrosswordClues = (
   };
 };
 
-export interface UpdateCompletelyFilledInPayload {
-  direction: string,
-  clueNumber: number,
-  completelyFilledIn: boolean,
-}
-
-export const updateCompletelyFilledIn = (
-  direction: string,
-  clueNumber: number,
-  completelyFilledIn: boolean,
-): any => {
-  return {
-    type: UPDATE_COMPLETELY_FILLED_IN,
-    payload: {
-      direction,
-      clueNumber,
-      completelyFilledIn,
-    }
-  };
-};
-
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -93,7 +71,7 @@ const initialState: DerivedCrosswordData = {
 
 export const derivedCrosswordDataReducer = (
   state: DerivedCrosswordData = initialState,
-  action: TedwordModelBaseAction<SetSizePayload & SetGridDataPayload & SetCrosswordCluesPayload & UpdateCompletelyFilledInPayload>
+  action: TedwordModelBaseAction<SetSizePayload & SetGridDataPayload & SetCrosswordCluesPayload>
 ): DerivedCrosswordData => {
   switch (action.type) {
     case SET_SIZE: {
@@ -104,15 +82,6 @@ export const derivedCrosswordDataReducer = (
     }
     case SET_CROSSSWORD_CLUES: {
       return { ...state, cluesByDirection: action.payload.crosswordClues };
-    }
-    case UPDATE_COMPLETELY_FILLED_IN: {
-      const { direction, clueNumber, completelyFilledIn } = action.payload;
-
-      const newState = cloneDeep(state) as DerivedCrosswordData;
-      const clueAtLocation: ClueAtLocation = newState.cluesByDirection[direction][clueNumber];
-      clueAtLocation.completelyFilledIn = completelyFilledIn;
-
-      return newState;
     }
     default:
       return state;

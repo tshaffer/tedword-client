@@ -9,7 +9,6 @@ import {
   setGridData,
   setPuzzleId,
   setSize,
-  // updateCompletelyFilledIn,
   updateGuess
 } from '../models';
 import {
@@ -191,79 +190,61 @@ const refreshCompletedClues = () => {
     const crosswordClues: CluesByDirection | null = cloneDeep(getCrosswordClues(state));
     if (!isNil(crosswordClues)) {
       const guesses: GuessesGrid = getGuesses(state);
-      dispatch(resetCompletedClues(crosswordClues));
-      dispatch(buildCompletedClues(crosswordClues, guesses));
+      resetCompletedClues(crosswordClues);
+      buildCompletedClues(crosswordClues, guesses);
       dispatch(setCrosswordClues(crosswordClues));
     }
   });
 };
 
 const resetCompletedClues = (cluesByDirection: CluesByDirection) => {
-  return ((dispatch: any): any => {
-    dispatch(resetCluesInDirection(cluesByDirection['across'], 'across'));
-    dispatch(resetCluesInDirection(cluesByDirection['down'], 'down'));
-  });
+  resetCluesInDirection(cluesByDirection['across'], 'across');
+  resetCluesInDirection(cluesByDirection['down'], 'down');
 };
 
 const resetCluesInDirection = (cluesByNumber: CluesByNumber, direction: string) => {
-  return ((dispatch: any): any => {
-    for (const clueNumber in cluesByNumber) {
-      if (Object.prototype.hasOwnProperty.call(cluesByNumber, clueNumber)) {
-        const clueAtLocation: ClueAtLocation = cluesByNumber[clueNumber];
-        clueAtLocation.completelyFilledIn = false;
-        // dispatch(updateCompletelyFilledIn(
-        //   direction,
-        //   parseInt(clueNumber, 10),
-        //   false,
-        // ));
-      }
+  for (const clueNumber in cluesByNumber) {
+    if (Object.prototype.hasOwnProperty.call(cluesByNumber, clueNumber)) {
+      const clueAtLocation: ClueAtLocation = cluesByNumber[clueNumber];
+      clueAtLocation.completelyFilledIn = false;
     }
-  });
+  }
 };
 
 const buildCompletedClues = (cluesByDirection: CluesByDirection, guesses: GuessesGrid) => {
-  return ((dispatch: any, getState: any): any => {
-    dispatch(buildCluesInDirection(cluesByDirection, 'across', guesses));
-    dispatch(buildCluesInDirection(cluesByDirection, 'down', guesses));
-  });
+  buildCluesInDirection(cluesByDirection, 'across', guesses);
+  buildCluesInDirection(cluesByDirection, 'down', guesses);
 };
 
 const buildCluesInDirection = (cluesByDirection: CluesByDirection, direction: string, guesses: GuessesGrid) => {
-  return ((dispatch: any): any => {
-    const cluesByNumber: CluesByNumber = cluesByDirection[direction];
-    for (const clueNumber in cluesByNumber) {
-      if (Object.prototype.hasOwnProperty.call(cluesByNumber, clueNumber)) {
-        const clueAtLocation: ClueAtLocation = cluesByNumber[clueNumber];
-        const { answer, row, col } = clueAtLocation;
+  const cluesByNumber: CluesByNumber = cluesByDirection[direction];
+  for (const clueNumber in cluesByNumber) {
+    if (Object.prototype.hasOwnProperty.call(cluesByNumber, clueNumber)) {
+      const clueAtLocation: ClueAtLocation = cluesByNumber[clueNumber];
+      const { answer, row, col } = clueAtLocation;
 
-        let completelyFilledIn = true;
-        if (direction === 'across') {
-          const startingCol = col;
-          for (let j = 0; j < answer.length; j++) {
-            const guess: Guess = guesses[row][startingCol + j];
-            if (guess.value === '') {
-              completelyFilledIn = false;
-            }
-          }
-        } else {
-          const startingRow = row;
-          for (let j = 0; j < answer.length; j++) {
-            const guess: Guess = guesses[startingRow + j][col];
-            if (guess.value === '') {
-              completelyFilledIn = false;
-            }
+      let completelyFilledIn = true;
+      if (direction === 'across') {
+        const startingCol = col;
+        for (let j = 0; j < answer.length; j++) {
+          const guess: Guess = guesses[row][startingCol + j];
+          if (guess.value === '') {
+            completelyFilledIn = false;
           }
         }
-
-        clueAtLocation.completelyFilledIn = completelyFilledIn;
-        // dispatch(updateCompletelyFilledIn(
-        //   direction,
-        //   parseInt(clueNumber, 10),
-        //   completelyFilledIn,
-        // ));
+      } else {
+        const startingRow = row;
+        for (let j = 0; j < answer.length; j++) {
+          const guess: Guess = guesses[startingRow + j][col];
+          if (guess.value === '') {
+            completelyFilledIn = false;
+          }
+        }
       }
+
+      clueAtLocation.completelyFilledIn = completelyFilledIn;
     }
-  });
+  }
 };
 
 export const uploadPuzFiles = (puzFiles: File[]) => {
