@@ -427,7 +427,7 @@ const Crossword = (props: CrosswordProps) => {
                 />
               </div>
             </div >
-            <div style={{ padding: '0 1em', flex: '1 2 25%' }}>
+            <div style={{ height: '750px', overflowY: 'auto', padding: '0 1em', flex: '1 2 25%' }}>
               {bothDirections.map((direction) => (
                 <DirectionClues
                   key={direction}
