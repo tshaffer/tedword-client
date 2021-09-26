@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 
 import Clue from './Clue';
 import { ClueAtLocation, CluesByNumber } from '../../types';
@@ -41,15 +39,5 @@ const DirectionClues = (props: DirectionClueProps) => {
 
 };
 
-function mapStateToProps(state: any) {
-  return {
-  };
-}
-
-const mapDispatchToProps = (dispatch: any) => {
-  return bindActionCreators({
-  }, dispatch);
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(DirectionClues);
+export default DirectionClues;
 
