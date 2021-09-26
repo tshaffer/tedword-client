@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import * as React from 'react';
 import { useState } from 'react';
 import { bindActionCreators } from 'redux';
@@ -19,7 +18,7 @@ import { CrosswordContext, CrosswordSizeContext } from './context';
 import { getSize, getGridData } from '../../selectors';
 
 const defaultTheme = {
-  columnBreakpoint: '768px',
+  columnBreakpoint: '768px',  // currently unused
   gridBackground: 'rgb(0,0,0)',
   cellBackground: 'rgb(255,255,255)',
   cellBorder: 'rgb(0,0,0)',
@@ -319,17 +318,10 @@ const Crossword = (props: CrosswordProps) => {
     selectedNumber: currentNumber,
     onClueSelected: handleClueSelected,
   };
-  // const finalTheme = { ...defaultTheme, ...contextTheme, ...theme };
   const finalTheme = { ...defaultTheme, ...(contextTheme as any) };
 
   const cells = [];
   if (props.gridData) {
-
-    // bothDirections.every((direction) =>
-    //   props.clues[direction].every((clueInfo) => {
-    //     return clueInfo.correct;
-    //   })
-    // );
 
     props.gridData.forEach((rowData, row) => {
 
@@ -349,8 +341,6 @@ const Crossword = (props: CrosswordProps) => {
         const gridSquare: GridSquare = {
           used: gridSquareSpec.used,
           number: gridSquareSpec.number,
-          // answer: gridSquareSpec.answer,
-          // locked: gridSquareSpec.locked,
           row: gridSquareSpec.row,
           col: gridSquareSpec.col,
           across: gridSquareSpec.across,
