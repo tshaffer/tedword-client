@@ -70,7 +70,7 @@ const Crossword = (props: CrosswordProps) => {
     }
 
     // fake cellData to represent "out of bounds"
-    return { row, col, used: false, outOfBounds: true };
+    return { row, col, used: false };
   };
 
   const handleCellClick = (cellData) => {

@@ -59,8 +59,6 @@ export function calculateExtents(data: CluesByDirection, direction: string) {
 const emptyCellData: GridSquareSpec = {
   used: false,
   number: null,
-  // answer: '',
-  // locked: false,
   across: null,
   down: null,
   row: null,
@@ -107,7 +105,6 @@ function fillClues(gridData: GridSpec, data: CluesByDirection, direction: string
 
       // TODO?: check to ensure the answer is the same if it's already set?
       cellData.used = true;
-      // cellData.answer = answer[i];
       cellData[direction] = number;
 
       if (i === 0) {
