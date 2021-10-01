@@ -284,6 +284,7 @@ const parsePuzzleFile = (puzFile: File): Promise<PuzzleSpec> => {
     fileReader.onload = function () {
       const puzData: Buffer = Buffer.from(fileReader.result as ArrayBuffer);
       const puzzleSpec: PuzzleSpec = PuzCrossword.from(puzData);
+      puzzleSpec.sourceFileName = puzFile.name;
       resolve(puzzleSpec);
     };
 
