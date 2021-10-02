@@ -6,6 +6,7 @@ import { isNil } from 'lodash';
 
 import Board from './Board';
 import BoardPlay from './BoardPlay';
+import BoardToolbar from './BoardToolbar';
 import { getAppState, getBoard, getPuzzlesMetadata, getDisplayedPuzzle, getCellContents, getPuzzle } from '../selectors';
 import { AppState, BoardEntity, CellContentsMap, DisplayedPuzzle, PuzzlesMetadataMap, PuzzleSpec } from '../types';
 
@@ -65,6 +66,7 @@ const BoardTop = (props: BoardTopProps) => {
 
   return (
     <div>
+      <BoardToolbar />
       <Board />
       <BoardPlay
         appState={props.appState}
