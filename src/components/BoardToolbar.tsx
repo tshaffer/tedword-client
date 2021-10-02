@@ -116,7 +116,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
         <ReactModal
           isOpen={!props.puzzlePlayActive}
           style={modalStyle}
-          contentLabel="Pizza"
+          ariaHideApp={false}
         >
           <div>
             <p>Your game has been paused.</p>
