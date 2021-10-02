@@ -15,11 +15,9 @@ import {
   getBoard,
   getPuzzlesMetadata
 } from '../selectors';
-import { addBoard, addUser, addUserToBoard, setBoardId, setFocusedClues, updateLastPlayedDateTimeRedux } from '../models';
+import { addBoard, addUserToBoard, setBoardId, setFocusedClues, updateElapsedTimeRedux, updateLastPlayedDateTimeRedux } from '../models';
 import { isNil } from 'lodash';
 import { getAppState, getPuzzle } from '../selectors';
-
-// import { boardPlayCrossword } from '../components/BoardPlay';
 
 export const loadBoards = () => {
   return (dispatch: any) => {
@@ -175,6 +173,34 @@ export const updateLastPlayedDateTime = (
       updateLastPlayedDateTimeBody
     ).then((response) => {
       dispatch(updateLastPlayedDateTimeRedux(id, lastPlayedDateTime));
+      return;
+    }).catch((error) => {
+      console.log('error');
+      console.log(error);
+      return;
+    });
+
+  });
+};
+
+export const updateElapsedTime = (
+  id: string,
+  elapsedTime: number,
+): any => {
+  return ((dispatch: any): any => {
+
+    const path = serverUrl + apiUrlFragment + 'updateElapsedTime';
+
+    const updateElapsedTimeBody: any = {
+      boardId: id,
+      elapsedTime,
+    };
+
+    return axios.post(
+      path,
+      updateElapsedTimeBody
+    ).then((response) => {
+      dispatch(updateElapsedTimeRedux(id, elapsedTime));
       return;
     }).catch((error) => {
       console.log('error');

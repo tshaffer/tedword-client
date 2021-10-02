@@ -93,7 +93,7 @@ export interface UpdatedElapsedTimePayload {
   elapsedTime: number;
 }
 
-export const updateElapsedTime = (
+export const updateElapsedTimeRedux = (
   id: string,
   elapsedTime: number,
 ): any => {

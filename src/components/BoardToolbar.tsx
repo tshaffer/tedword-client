@@ -5,11 +5,14 @@ import { connect } from 'react-redux';
 import ReactModal = require('react-modal');
 
 import { GameState } from '../types';
-import { setPuzzlePlayActive, updateElapsedTime } from '../models';
+import { updateElapsedTime } from '../controllers';
+import { setPuzzlePlayActive } from '../models';
 import { getBoardId, getElapsedTime, getGameState, getPuzzlePlayActive } from '../selectors';
 import { isNil } from 'lodash';
 
 export interface BoardToolbarProps {
+  boardId: string,
+  elapsedTime: number,
   gameState: GameState,
   puzzlePlayActive: boolean,
   onSetPuzzlePlayActive: (puzzleActive: boolean) => any;
@@ -137,6 +140,8 @@ function mapStateToProps(state: any) {
   currentBoardId = getBoardId(state);
   currentElapsedTime = getElapsedTime(state);
   return {
+    boardId: getBoardId(state),
+    elapsedTime: getElapsedTime(state),
     gameState: getGameState(state),
     puzzlePlayActive: getPuzzlePlayActive(state),
   };
