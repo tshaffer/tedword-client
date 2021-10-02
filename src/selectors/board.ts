@@ -7,7 +7,7 @@ import {
 } from '../types';
 import {
   getBoardId
-} from '../selectors';
+} from './appState';
 
 
 export const getBoards = (state: TedwordState): BoardsMap => {
@@ -29,4 +29,10 @@ export const getCellContents = (state: TedwordState): CellContentsMap => {
     return boardsMap[boardId].cellContents;
   }
   return null;
+};
+
+export const getElapsedTime = (state: TedwordState): number => {
+  // TEDTODO null check
+  const boardEntity: BoardEntity = getBoard(state, getBoardId(state));
+  return boardEntity.elapsedTime;
 };

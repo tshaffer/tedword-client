@@ -3,24 +3,14 @@ export const serverUrl = 'http://localhost:8000';
 
 export const apiUrlFragment = '/api/v1/';
 
-export interface FileInput {
-  name: string;
-  size: number;
-  type: string;
-  lastModified: number;
-  lastModifiedDate: string;
-}
-
 export interface TedwordState {
   appState: AppState;
   boardsState: BoardsState;
+  derivedCrosswordData: DerivedCrosswordData | null;
   gameState: GameState;
+  guessesState: GuessesState;
   puzzlesState: PuzzlesState,
   users: UsersMap;
-
-  derivedCrosswordData: DerivedCrosswordData | null;
-  guessesState: GuessesState;
-
 }
 
 export interface AppState {
@@ -214,3 +204,12 @@ export interface DerivedCrosswordData {
 export interface GuessesState {
   guessesGrid: GuessesGrid | null;
 }
+
+export interface FileInput {
+  name: string;
+  size: number;
+  type: string;
+  lastModified: number;
+  lastModifiedDate: string;
+}
+
