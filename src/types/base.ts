@@ -19,6 +19,7 @@ export interface AppState {
   puzzleId: string;
   boardId: string;
   fileUploadStatus: string;
+  puzzlePlayActive: boolean;
 }
 
 export interface GameState {

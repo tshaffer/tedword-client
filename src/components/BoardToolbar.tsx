@@ -2,28 +2,30 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { GameState } from '../types';
-import { getGameState } from '../selectors';
 import ReactModal = require('react-modal');
+
+import { GameState } from '../types';
+import { setPuzzlePlayActive } from '../models';
+import { getGameState, getPuzzlePlayActive } from '../selectors';
 
 export interface BoardToolbarProps {
   gameState: GameState,
+  puzzlePlayActive: boolean,
+  onSetPuzzlePlayActive: (puzzleActive: boolean) => any;
 }
 
 const BoardToolbar = (props: BoardToolbarProps) => {
 
-  const [showModal, setShowModal] = React.useState(false);
-
-  console.log(props);
+  React.useEffect(() => {
+    props.onSetPuzzlePlayActive(true);
+  }, []);
 
   const handlePauseGame = () => {
-    console.log('handlePauseGame');
-    setShowModal(true);
+    props.onSetPuzzlePlayActive(false);
   };
 
   const handleResumeGame = () => {
-    console.log('handleResumeGame');
-    setShowModal(false);
+    props.onSetPuzzlePlayActive(true);
   };
 
   const customStyles = {
@@ -37,14 +39,21 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     },
   };
 
+  const buttonLabel: string = props.puzzlePlayActive
+    ? 'Pause'
+    : 'Resume';
+
+  const handler: any = props.puzzlePlayActive
+    ? handlePauseGame
+    : handleResumeGame;
+
   return (
     <div>
-      <p>{'this is the toolbar'}</p>
       <div>
         <ReactModal
-          isOpen={showModal}
+          isOpen={!props.puzzlePlayActive}
           style={customStyles}
-          contentLabel="Minimal Modal Example"
+          contentLabel="Pizza"
         >
           <div>
             <p>Your game has been paused.</p>
@@ -52,17 +61,10 @@ const BoardToolbar = (props: BoardToolbarProps) => {
           </div>
         </ReactModal>
       </div>
-
       <button
-        onClick={() => handlePauseGame()}
+        onClick={() => handler()}
       >
-        Pause
-      </button>
-
-      <button
-        onClick={() => handleResumeGame()}
-      >
-        Resume
+        {buttonLabel}
       </button>
     </div>
   );
@@ -71,11 +73,13 @@ const BoardToolbar = (props: BoardToolbarProps) => {
 function mapStateToProps(state: any) {
   return {
     gameState: getGameState(state),
+    puzzlePlayActive: getPuzzlePlayActive(state),
   };
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onSetPuzzlePlayActive: setPuzzlePlayActive,
   }, dispatch);
 };
 

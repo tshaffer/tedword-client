@@ -14,3 +14,7 @@ export const getBoardId = (state: TedwordState): string => {
 export const getCurrentUser = (state: TedwordState): string => {
   return state.appState.userName;
 };
+
+export const getPuzzlePlayActive = (state: TedwordState): boolean => {
+  return state.appState.puzzlePlayActive;
+};

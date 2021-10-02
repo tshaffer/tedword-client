@@ -9,6 +9,7 @@ export const SET_USER_NAME = 'SET_USER_NAME';
 export const SET_PUZZLE_ID = 'SET_PUZZLE_ID';
 export const SET_BOARD_ID = 'SET_BOARD_ID';
 export const SET_FILE_UPLOAD_STATUS = 'SET_FILE_UPLOAD_STATUS';
+export const SET_PUZZLE_PLAY_ACTIVE = 'SET_PUZZLE_PLAY_ACTIVE';
 
 // ------------------------------------
 // Actions
@@ -89,6 +90,21 @@ export const setFileUploadStatus = (
   };
 };
 
+export interface SetPuzzlePlayActivePayload {
+  puzzlePlayActive: boolean;
+}
+
+export const setPuzzlePlayActive = (
+  puzzlePlayActive: boolean,
+): any => {
+  return {
+    type: SET_PUZZLE_PLAY_ACTIVE,
+    payload: {
+      puzzlePlayActive,
+    },
+  };
+};
+
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -99,11 +115,12 @@ const initialState: AppState = {
   puzzleId: '',
   boardId: '',
   fileUploadStatus: '',
+  puzzlePlayActive: false,
 };
 
 export const appStateReducer = (
   state: AppState = initialState,
-  action: TedwordModelBaseAction<SetUiStatePayload & SetUserNamePayload & SetPuzzleIdPayload & SetBoardIdPayload & SetFileUploadStatusPayload>
+  action: TedwordModelBaseAction<SetUiStatePayload & SetUserNamePayload & SetPuzzleIdPayload & SetBoardIdPayload & SetFileUploadStatusPayload & SetPuzzlePlayActivePayload>
 ): AppState => {
   switch (action.type) {
     case SET_UI_STATE: {
@@ -120,6 +137,9 @@ export const appStateReducer = (
     }
     case SET_FILE_UPLOAD_STATUS: {
       return { ...state, fileUploadStatus: action.payload.fileUploadStatus };
+    }
+    case SET_PUZZLE_PLAY_ACTIVE: {
+      return { ...state, puzzlePlayActive: action.payload.puzzlePlayActive };
     }
     default:
       return state;
