@@ -20,50 +20,6 @@ export interface BoardTopProps {
 
 const BoardTop = (props: BoardTopProps) => {
 
-  let intervalId: NodeJS.Timeout;
-
-  React.useEffect(() => {
-    initVisibilityHandler();
-    startTimer();
-  }, []);
-
-  const initVisibilityHandler = () => {
-    let hidden, visibilityChange;
-    if (typeof document.hidden !== 'undefined') { // Opera 12.10 and Firefox 18 and later support
-      hidden = 'hidden';
-      visibilityChange = 'visibilitychange';
-    } else if (typeof (document as any).msHidden !== 'undefined') {
-      hidden = 'msHidden';
-      visibilityChange = 'msvisibilitychange';
-    } else if (typeof (document as any).webkitHidden !== 'undefined') {
-      hidden = 'webkitHidden';
-      visibilityChange = 'webkitvisibilitychange';
-    }
-    document.addEventListener(visibilityChange, handleVisibilityChange, false);
-  };
-
-  const handleVisibilityChange = () => {
-    if (document.hidden) {
-      console.log('crossword hidden');
-      pauseTimer();
-    } else {
-      console.log('crossword visible');
-      startTimer();
-    }
-  };
-
-  const handleTimerTimeout = () => {
-    console.log('crossword timer timeout');
-  };
-
-  const startTimer = () => {
-    intervalId = setInterval(handleTimerTimeout, 1000);
-  };
-
-  const pauseTimer = () => {
-    clearInterval(intervalId);
-  };
-
   return (
     <div>
       <BoardToolbar />
