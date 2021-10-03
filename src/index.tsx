@@ -18,6 +18,10 @@ const divStyle = {
   height: '1080px',
 };
 
+const contentElement = document.getElementById('content');
+console.log('user', contentElement.dataset.user);
+console.log('boardId', contentElement.dataset.boardid);
+
 ReactDOM.render(
   <Provider store={store}>
     <div style={divStyle}>
