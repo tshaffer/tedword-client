@@ -3,19 +3,22 @@ import axios from 'axios';
 import {
   AppState,
   BoardEntity,
+  BoardsState,
   ParsedClue,
   PuzzleEntity,
   PuzzleMetadata,
   PuzzlesMetadataMap,
-  TedwordState
+  TedwordState,
+  UiState
 } from '../types';
 
 import { apiUrlFragment, serverUrl } from '../index';
 import {
   getBoard,
+  getCurrentUser,
   getPuzzlesMetadata
 } from '../selectors';
-import { addBoard, addUserToBoard, setBoardId, setFocusedClues, updateElapsedTimeRedux, updateLastPlayedDateTimeRedux } from '../models';
+import { addBoard, addUserToBoard, setBoardId, setFocusedClues, setPuzzleId, setUiState, updateElapsedTimeRedux, updateLastPlayedDateTimeRedux } from '../models';
 import { isNil } from 'lodash';
 import { getAppState, getPuzzle } from '../selectors';
 
@@ -275,3 +278,20 @@ export const updateFocusedClues = (
   });
 };
 
+export const launchExistingGame = (boardId: string) => {
+  return ((dispatch: any, getState: any): any => {
+    const state: TedwordState = getState();
+    const boardsState: BoardsState = state.boardsState;
+    if (boardsState.boards.hasOwnProperty(boardId)) {
+      const boardEntity: BoardEntity = boardsState.boards[boardId];
+      dispatch(setPuzzleId(boardEntity.puzzleId));
+      dispatch(setBoardId(boardEntity.id));
+      const currentUser = getCurrentUser(state);
+      if (!boardEntity.users.includes(currentUser)) {
+        dispatch(addUserToBoard(boardEntity.id, currentUser));
+      }
+      dispatch(updateLastPlayedDateTime(boardEntity.id, new Date(Date())));
+      dispatch(setUiState(UiState.ExistingBoardPlay));
+    }
+  });
+};

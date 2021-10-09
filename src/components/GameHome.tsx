@@ -10,6 +10,7 @@ import {
   addUserToExistingBoard,
   createBoard,
   updateLastPlayedDateTime,
+  launchExistingGame,
 } from '../controllers';
 
 import NewGames from './NewGames';
@@ -25,6 +26,7 @@ export interface GameHomeProps {
   onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
   onUpdateLastPlayedDateTime: (boardId: string, dt: Date) => any;
+  onLaunchExistingGame: (boardId: string) => any;
 }
 
 const GameHome = (props: GameHomeProps) => {
@@ -34,13 +36,14 @@ const GameHome = (props: GameHomeProps) => {
   };
 
   const handleOpenBoard = (boardEntity: BoardEntity) => {
-    props.onSetPuzzleId(boardEntity.puzzleId);
-    props.onSetBoardId(boardEntity.id);
-    if (!userInGame(boardEntity)) {
-      props.onAddUserToBoard(boardEntity.id, props.currentUser);
-    }
-    props.onUpdateLastPlayedDateTime(boardEntity.id, new Date(Date()));
-    props.onSetUiState(UiState.ExistingBoardPlay);
+    props.onLaunchExistingGame(boardEntity.id);
+    // props.onSetPuzzleId(boardEntity.puzzleId);
+    // props.onSetBoardId(boardEntity.id);
+    // if (!userInGame(boardEntity)) {
+    //   props.onAddUserToBoard(boardEntity.id, props.currentUser);
+    // }
+    // props.onUpdateLastPlayedDateTime(boardEntity.id, new Date(Date()));
+    // props.onSetUiState(UiState.ExistingBoardPlay);
   };
 
   const handleOpenPuzzle = (puzzleMetadata: PuzzleMetadata) => {
@@ -158,6 +161,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetPuzzleId: setPuzzleId,
     onSetUiState: setUiState,
     onUpdateLastPlayedDateTime: updateLastPlayedDateTime,
+    onLaunchExistingGame: launchExistingGame,
   }, dispatch);
 };
 

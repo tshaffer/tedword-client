@@ -87,7 +87,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     const currentElapsedTimeInSeconds = currentElapsedTime;
     const newElapsedTimeInSeconds = currentElapsedTimeInSeconds + 1;
     if (!isNil(currentBoardId) && (currentElapsedTime >= 0)) {
-      props.onUpdateElapsedTime(currentBoardId, newElapsedTimeInSeconds); 
+      props.onUpdateElapsedTime(currentBoardId, newElapsedTimeInSeconds);
     }
   };
 
@@ -109,7 +109,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     props.onSetPuzzlePlayActive(true);
   };
 
-  
+
   return (
     <div>
       <div>

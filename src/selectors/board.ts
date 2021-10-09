@@ -1,4 +1,5 @@
 /* eslint-disable no-prototype-builtins */
+import { isNil, isNumber } from 'lodash';
 import {
   BoardEntity,
   BoardsMap,
@@ -32,7 +33,10 @@ export const getCellContents = (state: TedwordState): CellContentsMap => {
 };
 
 export const getElapsedTime = (state: TedwordState): number => {
-  // TEDTODO null check
   const boardEntity: BoardEntity = getBoard(state, getBoardId(state));
-  return boardEntity.elapsedTime;
+  if (!isNil(boardEntity) && isNumber(boardEntity.elapsedTime)) {
+    return boardEntity.elapsedTime;
+  } else {
+    return 0;
+  }
 };

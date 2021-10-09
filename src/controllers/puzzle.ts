@@ -129,7 +129,7 @@ export const buildDisplayedPuzzle = (puzzleEntity: PuzzleEntity): CluesByDirecti
 
 export const loadPuzzlesMetadata = () => {
   return (dispatch: any) => {
-    // const path = 'http://localhost:8888/api/v1/allPuzzlesMetadata';
+
     const path = serverUrl + apiUrlFragment + 'allPuzzlesMetadata';
 
     return axios.get(path)

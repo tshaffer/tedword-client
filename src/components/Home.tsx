@@ -4,10 +4,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as QueryString from 'query-string';
 
-import { isNil } from 'lodash';
+import { isEmpty, isNil } from 'lodash';
 
 import { AppState, DisplayedPuzzle, Guess, UiState, UsersMap } from '../types';
-import { loadBoards, loadPuzzlesMetadata, loadUsers } from '../controllers';
+import { launchExistingGame, loadBoards, loadPuzzlesMetadata, loadUsers } from '../controllers';
 import { getAppState, getDisplayedPuzzle, getUsers } from '../selectors';
 import { setUiState, setUserName, updateGuess } from '../models';
 
@@ -27,6 +27,7 @@ export interface HomeProps {
   onLoadPuzzlesMetadata: () => any;
   onLoadUsers: () => any;
   onUpdateGuess: (row: number, col: number, puzzleGuess: Guess) => any;
+  onLaunchExistingGame: (boardId: string) => any;
 }
 
 let homeProps;
@@ -41,7 +42,7 @@ const Home = (props: HomeProps) => {
       cluster: 'us3',
       // encrypted: true,
     });
-  
+
     const channel = pusher.subscribe('puzzle');
     channel.bind('cell-change', data => {
 
@@ -54,9 +55,9 @@ const Home = (props: HomeProps) => {
       console.log(data);
       console.log('current user is ', homeProps.appState.userName);
       console.log('external event: ', homeProps.appState.userName !== data.user);
-  
+
       const { user, row, col, typedChar } = data;
-  
+
       const externalEvent: boolean = homeProps.appState.userName !== user;
       if (externalEvent) {
         const guess: Guess = {
@@ -68,36 +69,53 @@ const Home = (props: HomeProps) => {
       }
     });
   };
-  
+
   const getStartupParams = () => {
     console.log(window.location.href);
     const parsedQueryParams = QueryString.parse(window.location.search);
     console.log(parsedQueryParams);
+
+    if (!isEmpty(parsedQueryParams)) {
+      if (!isNil(parsedQueryParams.user) && (!isNil(parsedQueryParams.boardId))) {
+        // TEDTODO - validity checking
+        // http://localhost:8000/?user=Ted&boardId=863c7139-6b17-4762-95a7-37fe65747719
+        const { user, boardId } = parsedQueryParams;
+        console.log(user, boardId);
+        props.onSetUserName(user as string);
+        props.onSetUiState(UiState.SelectPuzzleOrBoard);
+        props.onLaunchExistingGame(boardId as string);
+      }
+    }
   };
 
   React.useEffect(() => {
+    
     initializePusher();
-    props.onLoadPuzzlesMetadata();
-    props.onLoadBoards();
-    props.onLoadUsers();
-    getStartupParams();
+
+    const loadPuzzlesMetadataPromise = props.onLoadPuzzlesMetadata();
+    const loadBoardsPromise = props.onLoadBoards();
+    const loadUsersPromise = props.onLoadUsers();
+    Promise.all([loadPuzzlesMetadataPromise, loadBoardsPromise, loadUsersPromise])
+      .then(() => {
+        getStartupParams();
+      });
   }, []);
 
   switch (props.appState.uiState) {
     case UiState.SelectUser: {
       return (
-        <Login/>
+        <Login />
       );
     }
     case UiState.SelectPuzzleOrBoard: {
       return (
-        <GameHome/>
+        <GameHome />
       );
     }
     case UiState.NewBoardPlay:
     case UiState.ExistingBoardPlay: {
       return (
-        <BoardTop/>
+        <BoardTop />
       );
     }
   }
@@ -119,6 +137,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onLoadPuzzlesMetadata: loadPuzzlesMetadata,
     onLoadUsers: loadUsers,
     onUpdateGuess: updateGuess,
+    onLaunchExistingGame: launchExistingGame,
   }, dispatch);
 };
 
