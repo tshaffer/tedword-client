@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import * as QueryString from 'query-string';
 
 import { isNil } from 'lodash';
 
@@ -68,11 +69,18 @@ const Home = (props: HomeProps) => {
     });
   };
   
+  const getStartupParams = () => {
+    console.log(window.location.href);
+    const parsedQueryParams = QueryString.parse(window.location.search);
+    console.log(parsedQueryParams);
+  };
+
   React.useEffect(() => {
     initializePusher();
     props.onLoadPuzzlesMetadata();
     props.onLoadBoards();
     props.onLoadUsers();
+    getStartupParams();
   }, []);
 
   switch (props.appState.uiState) {
