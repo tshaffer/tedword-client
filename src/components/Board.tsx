@@ -45,8 +45,6 @@ const Board = (props: BoardProps) => {
         }
       }
     }
-    console.log('userEntry:', userEntry, userEntry.length, clueAnswer.length);
-
     return userEntry;
   };
 
