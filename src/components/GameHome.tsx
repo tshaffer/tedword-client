@@ -31,19 +31,8 @@ export interface GameHomeProps {
 
 const GameHome = (props: GameHomeProps) => {
 
-  const userInGame = (boardEntity: BoardEntity): boolean => {
-    return boardEntity.users.includes(props.currentUser);
-  };
-
   const handleOpenBoard = (boardEntity: BoardEntity) => {
     props.onLaunchExistingGame(boardEntity.id);
-    // props.onSetPuzzleId(boardEntity.puzzleId);
-    // props.onSetBoardId(boardEntity.id);
-    // if (!userInGame(boardEntity)) {
-    //   props.onAddUserToBoard(boardEntity.id, props.currentUser);
-    // }
-    // props.onUpdateLastPlayedDateTime(boardEntity.id, new Date(Date()));
-    // props.onSetUiState(UiState.ExistingBoardPlay);
   };
 
   const handleOpenPuzzle = (puzzleMetadata: PuzzleMetadata) => {

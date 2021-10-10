@@ -10,7 +10,7 @@ export const ADD_BOARD = 'ADD_BOARD';
 export const ADD_USER_TO_BOARD = 'ADD_USER_TO_BOARD';
 export const SET_CELL_CONTENTS = 'SET_CELL_CONTENTS';
 export const UPDATE_LAST_PLAYED_DATE_TIME = 'UPDATE_LAST_PLAYED_DATE_TIME';
-export const UPDATED_ELAPSED_TIME = 'UPDATED_ELAPSED_TIME';
+export const UPDATE_ELAPSED_TIME = 'UPDATE_ELAPSED_TIME';
 
 // ------------------------------------
 // Actions
@@ -80,7 +80,7 @@ export const updateLastPlayedDateTimeRedux = (
   lastPlayedDateTime: Date,
 ): any => {
   return {
-    type: UPDATED_ELAPSED_TIME,
+    type: UPDATE_LAST_PLAYED_DATE_TIME,
     payload: {
       id,
       lastPlayedDateTime,
@@ -98,7 +98,7 @@ export const updateElapsedTimeRedux = (
   elapsedTime: number,
 ): any => {
   return {
-    type: UPDATED_ELAPSED_TIME,
+    type: UPDATE_ELAPSED_TIME,
     payload: {
       id,
       elapsedTime,
@@ -143,7 +143,7 @@ export const boardsStateReducer = (
       boardEntity.lastPlayedDateTime = action.payload.lastPlayedDateTime;
       return newState;
     }
-    case UPDATED_ELAPSED_TIME: {
+    case UPDATE_ELAPSED_TIME: {
       const newState = cloneDeep(state) as BoardsState;
       const boardEntity: BoardEntity = newState.boards[action.payload.id];
       boardEntity.elapsedTime = action.payload.elapsedTime;

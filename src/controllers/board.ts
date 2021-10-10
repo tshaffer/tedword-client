@@ -286,6 +286,7 @@ export const launchExistingGame = (boardId: string) => {
       const boardEntity: BoardEntity = boardsState.boards[boardId];
       dispatch(setPuzzleId(boardEntity.puzzleId));
       dispatch(setBoardId(boardEntity.id));
+      dispatch(updateElapsedTimeRedux(boardEntity.id, boardEntity.elapsedTime));
       const currentUser = getCurrentUser(state);
       if (!boardEntity.users.includes(currentUser)) {
         dispatch(addUserToBoard(boardEntity.id, currentUser));
