@@ -25,13 +25,13 @@ let intervalId: NodeJS.Timeout;
 
 const BoardToolbar = (props: BoardToolbarProps) => {
 
-  const elapsedGameTimerRef = React.useRef(0);
+  const elapsedGameTimerRef = React.useRef(false);
 
   React.useEffect(() => {
     initVisibilityHandler();
     props.onSetPuzzlePlayActive(true);
     startTimer();
-    elapsedGameTimerRef.current = 1;
+    elapsedGameTimerRef.current = true;
   }, []);
 
   const modalStyle = {
@@ -84,7 +84,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     } else {
       console.log('crossword visible');
       // if (props.puzzlePlayActive) { // this value is stale
-      if (elapsedGameTimerRef.current === 1) {
+      if (elapsedGameTimerRef.current) {
         startTimer();
       }
     }
@@ -111,14 +111,14 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     console.log('handlePauseGame', elapsedGameTimerRef.current);
     pauseTimer();
     props.onSetPuzzlePlayActive(false);
-    elapsedGameTimerRef.current = 0;
+    elapsedGameTimerRef.current = false;
   };
 
   const handleResumeGame = () => {
     console.log('handleResumeGame', elapsedGameTimerRef.current);
     startTimer();
     props.onSetPuzzlePlayActive(true);
-    elapsedGameTimerRef.current = 1;
+    elapsedGameTimerRef.current = true;
   };
 
   return (
