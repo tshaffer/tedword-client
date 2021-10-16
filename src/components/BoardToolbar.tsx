@@ -3,11 +3,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import ReactModal = require('react-modal');
+import Select from 'react-select';
 
-import { GameState } from '../types';
+import { GameState, User, UsersMap } from '../types';
 import { updateElapsedTime } from '../controllers';
 import { setPuzzlePlayActive } from '../models';
-import { getBoardId, getElapsedTime, getGameState, getPuzzlePlayActive } from '../selectors';
+import { getBoardId, getElapsedTime, getGameState, getPuzzlePlayActive, getUsers } from '../selectors';
 import { isNil } from 'lodash';
 
 export interface BoardToolbarProps {
@@ -15,6 +16,7 @@ export interface BoardToolbarProps {
   elapsedTime: number,
   gameState: GameState,
   puzzlePlayActive: boolean,
+  users: UsersMap,
   onSetPuzzlePlayActive: (puzzleActive: boolean) => any;
   onUpdateElapsedTime: (boardId: string, elapsedTime: number) => any;
 }
@@ -26,6 +28,8 @@ let intervalId: NodeJS.Timeout;
 const BoardToolbar = (props: BoardToolbarProps) => {
 
   const elapsedGameTimerRef = React.useRef(false);
+
+  const [showSendInviteModal, setShowSendInviteModal] = React.useState(false);
 
   React.useEffect(() => {
     initVisibilityHandler();
@@ -76,6 +80,20 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     return elapsedTimeString;
   };
 
+  const getInviteeOptions = () => {
+    const inviteeOptions: any[] = [];
+    for (const userKey in props.users) {
+      if (Object.prototype.hasOwnProperty.call(props.users, userKey)) {
+        const user: User = props.users[userKey];
+        inviteeOptions.push({
+          value: user,
+          label: user.userName
+        });
+      }
+    }
+    return inviteeOptions;
+  };
+
   const handleVisibilityChange = () => {
     console.log('handleVisibilityChange', elapsedGameTimerRef.current);
     if (document.hidden) {
@@ -83,7 +101,6 @@ const BoardToolbar = (props: BoardToolbarProps) => {
       pauseTimer();
     } else {
       console.log('crossword visible');
-      // if (props.puzzlePlayActive) { // this value is stale
       if (elapsedGameTimerRef.current) {
         startTimer();
       }
@@ -121,6 +138,14 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     elapsedGameTimerRef.current = true;
   };
 
+  const handleShowSendInvite = () => {
+    setShowSendInviteModal(true);
+  };
+
+  const handleSendInvite = () => {
+    setShowSendInviteModal(false);
+  };
+
   return (
     <div>
       <div>
@@ -135,6 +160,23 @@ const BoardToolbar = (props: BoardToolbarProps) => {
           </div>
         </ReactModal>
       </div>
+      <div>
+        <ReactModal
+          isOpen={showSendInviteModal}
+          style={modalStyle}
+          ariaHideApp={false}
+        >
+          <div>
+            <p>Invite others to play</p>
+            <Select
+              options={getInviteeOptions()}
+              isMulti
+            />
+            <button onClick={handleSendInvite}>Generate Link</button>
+            <button onClick={handleSendInvite}>Close</button>
+          </div>
+        </ReactModal>
+      </div>
       {getElapsedTimeString()}
       <button
         onClick={() => handlePauseGame()}
@@ -142,6 +184,12 @@ const BoardToolbar = (props: BoardToolbarProps) => {
         style={buttonStyle}
       >
         {'Pause'}
+      </button>
+      <button
+        onClick={() => handleShowSendInvite()}
+        style={buttonStyle}
+      >
+        Send Invitation
       </button>
     </div>
   );
@@ -155,6 +203,7 @@ function mapStateToProps(state: any) {
     elapsedTime: getElapsedTime(state),
     gameState: getGameState(state),
     puzzlePlayActive: getPuzzlePlayActive(state),
+    users: getUsers(state),
   };
 }
 
