@@ -49,6 +49,19 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     },
   };
 
+  const sendInviteModalStyle = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      minHeight: '250px',
+      minWidth: '150px',
+    },
+  };
+
   const buttonStyle = {
     marginLeft: '6px',
   };
@@ -163,7 +176,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
       <div>
         <ReactModal
           isOpen={showSendInviteModal}
-          style={modalStyle}
+          style={sendInviteModalStyle}
           ariaHideApp={false}
         >
           <div>
@@ -172,8 +185,23 @@ const BoardToolbar = (props: BoardToolbarProps) => {
               options={getInviteeOptions()}
               isMulti
             />
-            <button onClick={handleSendInvite}>Generate Link</button>
-            <button onClick={handleSendInvite}>Close</button>
+            <div
+              style={{
+                position: 'absolute',
+                bottom: '8px',
+                margin: '0 auto',
+              }}
+            >
+              <button onClick={handleSendInvite}>Generate Link</button>
+              <button
+                onClick={handleSendInvite}
+                style={{
+                  marginLeft: '8px',
+                }}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </ReactModal>
       </div>
