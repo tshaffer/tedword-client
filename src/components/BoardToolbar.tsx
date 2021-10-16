@@ -159,6 +159,15 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     setShowSendInviteModal(false);
   };
 
+  // https://react-select.com/typescript
+  // https://github.com/JedWatson/react-select/blob/master/packages/react-select/src/types.ts
+  // const handleInviteesSelectChange = (option: readonly Option[], actionMeta: ActionMeta<Option>) => {
+  const handleInviteesSelectChange = (selectedUsers: readonly User[], actionMeta: any) => {
+    console.log('handleInviteesSelectChange');
+    console.log(selectedUsers);
+    console.log(actionMeta);
+  };
+
   return (
     <div>
       <div>
@@ -183,7 +192,12 @@ const BoardToolbar = (props: BoardToolbarProps) => {
             <p>Invite others to play</p>
             <Select
               options={getInviteeOptions()}
+              onChange={handleInviteesSelectChange}
               isMulti
+            /* menuPlacement={'auto'} */
+            /* captureMenuScroll={true} */
+            /* maxMenuHeight={256} */
+            /* minMenuHeight={256} */
             />
             <div
               style={{
