@@ -57,7 +57,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
       bottom: 'auto',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
-      minHeight: '250px',
+      minHeight: '120px',
       minWidth: '150px',
     },
   };
@@ -189,7 +189,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
               style={{
                 position: 'absolute',
                 bottom: '8px',
-                margin: '0 auto',
+                margin: '8px auto',
               }}
             >
               <button onClick={handleSendInvite}>Generate Link</button>
