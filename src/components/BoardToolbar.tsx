@@ -125,7 +125,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
             {inviteeUrl}
           </p>
         </div>
-      );  
+      );
     } else {
       return null;
     }
@@ -255,6 +255,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
             >
               <button
                 onClick={handleGenerateLink}
+                disabled={inviteeList.length === 0}
               >
                 Generate Link
               </button>
