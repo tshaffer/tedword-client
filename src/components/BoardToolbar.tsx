@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import ReactModal = require('react-modal');
 import Select from 'react-select';
 
-import { GameState, User, UsersMap } from '../types';
+import { apiUrlFragment, GameState, serverUrl, User, UsersMap } from '../types';
 import { updateElapsedTime } from '../controllers';
 import { setPuzzlePlayActive } from '../models';
 import { getBoardId, getElapsedTime, getGameState, getPuzzlePlayActive, getUsers } from '../selectors';
@@ -30,6 +30,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
   const elapsedGameTimerRef = React.useRef(false);
 
   const [showSendInviteModal, setShowSendInviteModal] = React.useState(false);
+  const [inviteeList, setInviteeList] = React.useState([]);
 
   React.useEffect(() => {
     initVisibilityHandler();
@@ -121,7 +122,6 @@ const BoardToolbar = (props: BoardToolbarProps) => {
   };
 
   const handleTimerTimeout = () => {
-    console.log('handleTimerTimeout', elapsedGameTimerRef.current);
     const currentElapsedTimeInSeconds = currentElapsedTime;
     const newElapsedTimeInSeconds = currentElapsedTimeInSeconds + 1;
     if (!isNil(currentBoardId) && (currentElapsedTime >= 0)) {
@@ -155,17 +155,32 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     setShowSendInviteModal(true);
   };
 
-  const handleSendInvite = () => {
+  const handleHideSendInvite = () => {
+    setShowSendInviteModal(false);
+  };
+
+  const handleGenerateLink = () => {
+    // http://localhost:8000/?startpage=joinGame&user=Joel&boardId=632d1f50-0f82-404e-8058-4f3079e4b511&user=Morgan
+    console.log('Send invitation to ', inviteeList);
+
+    let path = serverUrl + '/?startpage=joinGame&boardId=' + props.boardId;
+    for (const invitee of inviteeList) {
+      path += '&user=' + invitee.value.userName;
+    }
+    console.log('path');
+    console.log(path);
+
     setShowSendInviteModal(false);
   };
 
   // https://react-select.com/typescript
   // https://github.com/JedWatson/react-select/blob/master/packages/react-select/src/types.ts
   // const handleInviteesSelectChange = (option: readonly Option[], actionMeta: ActionMeta<Option>) => {
-  const handleInviteesSelectChange = (selectedUsers: readonly User[], actionMeta: any) => {
+  const handleInviteesSelectChange = (selectedUsers: User[], actionMeta: any) => {
     console.log('handleInviteesSelectChange');
     console.log(selectedUsers);
     console.log(actionMeta);
+    setInviteeList(selectedUsers);
   };
 
   return (
@@ -206,9 +221,9 @@ const BoardToolbar = (props: BoardToolbarProps) => {
                 margin: '8px auto',
               }}
             >
-              <button onClick={handleSendInvite}>Generate Link</button>
+              <button onClick={handleGenerateLink}>Generate Link</button>
               <button
-                onClick={handleSendInvite}
+                onClick={handleHideSendInvite}
                 style={{
                   marginLeft: '8px',
                 }}
