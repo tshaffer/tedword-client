@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as QueryString from 'query-string';
 
-import { isEmpty, isNil } from 'lodash';
+import { isArray, isEmpty, isNil, isString } from 'lodash';
 
 import { AppState, DisplayedPuzzle, Guess, UiState, UsersMap } from '../types';
 import { launchExistingGame, loadBoards, loadPuzzlesMetadata, loadUsers } from '../controllers';
@@ -76,20 +76,53 @@ const Home = (props: HomeProps) => {
     console.log(parsedQueryParams);
 
     if (!isEmpty(parsedQueryParams)) {
-      if (!isNil(parsedQueryParams.user) && (!isNil(parsedQueryParams.boardId))) {
+
+      if (isString(parsedQueryParams.startpage) && parsedQueryParams.startpage === 'joinGame' &&
+        !isNil(parsedQueryParams.user) && !isNil(parsedQueryParams.boardId)) {
         // TEDTODO - validity checking
         // http://localhost:8000/?user=Ted&boardId=863c7139-6b17-4762-95a7-37fe65747719
-        const { user, boardId } = parsedQueryParams;
-        console.log(user, boardId);
-        props.onSetUserName(user as string);
-        props.onSetUiState(UiState.SelectPuzzleOrBoard);
-        props.onLaunchExistingGame(boardId as string);
+
+        const boardId = parsedQueryParams.boardId;
+
+        // users
+        //    userNamesOfInvitees: single invited user or list of users invited - retrieved from query string
+        //    props.users: map of user objects - loaded from server
+        //    storedUserName: user name retrieved from local storage
+        // algorithm
+        //    if storedUserName is in userNamesOfInvitees and storedUserName is in props.users, join game with storedUserName
+        //        ** not currently looking for storedUserName in props.users as props.users does not contain the list of users yet, even
+        //        though the users were loaded from the server. I don't know why as I thought this stuff was synchronous??
+        //    else ignore request and ????
+
+        const userNamesOfInvitees = parsedQueryParams.user;
+        const storedUserName = localStorage.getItem('userName');
+
+        // Code is not looking for a match
+        if (isString(storedUserName) && !isNil(props.users)) {
+          let proceedToStoredGame = false;
+          if (isArray(userNamesOfInvitees)) {
+            if (userNamesOfInvitees.indexOf(storedUserName) >= 0) {
+              proceedToStoredGame = true;
+            }
+          } else if (isString(userNamesOfInvitees)) {
+            if (userNamesOfInvitees === storedUserName) {
+              proceedToStoredGame = true;
+            }
+          }
+          if (proceedToStoredGame) {
+            props.onSetUserName(storedUserName as string);
+            props.onSetUiState(UiState.SelectPuzzleOrBoard);
+            props.onLaunchExistingGame(boardId as string);
+          }
+        }
       }
+
     }
   };
 
+
   React.useEffect(() => {
-    
+
     initializePusher();
 
     const loadPuzzlesMetadataPromise = props.onLoadPuzzlesMetadata();
