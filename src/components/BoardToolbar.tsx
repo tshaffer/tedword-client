@@ -175,11 +175,17 @@ const BoardToolbar = (props: BoardToolbarProps) => {
   };
 
   const handleShowSendInvite = () => {
+    if (props.puzzlePlayActive) {
+      pauseTimer();
+    }
     setShowSendInviteModal(true);
   };
 
   const handleHideSendInvite = () => {
     setShowSendInviteModal(false);
+    if (props.puzzlePlayActive) {
+      startTimer();
+    }
   };
 
   const handleGenerateLink = () => {
