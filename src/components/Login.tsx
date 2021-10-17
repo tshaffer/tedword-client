@@ -55,6 +55,7 @@ const Login = (props: LoginProps) => {
 
   const handleLogin = () => {
     props.onSetUiState(UiState.SelectPuzzleOrBoard);
+    localStorage.setItem('userName', props.appState.userName);
   };
 
 

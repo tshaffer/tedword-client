@@ -3,6 +3,7 @@ import { User } from '../types';
 import { addUser, setUserName } from '../models';
 
 import { apiUrlFragment, serverUrl } from '../index';
+import { isNil, isString } from 'lodash';
 
 export const loadUsers = () => {
   return (dispatch: any) => {
@@ -17,7 +18,19 @@ export const loadUsers = () => {
           dispatch(addUser(user.userName, user));
         }
         if (users.length > 0) {
-          dispatch(setUserName(users[0].userName));
+          
+          let selectedUser = '';
+
+          const storedUserName = localStorage.getItem('userName');
+          if (isString(storedUserName)) {
+            const matchedUser = users.find(o => o.userName === storedUserName);
+            if (!isNil(matchedUser)) {
+              selectedUser = matchedUser.userName;
+            }
+          } else {
+            selectedUser = users[0].userName;
+          }
+          dispatch(setUserName(selectedUser));
         }
       });
   };
