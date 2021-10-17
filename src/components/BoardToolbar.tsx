@@ -5,11 +5,12 @@ import { connect } from 'react-redux';
 import ReactModal = require('react-modal');
 import Select from 'react-select';
 
-import { apiUrlFragment, GameState, serverUrl, User, UsersMap } from '../types';
+import { isNil } from 'lodash';
+
+import { GameState, serverUrl, User, UsersMap } from '../types';
 import { updateElapsedTime } from '../controllers';
 import { setPuzzlePlayActive } from '../models';
 import { getBoardId, getElapsedTime, getGameState, getPuzzlePlayActive, getUsers } from '../selectors';
-import { isNil } from 'lodash';
 
 export interface BoardToolbarProps {
   boardId: string,
@@ -31,6 +32,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
 
   const [showSendInviteModal, setShowSendInviteModal] = React.useState(false);
   const [inviteeList, setInviteeList] = React.useState([]);
+  const [inviteeUrl, setInviteeUrl] = React.useState('');
 
   React.useEffect(() => {
     initVisibilityHandler();
@@ -65,6 +67,10 @@ const BoardToolbar = (props: BoardToolbarProps) => {
 
   const buttonStyle = {
     marginLeft: '6px',
+  };
+
+  const paragraphWithBottomMarginStyle = {
+    marginBottom: '32px',
   };
 
   const initVisibilityHandler = () => {
@@ -106,6 +112,23 @@ const BoardToolbar = (props: BoardToolbarProps) => {
       }
     }
     return inviteeOptions;
+  };
+
+  const getLinkDiv = () => {
+    if (inviteeUrl.length > 0) {
+      return (
+        <div>
+          <p>Copy and paste into a browser</p>
+          <p
+            style={paragraphWithBottomMarginStyle}
+          >
+            {inviteeUrl}
+          </p>
+        </div>
+      );  
+    } else {
+      return null;
+    }
   };
 
   const handleVisibilityChange = () => {
@@ -170,7 +193,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     console.log('path');
     console.log(path);
 
-    setShowSendInviteModal(false);
+    setInviteeUrl(path);
   };
 
   // https://react-select.com/typescript
@@ -182,6 +205,8 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     console.log(actionMeta);
     setInviteeList(selectedUsers);
   };
+
+  const linkDiv = getLinkDiv();
 
   return (
     <div>
@@ -214,6 +239,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
             /* maxMenuHeight={256} */
             /* minMenuHeight={256} */
             />
+            {linkDiv}
             <div
               style={{
                 position: 'absolute',
@@ -221,7 +247,11 @@ const BoardToolbar = (props: BoardToolbarProps) => {
                 margin: '8px auto',
               }}
             >
-              <button onClick={handleGenerateLink}>Generate Link</button>
+              <button
+                onClick={handleGenerateLink}
+              >
+                Generate Link
+              </button>
               <button
                 onClick={handleHideSendInvite}
                 style={{
