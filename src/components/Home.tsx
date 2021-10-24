@@ -15,7 +15,7 @@ import Login from './Login';
 import GameHome from './GameHome';
 import BoardTop from './BoardTop';
 
-const Pusher = require('pusher-js');
+import * as Pusher from 'pusher-js';
 
 export interface HomeProps {
   appState: AppState,

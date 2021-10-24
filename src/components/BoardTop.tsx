@@ -9,6 +9,7 @@ import BoardPlay from './BoardPlay';
 import BoardToolbar from './BoardToolbar';
 import { getAppState, getBoard, getPuzzlesMetadata, getDisplayedPuzzle, getCellContents, getPuzzle } from '../selectors';
 import { AppState, BoardEntity, CellContentsMap, DisplayedPuzzle, PuzzlesMetadataMap, PuzzleSpec } from '../types';
+import Chat from './Chat';
 
 export interface BoardTopProps {
   appState: AppState,
@@ -18,19 +19,28 @@ export interface BoardTopProps {
   puzzleSpec: PuzzleSpec;
 }
 
+/*
+      <div style={{ position: 'absolute', bottom: '0px', left: '0px' }}>
+        <p>line one of pizza</p>
+        <p>line two of pizza</p>
+      </div>
+*/
 const BoardTop = (props: BoardTopProps) => {
 
   return (
-    <div>
-      <BoardToolbar />
-      <Board />
-      <BoardPlay
-        appState={props.appState}
-        cellContents={props.cellContents}
-        displayedPuzzle={props.displayedPuzzle}
-        puzzlesMetadata={props.puzzlesMetadata}
-        puzzleSpec={props.puzzleSpec}
-      />
+    <div style={{ position: 'relative', height: '1080px' }}>
+      <div style={{ maxHeight: '800px', overflow: 'auto' }}>
+        <BoardToolbar />
+        <Board />
+        <BoardPlay
+          appState={props.appState}
+          cellContents={props.cellContents}
+          displayedPuzzle={props.displayedPuzzle}
+          puzzlesMetadata={props.puzzlesMetadata}
+          puzzleSpec={props.puzzleSpec}
+        />
+      </div>
+      <Chat/>
     </div>
   );
 };

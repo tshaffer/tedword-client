@@ -1,6 +1,7 @@
 export * from './Board';
 export * from './BoardPlay';
 export * from './BoardTop';
+export * from './Chat';
 export * from './Crossword';
 export * from './GameHome';
 export * from './Home';
