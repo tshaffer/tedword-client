@@ -2,6 +2,7 @@ export * from './appState';
 export * from './baseAction';
 export * from './baseReducer';
 export * from './boards';
+export * from './chat';
 export * from './derivedCrosswordData';
 export * from './gameState';
 export * from './guessesState';

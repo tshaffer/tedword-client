@@ -6,6 +6,7 @@ export const apiUrlFragment = '/api/v1/';
 export interface TedwordState {
   appState: AppState;
   boardsState: BoardsState;
+  chat: ChatState;
   derivedCrosswordData: DerivedCrosswordData | null;
   gameState: GameState;
   guessesState: GuessesState;
@@ -22,13 +23,29 @@ export interface AppState {
   puzzlePlayActive: boolean;
 }
 
+export interface BoardsState {
+  boards: BoardsMap;
+}
+
+export interface ChatMember {
+  userName: string;
+}
+
+export interface Chat {
+  sender: string;
+  message: string;
+  timestamp: Date;
+}
+
+export interface ChatState {
+  joined: boolean;
+  members: ChatMember[];
+  chats: Chat[];
+}
+
 export interface GameState {
   focusedAcrossClue: ParsedClue;
   focusedDownClue: ParsedClue;
-}
-
-export interface BoardsState {
-  boards: BoardsMap;
 }
 
 export interface PuzzlesState {

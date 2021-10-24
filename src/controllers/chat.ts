@@ -3,6 +3,8 @@ import { apiUrlFragment, serverUrl } from '../types';
 
 import { pusher } from '../components/Home';
 
+import { addChatMember, setJoined } from '../models';
+
 let chatMembers: any;
 let userName: string = '';
 
@@ -13,16 +15,20 @@ export const joinChat = (username: string) => {
       path,
       { username },
     ).then((response) => {
+      dispatch(setJoined(true));
       userName = username;
       const channel = pusher.subscribe('presence-groupChat');
       channel.bind('pusher:subscription_succeeded', (members: any) => {
         chatMembers = channel.members;
-        console.log('chatMembers: ', chatMembers);
-        console.log('members', members);
+        const chatMemberNames: string[] = Object.keys(chatMembers.members);
+        for (const chatMemberName of chatMemberNames) {
+          dispatch(addChatMember(chatMemberName));
+        }
       });
       // User joins chat
       channel.bind('pusher:member_added', (member: any) => {
         console.log(`${member.id} joined the chat`);
+        dispatch(addChatMember(member.id));
       });
       // Listen for chat messages
       listen();
