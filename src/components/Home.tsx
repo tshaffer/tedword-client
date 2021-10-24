@@ -15,7 +15,8 @@ import Login from './Login';
 import GameHome from './GameHome';
 import BoardTop from './BoardTop';
 
-import * as Pusher from 'pusher-js';
+// import * as Pusher from 'pusher-js';
+const Pusher = require('pusher-js');
 
 export interface HomeProps {
   appState: AppState,
@@ -32,15 +33,19 @@ export interface HomeProps {
 
 let homeProps;
 
+export let pusher: any;
+
 const Home = (props: HomeProps) => {
 
   homeProps = props;
 
   const initializePusher = () => {
 
-    const pusher = new Pusher('c6addcc9977bdaa7e8a2', {
+    pusher = new Pusher('c6addcc9977bdaa7e8a2', {
       cluster: 'us3',
       // encrypted: true,
+      encrypted: true,
+      authEndpoint: 'pusher/auth'
     });
 
     const channel = pusher.subscribe('puzzle');
