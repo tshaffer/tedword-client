@@ -66,9 +66,19 @@ const Chat = (props: ChatProps) => {
 
 
   const getChatTo = () => {
-    const chatUsers: string[] = props.chatMembers.map((chatMember: ChatMember) => {
-      return chatMember.userName;
-    });
+    const chatUsers: string[] = [];
+    for (const chatMember of props.chatMembers) {
+      const { userName } = chatMember;
+      // filter out duplicates
+      if (chatUsers.indexOf(userName) < 0) {
+        chatUsers.push(userName);
+      }
+    }
+    const indexOfMe: number = chatUsers.indexOf(props.currentUser);
+    if (indexOfMe >= 0) {
+      chatUsers.splice(indexOfMe, 1);
+    }
+
     const memberList = chatUsers.join(', ');
     const chatTo = 'To: ' + memberList;
     return chatTo;
@@ -76,7 +86,7 @@ const Chat = (props: ChatProps) => {
 
   const getChatMessage = (chat: Chat): JSX.Element => {
     return (
-      <p>{chat.message}</p>
+      <p>{'From: ' + chat.sender + '- ' + chat.message}</p>
     );
   };
 
@@ -113,7 +123,6 @@ const Chat = (props: ChatProps) => {
     return (
       <div>
         <p>{chatTo}</p>
-        <p>History here</p>
         <div>{chatHistory}</div>
         {chatMessageToSend}
       </div>
