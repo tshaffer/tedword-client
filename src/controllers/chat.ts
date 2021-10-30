@@ -3,13 +3,17 @@ import { apiUrlFragment, serverUrl } from '../types';
 
 import { pusher } from '../components/Home';
 
-import { addChatMember, setJoined } from '../models';
+import {
+  addChat,
+  addChatMember,
+  setJoined
+} from '../models';
 
 let chatMembers: any;
 let userName: string = '';
 
 export const joinChat = (username: string) => {
-  return (dispatch: any) => {
+  return (dispatch: any, getState) => {
     const path = serverUrl + apiUrlFragment + 'joinChat';
     axios.post(
       path,
@@ -31,7 +35,7 @@ export const joinChat = (username: string) => {
         dispatch(addChatMember(member.id));
       });
       // Listen for chat messages
-      listen();
+      dispatch(listen());
       return;
     }).catch((error) => {
       console.log('error');
@@ -57,12 +61,11 @@ export const sendMessage = (newMessage: string) => {
 };
 
 const listen = () => {
-  const channel = pusher.subscribe('presence-groupChat');
-  channel.bind('message_sent', (data) => {
-    console.log('messageReceived', data);
-    // messages.push({
-    //   username: data.username,
-    //   message: data.message
-    // });
-  });
-}
+  return (dispatch: any) => {
+    const channel = pusher.subscribe('presence-groupChat');
+    channel.bind('message_sent', (data) => {
+      console.log('messageReceived', data);
+      dispatch(addChat(data.username, data.message, new Date()));
+    });
+  };
+};

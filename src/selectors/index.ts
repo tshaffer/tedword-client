@@ -1,5 +1,6 @@
 export * from './appState';
 export * from './board';
+export * from './chat';
 export * from './derivedCrosswordData';
 export * from './gameState';
 export * from './guesses';
