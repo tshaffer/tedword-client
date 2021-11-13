@@ -14,12 +14,14 @@ import { setUiState, setUserName, updateGuess } from '../models';
 import Login from './Login';
 import GameHome from './GameHome';
 import BoardTop from './BoardTop';
+import { getCurrentUser } from '../selectors';
 
 // import * as Pusher from 'pusher-js';
 const Pusher = require('pusher-js');
 
 export interface HomeProps {
   appState: AppState,
+  currentUser: string | null,
   users: UsersMap;
   onSetUserName: (userName: string) => any;
   onSetUiState: (uiState: UiState) => any;
@@ -139,6 +141,11 @@ const Home = (props: HomeProps) => {
       });
   }, []);
 
+  if (isNil(props.currentUser)) {
+    return (
+      <div>Loading...</div>
+    );
+  }
   switch (props.appState.uiState) {
     case UiState.SelectUser: {
       return (
@@ -161,6 +168,7 @@ const Home = (props: HomeProps) => {
 
 function mapStateToProps(state: any) {
   return {
+    currentUser: getCurrentUser(state),
     users: getUsers(state),
     appState: getAppState(state),
     displayedPuzzle: getDisplayedPuzzle(state),

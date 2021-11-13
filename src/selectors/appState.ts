@@ -11,7 +11,7 @@ export const getBoardId = (state: TedwordState): string => {
   return state.appState.boardId;
 };
 
-export const getCurrentUser = (state: TedwordState): string => {
+export const getCurrentUser = (state: TedwordState): string | null => {
   return state.appState.userName;
 };
 

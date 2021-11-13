@@ -16,7 +16,7 @@ export interface TedwordState {
 
 export interface AppState {
   uiState: UiState;
-  userName: string;
+  userName: string | null;
   puzzleId: string;
   boardId: string;
   fileUploadStatus: string;

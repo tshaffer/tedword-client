@@ -111,7 +111,7 @@ export const setPuzzlePlayActive = (
 
 const initialState: AppState = {
   uiState: UiState.SelectUser,
-  userName: '',
+  userName: null,
   puzzleId: '',
   boardId: '',
   fileUploadStatus: '',

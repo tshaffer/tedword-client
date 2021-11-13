@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { User } from '../types';
-import { addUser, setUserName } from '../models';
+import { UiState, User } from '../types';
+import { addUser, setUiState, setUserName } from '../models';
 
 import { apiUrlFragment, serverUrl } from '../index';
 import { isNil, isString } from 'lodash';
@@ -21,14 +21,20 @@ export const loadUsers = () => {
           
           let selectedUser = '';
 
+          // if there's a stored / persistent userName and it matches a user name in the downloaded list of users,
+          // bypass the signin screen
           const storedUserName = localStorage.getItem('userName');
           if (isString(storedUserName)) {
             const matchedUser = users.find(o => o.userName === storedUserName);
+
             if (!isNil(matchedUser)) {
-              selectedUser = matchedUser.userName;
+              dispatch(setUserName(matchedUser.userName));
+              dispatch(setUiState(UiState.SelectPuzzleOrBoard));
+              return;
             } else {
               selectedUser = users[0].userName;
             }
+
           } else {
             selectedUser = users[0].userName;
           }
