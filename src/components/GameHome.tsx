@@ -3,9 +3,9 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { UiState, PuzzleMetadata, BoardEntity } from '../types';
-import { getCurrentUser } from '../selectors';
-import { setBoardId, setPuzzleId, setUiState, setFileUploadStatus } from '../models';
+import { UiState, PuzzleMetadata, BoardEntity, UsersMap } from '../types';
+import { getCurrentUser, getUsers } from '../selectors';
+import { setBoardId, setPuzzleId, setUiState, setFileUploadStatus, setUserName } from '../models';
 import {
   addUserToExistingBoard,
   createBoard,
@@ -19,6 +19,7 @@ import PuzzleUpload from './PuzzleUpload';
 
 export interface GameHomeProps {
   currentUser: string;
+  users: UsersMap,
   onAddUserToBoard: (id: string, userName: string) => any;
   onCreateBoard: () => any;
   onSetBoardId: (boardId: string) => any;
@@ -27,6 +28,7 @@ export interface GameHomeProps {
   onSetUiState: (uiState: UiState) => any;
   onUpdateLastPlayedDateTime: (boardId: string, dt: Date) => any;
   onLaunchExistingGame: (boardId: string) => any;
+  onSetUserName: (userName: string) => any;
 }
 
 const GameHome = (props: GameHomeProps) => {
@@ -65,6 +67,23 @@ const GameHome = (props: GameHomeProps) => {
       padding: '14px 16px',
       transition: '0.3s'
     };
+
+    function handleSignout() {
+
+      localStorage.setItem('userName', '');
+
+      const users: string[] = [];
+      for (const userKey in props.users) {
+        if (Object.prototype.hasOwnProperty.call(props.users, userKey)) {
+          users.push(userKey);
+        }
+      }
+  
+      if (users.length > 0) {
+        props.onSetUserName(users[0]);  
+      }
+      props.onSetUiState(UiState.SelectUser);
+    }
 
     function handleSelectTab(evt: any) {
 
@@ -110,6 +129,9 @@ const GameHome = (props: GameHomeProps) => {
 
     return (
       <div>
+        <div>
+          <button onClick={handleSignout}>Signout</button>
+        </div>
         <div style={tab}>
           <button style={tabLinks} onClick={handleSelectTab} id='newGameTabSelect' ref={newGameTabSelectRef}>New Games</button>
           <button style={tabLinks} onClick={handleSelectTab} id='inProgressGameTabSelect' ref={inProgressGamesTabSelectRef}>In Progress Games</button>
@@ -138,6 +160,7 @@ const GameHome = (props: GameHomeProps) => {
 function mapStateToProps(state: any) {
   return {
     currentUser: getCurrentUser(state),
+    users: getUsers(state),
   };
 }
 
@@ -151,6 +174,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetUiState: setUiState,
     onUpdateLastPlayedDateTime: updateLastPlayedDateTime,
     onLaunchExistingGame: launchExistingGame,
+    onSetUserName: setUserName,
   }, dispatch);
 };
 

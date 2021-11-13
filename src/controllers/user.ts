@@ -26,6 +26,8 @@ export const loadUsers = () => {
             const matchedUser = users.find(o => o.userName === storedUserName);
             if (!isNil(matchedUser)) {
               selectedUser = matchedUser.userName;
+            } else {
+              selectedUser = users[0].userName;
             }
           } else {
             selectedUser = users[0].userName;
