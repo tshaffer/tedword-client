@@ -103,6 +103,10 @@ const Home = (props: HomeProps) => {
         props.onSetStartPage(StartPage.JoinGame);
         props.onSetStartupBoardId(boardId as string);
 
+        return {
+          startPage: StartPage.JoinGame,
+          startupBoardId: boardId,
+        };
         // users
         //    userNamesOfInvitees: single invited user or list of users invited - retrieved from query string
         //    props.users: map of user objects - loaded from server
@@ -136,7 +140,12 @@ const Home = (props: HomeProps) => {
       }
 
     }
-  };
+
+    return {
+      startPage: StartPage.Standard,
+      startupBoardId: null,
+    };
+};
 
   React.useEffect(() => {
 
@@ -144,7 +153,8 @@ const Home = (props: HomeProps) => {
 
     // TEDTODO - put these startup calls into a controller?
 
-    getStartupParams();
+
+    const startupParams: any = getStartupParams();
 
     const loadPuzzlesMetadataPromise = props.onLoadPuzzlesMetadata();
     const loadBoardsPromise = props.onLoadBoards();
@@ -156,9 +166,9 @@ const Home = (props: HomeProps) => {
 
         if (isNil(loggedInUser)) {
           props.onSetUiState(UiState.SelectUser);
-        } else if (props.startPage === StartPage.JoinGame && isString(props.startupBoardId)) {
+        } else if (startupParams.startPage === StartPage.JoinGame && isString(startupParams.startupBoardId)) {
           props.onSetUiState(UiState.SelectPuzzleOrBoard);
-          props.onLaunchExistingGame(props.startupBoardId);
+          props.onLaunchExistingGame(startupParams.startupBoardId);
         } else {
           props.onSetUiState(UiState.SelectPuzzleOrBoard);
         }
