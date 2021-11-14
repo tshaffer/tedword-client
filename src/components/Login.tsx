@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 
 import { AppState, UiState, User, UsersMap } from '../types';
+import { setStartupAppState } from '../controllers';
 import { getAppState, getUsers } from '../selectors';
 import { setUiState, setUserName } from '../models';
 import { isNil } from 'lodash';
@@ -14,6 +15,7 @@ export interface LoginProps {
   users: UsersMap;
   onSetUserName: (userName: string) => any;
   onSetUiState: (uiState: UiState) => any;
+  onSetStartupAppState: () => any;
 }
 
 const Login = (props: LoginProps) => {
@@ -55,7 +57,7 @@ const Login = (props: LoginProps) => {
     }
     localStorage.setItem('userName', selectedUser.userName);
     props.onSetUserName(selectedUser.userName);
-    props.onSetUiState(UiState.SelectPuzzleOrBoard);
+    props.onSetStartupAppState();
   };
 
   const renderSelectUser = () => {
@@ -98,6 +100,7 @@ const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onSetUserName: setUserName,
     onSetUiState: setUiState,
+    onSetStartupAppState: setStartupAppState,
   }, dispatch);
 };
 

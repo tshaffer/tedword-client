@@ -1,3 +1,4 @@
+export * from './appParameters';
 export * from './appState';
 export * from './board';
 export * from './chat';

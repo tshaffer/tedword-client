@@ -15,11 +15,14 @@ import Login from './Login';
 import GameHome from './GameHome';
 import BoardTop from './BoardTop';
 import { getCurrentUser } from '../selectors';
+import { getStartPage, getStartupBoardId } from '../selectors';
 
 // import * as Pusher from 'pusher-js';
 const Pusher = require('pusher-js');
 
 export interface HomeProps {
+  startPage: StartPage,
+  startupBoardId: string | null,
   appState: AppState,
   currentUser: string | null,
   users: UsersMap;
@@ -142,15 +145,26 @@ const Home = (props: HomeProps) => {
     // TEDTODO - put these startup calls into a controller?
 
     getStartupParams();
-    
+
     const loadPuzzlesMetadataPromise = props.onLoadPuzzlesMetadata();
     const loadBoardsPromise = props.onLoadBoards();
     const loadUsersPromise = props.onLoadUsers();
     Promise.all([loadPuzzlesMetadataPromise, loadBoardsPromise, loadUsersPromise])
       .then(() => {
-        console.log('loads complete');
-        props.onLoginPersistentUser();
+
+        const loggedInUser = props.onLoginPersistentUser();
+
+        if (isNil(loggedInUser)) {
+          props.onSetUiState(UiState.SelectUser);
+        } else if (props.startPage === StartPage.JoinGame && isString(props.startupBoardId)) {
+          props.onSetUiState(UiState.SelectPuzzleOrBoard);
+          props.onLaunchExistingGame(props.startupBoardId);
+        } else {
+          props.onSetUiState(UiState.SelectPuzzleOrBoard);
+        }
+
         setInitializationComplete(true);
+
       });
   }, []);
 
@@ -181,9 +195,11 @@ const Home = (props: HomeProps) => {
 
 function mapStateToProps(state: any) {
   return {
+    startPage: getStartPage(state),
+    startupBoardId: getStartupBoardId(state),
+    appState: getAppState(state),
     currentUser: getCurrentUser(state),
     users: getUsers(state),
-    appState: getAppState(state),
     displayedPuzzle: getDisplayedPuzzle(state),
   };
 }

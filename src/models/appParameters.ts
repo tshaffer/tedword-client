@@ -21,7 +21,7 @@ export const setStartPage = (
   return {
     type: SET_START_PAGE,
     payload: {
-      StartPage: startPage,
+      startPage,
     },
   };
 };

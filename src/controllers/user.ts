@@ -50,7 +50,7 @@ export const loginPersistentUser = () => {
 
     const storedUserName = localStorage.getItem('userName');
     if (!isString(storedUserName)) {
-      return;
+      return null;
     }
 
     const state: TedwordState = getState();
@@ -69,8 +69,10 @@ export const loginPersistentUser = () => {
 
     if (!isNil(matchedUser)) {
       dispatch(setUserName(matchedUser.userName));
-      dispatch(setUiState(UiState.SelectPuzzleOrBoard));
-      return;
+      // dispatch(setUiState(UiState.SelectPuzzleOrBoard));
+      return matchedUser;
     }
+
+    return null;
   };
 };
