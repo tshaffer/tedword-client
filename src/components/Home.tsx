@@ -4,10 +4,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as QueryString from 'query-string';
 
-import { isArray, isEmpty, isNil, isString } from 'lodash';
+import { isEmpty, isNil, isString } from 'lodash';
 
 import { AppState, DisplayedPuzzle, Guess, StartPage, UiState, UsersMap } from '../types';
-import { launchExistingGame, loadBoards, loadPuzzlesMetadata, loadUsers } from '../controllers';
+import { launchExistingGame, loadBoards, loadPuzzlesMetadata, loadUsers, loginPersistentUser, } from '../controllers';
 import { getAppState, getDisplayedPuzzle, getUsers } from '../selectors';
 import { setUiState, setUserName, updateGuess, setStartPage, setStartupBoardId, } from '../models';
 
@@ -29,6 +29,7 @@ export interface HomeProps {
   onLoadBoards: () => any;
   onLoadPuzzlesMetadata: () => any;
   onLoadUsers: () => any;
+  onLoginPersistentUser: () => any;
   onUpdateGuess: (row: number, col: number, puzzleGuess: Guess) => any;
   onLaunchExistingGame: (boardId: string) => any;
   onSetStartPage: (startPage: StartPage) => any;
@@ -40,6 +41,8 @@ let homeProps;
 export let pusher: any;
 
 const Home = (props: HomeProps) => {
+
+  const [initializationComplete, setInitializationComplete] = React.useState<boolean>(false);
 
   homeProps = props;
 
@@ -132,10 +135,11 @@ const Home = (props: HomeProps) => {
     }
   };
 
-
   React.useEffect(() => {
 
     initializePusher();
+
+    // TEDTODO - put these startup calls into a controller?
 
     getStartupParams();
     
@@ -145,10 +149,12 @@ const Home = (props: HomeProps) => {
     Promise.all([loadPuzzlesMetadataPromise, loadBoardsPromise, loadUsersPromise])
       .then(() => {
         console.log('loads complete');
+        props.onLoginPersistentUser();
+        setInitializationComplete(true);
       });
   }, []);
 
-  if (isNil(props.currentUser)) {
+  if (!initializationComplete) {
     return (
       <div>Loading...</div>
     );
@@ -189,6 +195,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onLoadBoards: loadBoards,
     onLoadPuzzlesMetadata: loadPuzzlesMetadata,
     onLoadUsers: loadUsers,
+    onLoginPersistentUser: loginPersistentUser,
     onUpdateGuess: updateGuess,
     onLaunchExistingGame: launchExistingGame,
     onSetStartPage: setStartPage,
