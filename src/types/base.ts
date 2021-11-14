@@ -4,6 +4,7 @@ export const serverUrl = 'http://localhost:8000';
 export const apiUrlFragment = '/api/v1/';
 
 export interface TedwordState {
+  appParameters: AppParameters;
   appState: AppState;
   boardsState: BoardsState;
   chat: ChatState;
@@ -12,6 +13,11 @@ export interface TedwordState {
   guessesState: GuessesState;
   puzzlesState: PuzzlesState,
   users: UsersMap;
+}
+
+export interface AppParameters {
+  startPage: StartPage;
+  startupBoardId: string | null;
 }
 
 export interface AppState {
@@ -56,6 +62,11 @@ export interface PuzzlesState {
 
 export interface UsersMap {
   [id: string]: User; // userName
+}
+
+export enum StartPage {
+  Standard = 'Standard',
+  JoinGame = 'JoinGame',
 }
 
 export enum UiState {

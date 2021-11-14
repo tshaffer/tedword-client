@@ -2,9 +2,12 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { AppState, UiState, UsersMap } from '../types';
+import Select from 'react-select';
+
+import { AppState, UiState, User, UsersMap } from '../types';
 import { getAppState, getUsers } from '../selectors';
 import { setUiState, setUserName } from '../models';
+import { isNil } from 'lodash';
 
 export interface LoginProps {
   appState: AppState,
@@ -15,72 +18,59 @@ export interface LoginProps {
 
 const Login = (props: LoginProps) => {
 
-  const getSelectedUserName = (userNames: string[]) => {
-    const userNameFromRedux: string = props.appState.userName;
-    return userNameFromRedux === '' ? userNames[0] : userNameFromRedux;
-  };
+  const [selectedUser, setSelectedUser] = React.useState<User>(null);
 
-  const getUserNames = (): string[] => {
-    const userNames: string[] = [];
+  const getUsers = (): User[] => {
+    const users: User[] = [];
     for (const userName in props.users) {
       if (Object.prototype.hasOwnProperty.call(props.users, userName)) {
-        userNames.push(userName);
+        const user: User = props.users[userName];
+        users.push(user);
       }
     }
-    return userNames;
+    return users;
   };
 
-  const getUserOptions = (userNames: string[]) => {
-    const userOptions = userNames.map((userName: string) => {
-      return getUserOption(userName);
+  const getUserOptions = (users: User[]) => {
+    const userOptions = users.map((user: User) => {
+      return {
+        value: user,
+        label: user.userName,
+      };
     });
     return userOptions;
   };
 
-  const getUserOption = (userName: string) => {
-    return (
-      <option
-        key={userName}
-        value={userName}
-      >
-        {userName}
-      </option>
-    );
+  // https://react-select.com/typescript
+  // https://github.com/JedWatson/react-select/blob/master/packages/react-select/src/types.ts
+  const handleUserChange = (selectedUser: any) => {
+    console.log('handleUserChange, selected user is:', selectedUser.value);
+    setSelectedUser(selectedUser.value);
   };
-
-  const handleUserChange = (event) => {
-    props.onSetUserName(event.target.value);
-  };
-
 
   const handleLogin = () => {
+    if (isNil(selectedUser)) {
+      console.log('Select a user then click on Login');
+      return;
+    }
+    localStorage.setItem('userName', selectedUser.userName);
+    props.onSetUserName(selectedUser.userName);
     props.onSetUiState(UiState.SelectPuzzleOrBoard);
-    localStorage.setItem('userName', props.appState.userName);
   };
-
 
   const renderSelectUser = () => {
 
-    const userNames: string[] = getUserNames();
-    if (userNames.length === 0) {
-      return null;
-    }
-
-    const userOptions = getUserOptions(userNames);
-
-    const selectedUserName = getSelectedUserName(userNames);
-
+    const users: User[] = getUsers();
+    const userOptions = getUserOptions(users);
+  
     return (
       <div>
-
         <p>Select user</p>
-        <select
-          tabIndex={-1}
-          value={selectedUserName}
+        <Select
+          options={userOptions}
           onChange={handleUserChange}
-        >
-          {userOptions}
-        </select>
+          placeholder={'Select a user'}
+        />
         <p>
           <button
             type="button"
@@ -93,7 +83,6 @@ const Login = (props: LoginProps) => {
     );
 
   };
-
 
   return renderSelectUser();
 };
