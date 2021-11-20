@@ -7,6 +7,8 @@ import {
   ChatMember,
 } from '../types';
 
+import Modeless from './modelessExample';
+
 import { joinChat, sendMessage } from '../controllers/chat';
 import {
   getChatMembers,
@@ -117,16 +119,19 @@ const Chat = (props: ChatProps) => {
   };
 
   const getJoinedChatUI = () => {
-    const chatTo = getChatTo();
-    const chatHistory: JSX.Element[] = getChatHistory();
-    const chatMessageToSend = getChatMessageToSend();
     return (
-      <div>
-        <p>{chatTo}</p>
-        <div>{chatHistory}</div>
-        {chatMessageToSend}
-      </div>
+      <Modeless />
     );
+    // const chatTo = getChatTo();
+    // const chatHistory: JSX.Element[] = getChatHistory();
+    // const chatMessageToSend = getChatMessageToSend();
+    // return (
+    //   <div>
+    //     <p>{chatTo}</p>
+    //     <div>{chatHistory}</div>
+    //     {chatMessageToSend}
+    //   </div>
+    // );
   };
 
   const getChatJsx = () => {
