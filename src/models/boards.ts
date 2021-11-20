@@ -1,4 +1,3 @@
-import { CastConnectedSharp } from '@material-ui/icons';
 import { cloneDeep } from 'lodash';
 import { BoardEntity, BoardsState, CellContentsMap } from '../types';
 import { TedwordModelBaseAction } from './baseAction';

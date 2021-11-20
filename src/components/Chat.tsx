@@ -2,6 +2,8 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import DialogBox from 'react-modeless';
+
 import {
   Chat,
   ChatMember,
@@ -30,6 +32,8 @@ const Chat = (props: ChatProps) => {
 
   chatProps = props;
 
+  const [chatJoined, setChatJoined] = React.useState<boolean>(false);
+
   const [message, setMessage] = React.useState<string>('');
 
   const padded = {
@@ -37,7 +41,8 @@ const Chat = (props: ChatProps) => {
   };
 
   const handleJoinChat = () => {
-    props.onJoinChat(props.currentUser);
+    setChatJoined(true);
+    // props.onJoinChat(props.currentUser);
   };
 
   const handleMessageChanged = (event) => {
@@ -91,9 +96,9 @@ const Chat = (props: ChatProps) => {
   };
 
   const getChatHistory = (): JSX.Element[] => {
-    const chatHistoryJsx: JSX.Element[] = props.chats.map( (chat: Chat) => {
+    const chatHistoryJsx: JSX.Element[] = props.chats.map((chat: Chat) => {
       return getChatMessage(chat);
-    }); 
+    });
     return chatHistoryJsx;
   };
 
@@ -129,12 +134,42 @@ const Chat = (props: ChatProps) => {
     );
   };
 
+  const onClose = () => {
+    setChatJoined(false);
+  };
+
+  const dialogStyle = {
+    width: '60rem',
+    height: '20rem',
+    boxShadow: 'rgba(0,0,0,.3) 0 0.3rem 1rem',
+    background: 'red'
+  };
+
   const getChatJsx = () => {
-    if (!props.joined) {
-      return getNotJoinedChatUI();
+    if (chatJoined) {
+      return (
+        <DialogBox
+          isOpen={true}
+          onClose={onClose}
+          style={dialogStyle}
+          containerClassName={'container'}
+          noBackdrop={true}
+          clickBackdropToClose={false}>
+          <div className='content'>
+            <h2>This is a dialog box</h2>
+            <button onClick={onClose}>Close dialog</button>
+          </div>
+        </DialogBox>
+      );
     } else {
-      return getJoinedChatUI();
+      return getNotJoinedChatUI();
     }
+
+    // if (!props.joined) {
+    //   return getNotJoinedChatUI();
+    // } else {
+    //   return getJoinedChatUI();
+    // }
   };
 
   const chatJsx = getChatJsx();
