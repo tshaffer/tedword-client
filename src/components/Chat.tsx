@@ -32,6 +32,33 @@ const Chat = (props: ChatProps) => {
 
   const [message, setMessage] = React.useState<string>('');
 
+  const chatWindow: any = {
+    display: 'block',
+    position: 'fixed',
+    zIndex: 1,
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%',
+    overflowY: 'auto',
+    backgroundColor: 'rgb(0, 0, 0, 0)',
+  };
+
+  const chatWindowContentStyle: any = {
+    backgroundColor: '#fefefe',
+    margin: '15% auto',
+    padding: '20px',
+    border: '1px solid #888',
+    width: '80%',
+  };
+
+  const closeChatStyle: any = {
+    color: '#aaa',
+    float: 'right',
+    fontSize: '28px',
+    fontWeight: 'bold',
+  };
+
   const padded = {
     margin: '4px',
   };
@@ -91,9 +118,9 @@ const Chat = (props: ChatProps) => {
   };
 
   const getChatHistory = (): JSX.Element[] => {
-    const chatHistoryJsx: JSX.Element[] = props.chats.map( (chat: Chat) => {
+    const chatHistoryJsx: JSX.Element[] = props.chats.map((chat: Chat) => {
       return getChatMessage(chat);
-    }); 
+    });
     return chatHistoryJsx;
   };
 
@@ -116,15 +143,27 @@ const Chat = (props: ChatProps) => {
     );
   };
 
+  const chatWindowHide = () => {
+    console.log('chatWindowHide');
+  };
+
   const getJoinedChatUI = () => {
-    const chatTo = getChatTo();
-    const chatHistory: JSX.Element[] = getChatHistory();
-    const chatMessageToSend = getChatMessageToSend();
+    // const chatTo = getChatTo();
+    // const chatHistory: JSX.Element[] = getChatHistory();
+    // const chatMessageToSend = getChatMessageToSend();
+    // return (
+    //   <div>
+    //     <p>{chatTo}</p>
+    //     <div>{chatHistory}</div>
+    //     {chatMessageToSend}
+    //   </div>
+    // );
     return (
-      <div>
-        <p>{chatTo}</p>
-        <div>{chatHistory}</div>
-        {chatMessageToSend}
+      <div style={chatWindow}>
+        <div style={chatWindowContentStyle}>
+          <span style={closeChatStyle} onClick={chatWindowHide}>&times;</span>
+          <div>pizza</div>
+        </div>
       </div>
     );
   };
