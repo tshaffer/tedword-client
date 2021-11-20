@@ -3,7 +3,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import ReactModal = require('react-modal');
-import Select from 'react-select';
 
 import { isNil } from 'lodash';
 
@@ -31,8 +30,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
   const elapsedGameTimerRef = React.useRef(false);
 
   const [showSendInviteModal, setShowSendInviteModal] = React.useState(false);
-  const [inviteeList, setInviteeList] = React.useState([]);
-  const [inviteeUrl, setInviteeUrl] = React.useState('');
+  const [joinGameUrl, setJoinGameUrl] = React.useState('');
 
   React.useEffect(() => {
     initVisibilityHandler();
@@ -60,7 +58,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
       bottom: 'auto',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
-      minHeight: '120px',
+      minHeight: '105px',
       minWidth: '150px',
     },
   };
@@ -70,7 +68,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
   };
 
   const paragraphWithBottomMarginStyle = {
-    marginBottom: '32px',
+    marginBottom: '10px',
   };
 
   const initVisibilityHandler = () => {
@@ -100,29 +98,15 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     return elapsedTimeString;
   };
 
-  const getInviteeOptions = () => {
-    const inviteeOptions: any[] = [];
-    for (const userKey in props.users) {
-      if (Object.prototype.hasOwnProperty.call(props.users, userKey)) {
-        const user: User = props.users[userKey];
-        inviteeOptions.push({
-          value: user,
-          label: user.userName
-        });
-      }
-    }
-    return inviteeOptions;
-  };
 
   const getLinkDiv = () => {
-    if (inviteeUrl.length > 0) {
+    if (joinGameUrl.length > 0) {
       return (
         <div>
-          <p>Copy and paste into a browser</p>
           <p
             style={paragraphWithBottomMarginStyle}
           >
-            {inviteeUrl}
+            {joinGameUrl}
           </p>
         </div>
       );
@@ -178,6 +162,11 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     if (props.puzzlePlayActive) {
       pauseTimer();
     }
+
+    // http://localhost:8000/?startpage=joinGame&boardId=632d1f50-0f82-404e-8058-4f3079e4b511
+    const inviteUrl = serverUrl + '/?startpage=joinGame&boardId=' + props.boardId;
+    setJoinGameUrl(inviteUrl);
+
     setShowSendInviteModal(true);
   };
 
@@ -188,28 +177,21 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     }
   };
 
-  const handleGenerateLink = () => {
-    // http://localhost:8000/?startpage=joinGame&user=Joel&boardId=632d1f50-0f82-404e-8058-4f3079e4b511&user=Morgan
-    console.log('Send invitation to ', inviteeList);
+  const handleCopyToClipboard = () => {
 
-    let path = serverUrl + '/?startpage=joinGame&boardId=' + props.boardId;
-    for (const invitee of inviteeList) {
-      path += '&user=' + invitee.value.userName;
-    }
+    const path = serverUrl + '/?startpage=joinGame&boardId=' + props.boardId;
     console.log('path');
     console.log(path);
+    
+    navigator.clipboard.writeText(path).then(function() {
+      /* clipboard successfully set */
+      console.log('success');
+    }, function() {
+      /* clipboard write failed */
+      console.log('failure');
+    });
 
-    setInviteeUrl(path);
-  };
-
-  // https://react-select.com/typescript
-  // https://github.com/JedWatson/react-select/blob/master/packages/react-select/src/types.ts
-  // const handleInviteesSelectChange = (option: readonly Option[], actionMeta: ActionMeta<Option>) => {
-  const handleInviteesSelectChange = (selectedUsers: User[], actionMeta: any) => {
-    console.log('handleInviteesSelectChange');
-    console.log(selectedUsers);
-    console.log(actionMeta);
-    setInviteeList(selectedUsers);
+    setJoinGameUrl(path);
   };
 
   const linkDiv = getLinkDiv();
@@ -235,16 +217,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
           ariaHideApp={false}
         >
           <div>
-            <p>Invite others to play</p>
-            <Select
-              options={getInviteeOptions()}
-              onChange={handleInviteesSelectChange}
-              isMulti
-            /* menuPlacement={'auto'} */
-            /* captureMenuScroll={true} */
-            /* maxMenuHeight={256} */
-            /* minMenuHeight={256} */
-            />
+            <p>Link to join this game</p>
             {linkDiv}
             <div
               style={{
@@ -254,10 +227,9 @@ const BoardToolbar = (props: BoardToolbarProps) => {
               }}
             >
               <button
-                onClick={handleGenerateLink}
-                disabled={inviteeList.length === 0}
+                onClick={handleCopyToClipboard}
               >
-                Generate Link
+                Copy to Clipboard
               </button>
               <button
                 onClick={handleHideSendInvite}
