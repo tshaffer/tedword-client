@@ -153,18 +153,21 @@ const Chat = (props: ChatProps) => {
     //     {chatMessageToSend}
     //   </div>
     // );
+    /*
+        <div style={content}>
+          <h2>This is a dialog box</h2>
+          <button onClick={onCloseChat}>Close dialog</button>
+        </div>
+    */
     return (
-      <ModelessDialog>
+      <ModelessDialog
         isOpen={true}
         onClose={onCloseChat}
         noBackdrop={true}
         clickBackdropToClose={false}
         style={chatDialogStyle}
         containerClassName={container}
-        <div style={content}>
-          <h2>This is a dialog box</h2>
-          <button onClick={onCloseChat}>Close dialog</button>
-        </div>
+      >
       </ModelessDialog>
     );
   };
