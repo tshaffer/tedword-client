@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 export interface ModelessDialogProps {
-  // children: any;
+  children: any;
   className: string;
   containerClassName: string;
   backdropClassName: string;
@@ -102,8 +102,7 @@ const ModelessDialog = (props: ModelessDialogProps) => {
     <div style={containerStyle}>
       <div style={dialogStyle}>
         <div style={contentStyle}>
-          <h2>This is a dialog box</h2>
-          <button onClick={close}>Close dialog</button>
+          {props.children}
         </div>
       </div>
     </div>
@@ -112,7 +111,7 @@ const ModelessDialog = (props: ModelessDialogProps) => {
 
 function mapStateToProps(state: any, ownProps: any) {
   return {
-    // children: ownProps.children,
+    children: ownProps.children,
     className: ownProps.className,
     containerClassName: ownProps.containerClassName,
     backdropClassName: ownProps.backdropClassName,

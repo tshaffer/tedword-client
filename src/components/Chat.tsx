@@ -160,15 +160,20 @@ const Chat = (props: ChatProps) => {
         </div>
     */
     return (
-      <ModelessDialog
-        isOpen={true}
-        onClose={onCloseChat}
-        noBackdrop={true}
-        clickBackdropToClose={false}
-        style={chatDialogStyle}
-        containerClassName={container}
-      >
-      </ModelessDialog>
+      <div>
+        <ModelessDialog
+          isOpen={true}
+          onClose={onCloseChat}
+          noBackdrop={true}
+          clickBackdropToClose={false}
+          style={chatDialogStyle}
+          containerClassName={container}>
+          <div style={content}>
+            <h2>This is a child dialog box</h2>
+            <button onClick={onCloseChat}>Close dialog</button>
+          </div>
+        </ModelessDialog>
+      </div >
     );
   };
 
