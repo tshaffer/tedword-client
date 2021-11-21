@@ -7,6 +7,8 @@ import {
   ChatMember,
 } from '../types';
 
+import ModelessDialog from './ModelessDialog';
+
 import { joinChat, sendMessage } from '../controllers/chat';
 import {
   getChatMembers,
@@ -34,6 +36,26 @@ const Chat = (props: ChatProps) => {
 
   const padded = {
     margin: '4px',
+  };
+
+  const chatDialogStyle = {
+    width: '60rem',
+    height: '20rem',
+    boxShadow: 'rgba(0,0,0,.3) 0 0.3rem 1rem',
+    background: 'red'
+  };
+
+  const container = {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    maxWidth: '720px',
+    padding: '1em',
+  };
+
+  const content = {
+    marginLeft: '5em',
+    fontStyle: 'italic',
+    color: 'white',
   };
 
   const handleJoinChat = () => {
@@ -91,9 +113,9 @@ const Chat = (props: ChatProps) => {
   };
 
   const getChatHistory = (): JSX.Element[] => {
-    const chatHistoryJsx: JSX.Element[] = props.chats.map( (chat: Chat) => {
+    const chatHistoryJsx: JSX.Element[] = props.chats.map((chat: Chat) => {
       return getChatMessage(chat);
-    }); 
+    });
     return chatHistoryJsx;
   };
 
@@ -116,16 +138,34 @@ const Chat = (props: ChatProps) => {
     );
   };
 
+  const onCloseChat = () => {
+    console.log('onCloseChat invoked');
+  };
+
   const getJoinedChatUI = () => {
-    const chatTo = getChatTo();
-    const chatHistory: JSX.Element[] = getChatHistory();
-    const chatMessageToSend = getChatMessageToSend();
+    // const chatTo = getChatTo();
+    // const chatHistory: JSX.Element[] = getChatHistory();
+    // const chatMessageToSend = getChatMessageToSend();
+    // return (
+    //   <div>
+    //     <p>{chatTo}</p>
+    //     <div>{chatHistory}</div>
+    //     {chatMessageToSend}
+    //   </div>
+    // );
     return (
-      <div>
-        <p>{chatTo}</p>
-        <div>{chatHistory}</div>
-        {chatMessageToSend}
-      </div>
+      <ModelessDialog>
+        isOpen={true}
+        onClose={onCloseChat}
+        noBackdrop={true}
+        clickBackdropToClose={false}
+        style={chatDialogStyle}
+        containerClassName={container}
+        <div style={content}>
+          <h2>This is a dialog box</h2>
+          <button onClick={onCloseChat}>Close dialog</button>
+        </div>
+      </ModelessDialog>
     );
   };
 
