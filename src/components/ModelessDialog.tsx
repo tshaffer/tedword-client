@@ -17,6 +17,31 @@ const ModelessDialog = (props: ModelessDialogProps) => {
 
   console.log(props);
 
+  const containerStyle = {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    maxWidth: '720px',
+    padding: '1em',
+  };
+
+  const dialogStyle: any = {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    zIndex: 9999,
+    width: '60rem',
+    height: '20rem',
+    boxShadow: 'rgba(0,0,0,.3) 0 0.3rem 1rem',
+    background: 'red'
+  };
+
+  const contentStyle = {
+    marginLeft: '5em',
+    fontStyle: 'italic',
+    color: 'white',
+  };
+
   const defaultDialogStyle = {
     position: 'fixed',
     top: '50%',
@@ -66,14 +91,20 @@ const ModelessDialog = (props: ModelessDialogProps) => {
   //         onClick={props.clickBackdropToClose && close} />}
   //   </div>
   // );
-  console.log('finalDialogStyle');
-  console.log(finalDialogStyle);
-  console.log('defaultDialogStyle');
-  console.log(defaultDialogStyle);
+  // return (
+  //   <div>
+  //     <div style={finalDialogStyle}>
+  //       buried pizza
+  //     </div>
+  //   </div>
+  // );
   return (
-    <div>
-      <div style={finalDialogStyle}>
-        buried pizza
+    <div style={containerStyle}>
+      <div style={dialogStyle}>
+        <div style={contentStyle}>
+          <h2>This is a dialog box</h2>
+          <button>Close dialog</button>
+        </div>
       </div>
     </div>
   );
