@@ -1,5 +1,5 @@
 var webpack = require('webpack');
-var CopyWebpackPlugin =  require('copy-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -29,7 +29,18 @@ module.exports = {
             loader: 'ts-loader'
           }
         ]
-      }
+      },
+      {
+        test: /\.(png|jp(e*)g|svg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'images/[hash]-[name].[ext]',
+            },
+          },
+        ],
+      },
     ]
   },
   plugins: [
