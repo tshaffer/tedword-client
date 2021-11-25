@@ -16,6 +16,7 @@ import {
   getCurrentUser,
   getJoinedChat,
 } from '../selectors';
+import ChatWindow from './ChatWindow';
 
 export interface ChatProps {
   currentUser: string;
@@ -169,7 +170,7 @@ const Chat = (props: ChatProps) => {
           style={chatDialogStyle}
           containerClassName={container}>
           <div style={content}>
-            <h2>This is a child dialog box</h2>
+            <ChatWindow/>
             <button onClick={onCloseChat}>Close dialog</button>
           </div>
         </ModelessDialog>
@@ -186,8 +187,9 @@ const Chat = (props: ChatProps) => {
   };
 
   const chatJsx = getChatJsx();
+  //     <div style={{ position: 'absolute', bottom: '0px', left: '0px' }}>
   return (
-    <div style={{ position: 'absolute', bottom: '0px', left: '0px' }}>
+    <div style={{ position: 'absolute', top: '0px', left: '0px' }}>
       <h3>Chat</h3>
       {chatJsx}
     </div>

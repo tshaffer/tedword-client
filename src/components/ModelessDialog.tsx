@@ -71,33 +71,6 @@ const ModelessDialog = (props: ModelessDialogProps) => {
     }
   };
 
-  // return (
-  //   <div className={props.containerClassName}>
-  //     <div className={props.className} style={finalDialogStyle}>
-  //       {props.children}
-  //     </div>
-  //     {!props.noBackdrop &&
-  //       <div className={props.backdropClassName} style={finalBackdropStyle}
-  //         onClick={props.clickBackdropToClose && close} />}
-  //   </div>
-  // );
-  // return (
-  //   <div>
-  //     <div style={finalDialogStyle}>
-  //       {props.children}
-  //     </div>
-  //     {!props.noBackdrop &&
-  //       <div className={props.backdropClassName} style={finalBackdropStyle}
-  //         onClick={props.clickBackdropToClose && close} />}
-  //   </div>
-  // );
-  // return (
-  //   <div>
-  //     <div style={finalDialogStyle}>
-  //       buried pizza
-  //     </div>
-  //   </div>
-  // );
   return (
     <div style={containerStyle}>
       <div style={dialogStyle}>

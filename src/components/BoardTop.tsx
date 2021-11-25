@@ -29,6 +29,7 @@ const BoardTop = (props: BoardTopProps) => {
 
   return (
     <div style={{ position: 'relative', height: '1080px' }}>
+      <Chat/>
       <div style={{ maxHeight: '800px', overflow: 'auto' }}>
         <BoardToolbar />
         <Board />
@@ -40,7 +41,6 @@ const BoardTop = (props: BoardTopProps) => {
           puzzleSpec={props.puzzleSpec}
         />
       </div>
-      <Chat/>
     </div>
   );
 };
