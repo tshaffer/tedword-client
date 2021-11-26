@@ -87,7 +87,6 @@ const Chat = (props: ChatProps) => {
     );
   };
 
-
   const getChatTo = () => {
     const chatUsers: string[] = [];
     for (const chatMember of props.chatMembers) {
@@ -170,7 +169,7 @@ const Chat = (props: ChatProps) => {
           style={chatDialogStyle}
           containerClassName={container}>
           <div style={content}>
-            <ChatWindow/>
+            <ChatWindow />
             <button onClick={onCloseChat}>Close dialog</button>
           </div>
         </ModelessDialog>
