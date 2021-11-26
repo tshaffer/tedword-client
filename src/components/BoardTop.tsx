@@ -25,6 +25,10 @@ export interface BoardTopProps {
         <p>line two of pizza</p>
       </div>
 */
+//       <Chat/>
+
+// for now, put chat window between BoardToobar and Board
+
 const BoardTop = (props: BoardTopProps) => {
 
   return (

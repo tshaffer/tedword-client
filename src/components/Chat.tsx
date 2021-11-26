@@ -60,6 +60,7 @@ const Chat = (props: ChatProps) => {
   };
 
   const handleJoinChat = () => {
+    console.log('handleJoinChat invoked in Chat.tsx');
     props.onJoinChat(props.currentUser);
   };
 
@@ -159,6 +160,8 @@ const Chat = (props: ChatProps) => {
           <button onClick={onCloseChat}>Close dialog</button>
         </div>
     */
+    //             <button onClick={onCloseChat}>Close dialog</button>
+
     return (
       <div>
         <ModelessDialog
@@ -170,7 +173,6 @@ const Chat = (props: ChatProps) => {
           containerClassName={container}>
           <div style={content}>
             <ChatWindow />
-            <button onClick={onCloseChat}>Close dialog</button>
           </div>
         </ModelessDialog>
       </div >
@@ -178,18 +180,18 @@ const Chat = (props: ChatProps) => {
   };
 
   const getChatJsx = () => {
-    if (!props.joined) {
-      return getNotJoinedChatUI();
-    } else {
-      return getJoinedChatUI();
-    }
+    // if (!props.joined) {
+    //   return getNotJoinedChatUI();
+    // } else {
+    //   return getJoinedChatUI();
+    // }
+    return getJoinedChatUI();
   };
 
   const chatJsx = getChatJsx();
   //     <div style={{ position: 'absolute', bottom: '0px', left: '0px' }}>
   return (
     <div style={{ position: 'absolute', top: '0px', left: '0px' }}>
-      <h3>Chat</h3>
       {chatJsx}
     </div>
   );

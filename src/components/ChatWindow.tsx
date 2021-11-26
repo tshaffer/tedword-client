@@ -29,6 +29,7 @@ const ChatWindow = (props: ChatWindowProps) => {
   const openChatBubble = () => {
     setChatBubbleOpen(true);
     chatBubbleRef.current.classList.toggle('open');
+    props.onJoinChat(props.currentUser);
   };
 
   const closeChatBubble = () => {
@@ -41,7 +42,6 @@ const ChatWindow = (props: ChatWindowProps) => {
   };
 
   const handleKeyDown = (event) => {
-    console.log('handleKeyDown invoked');
     if (event.key === 'Enter') {
       console.log('send message:', message);
       props.onSendMessage(message);
@@ -60,16 +60,18 @@ const ChatWindow = (props: ChatWindowProps) => {
   };
 
   const getSenderOther = (chat: Chat): any => {
-    <div className='sender-other'>
-      <div className='user-avatar'>
-        <div className='img-container'>
-          <img src='https://source.unsplash.com/random/35x35' />
-        </div>
-        <div className='other-message'>
-          {chat.message}
+    return (
+      <div className='sender-other'>
+        <div className='user-avatar'>
+          <div className='img-container'>
+            <img src='https://source.unsplash.com/random/35x35' />
+          </div>
+          <div className='other-message'>
+            {chat.message}
+          </div>
         </div>
       </div>
-    </div>
+    );
   };
 
   const getChat = (chat: Chat): any => {

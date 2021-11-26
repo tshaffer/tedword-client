@@ -20,9 +20,12 @@ const ModelessDialog = (props: ModelessDialogProps) => {
   const containerStyle = {
     marginLeft: 'auto',
     marginRight: 'auto',
-    maxWidth: '720px',
+    maxWidth: '290px',
     padding: '1em',
   };
+
+  // width: '60rem',
+  // height: '20rem',
 
   const dialogStyle: any = {
     position: 'fixed',
@@ -30,8 +33,6 @@ const ModelessDialog = (props: ModelessDialogProps) => {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     zIndex: 9999,
-    width: '60rem',
-    height: '20rem',
     boxShadow: 'rgba(0,0,0,.3) 0 0.3rem 1rem',
     background: 'red'
   };
