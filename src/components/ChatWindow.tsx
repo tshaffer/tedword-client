@@ -3,14 +3,22 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { CSSProperties } from 'hoist-non-react-statics/node_modules/@types/react';
 
+import '../styles/app.css';
+
 export interface ChatWindowProps {
   placeholder: string;
 }
 
+// https://stackoverflow.com/questions/39853646/how-to-import-a-css-file-in-a-react-component
+
 // https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors
 // https://stackoverflow.com/questions/13444647/css-class-definition-with-multiple-identifiers
 
+let chatBubbleRef;
+
 const ChatWindow = (props: ChatWindowProps) => {
+
+  chatBubbleRef = React.createRef();
 
   const [chatBubbleOpen, setChatBubbleOpen] = React.useState<boolean>(false);
 
@@ -152,11 +160,13 @@ const ChatWindow = (props: ChatWindowProps) => {
   const openChatBubble = () => {
     console.log('openChatBubble');
     setChatBubbleOpen(true);
+    chatBubbleRef.current.classList.toggle('open');
   };
 
   const closeChatBubble = () => {
     console.log('closeChatBubble');
     setChatBubbleOpen(false);
+    chatBubbleRef.current.classList.toggle('open');
   };
 
   const modalStyle = {
@@ -171,44 +181,53 @@ const ChatWindow = (props: ChatWindowProps) => {
   };
 
 
+  //     <div style={chatBubble}>
+
   return (
-    <div style={chatBubble}>
-      <div style={chatContainer}>
-        <div style={chatHeader}>
-          <div style={userAvatar} onClick={openChatBubble}>
-            <div style={userAvatarAndImgContainer}>
-              <img src="https://source.unsplash.com/random/35x35" />
+    <div id='chat-bubble' ref={chatBubbleRef}>
+      <div id='chat-container'>
+        <div className='chat-header'>
+          <div className='user-avatar' onClick={openChatBubble}>
+            <div className='img-container'>
+              <img src='https://source.unsplash.com/random/35x35' />
             </div>
-            <div style={userStatusInfo}>
-              <a
-                style={userStatusInfoA}
-                href="#"
-              >
+            <div className='user-status-info'>
+              <a href='#'>
                 John Doe
               </a>
-              <p style={userStatusInfoP}>Active now</p>
+              <p>Active now</p>
             </div>
           </div>
-          <div style={chatComm}>
-            <a href="#" onClick={closeChatBubble}>
-              <img src="../icons/closeIcon.svg" />
+          <div className='chat-comm'>
+            <a href='#' onClick={closeChatBubble}>
+              <img src='../icons/closeIcon.svg' />
             </a>
           </div>
         </div>
-        <div style={chatBody}>
-          <div style={senderOther}>
-            <div style={userAvatar}>
-              <div style={userAvatarAndImgContainer}>
-                <img src="https://source.unsplash.com/random/35x35" />
+        <div className='chat-body'>
+          <div className='sender-other'>
+            <div className='user-avatar'>
+              <div className='img-container'>
+                <img src='https://source.unsplash.com/random/35x35' />
               </div>
-              <div style={otherMessage}>
+              <div className='other-message'>
                 Hi there!
               </div>
             </div>
           </div>
         </div>
-        <div style={chatFooter}>
-          <input type="textarea" placeholder={'Type a message...'} />
+
+        <div className='sender-me'>
+          <div className='my-message'>
+            Hello
+          </div>
+          <div className='seen-at'>
+            <img className='check' src='./icons/check.svg' /> Seen 8:00 AM
+          </div>
+        </div>
+
+        <div className='chat-footer'>
+          <input type='textarea' placeholder={'Type a message...'} />
         </div>
       </div>
     </div>

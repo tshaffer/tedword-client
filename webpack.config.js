@@ -17,7 +17,20 @@ module.exports = {
   target: 'web',
 
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.json']
+    extensions: ['.ts', '.tsx', '.js', '.json', '.css'],
+    fallback: {
+      'fs': false,
+      'tls': false,
+      'net': false,
+      'path': false,
+      'zlib': false,
+      'http': false,
+      'https': false,
+      'stream': false,
+      'crypto': false,
+      'buffer': require.resolve('buffer'),
+      'crypto-browserify': require.resolve('crypto-browserify'),
+    }
   },
 
   module: {
@@ -41,16 +54,15 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
     ]
   },
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'),
-    }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
     }),
     new CopyWebpackPlugin([
       { from: '../tedword-client/build/bundle.js', to: '../../tedword/public/build' },
