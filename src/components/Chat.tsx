@@ -55,7 +55,6 @@ const Chat = (props: ChatProps) => {
 
   const content = {
     marginLeft: '5em',
-    fontStyle: 'italic',
     color: 'white',
   };
 

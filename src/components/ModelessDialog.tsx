@@ -36,7 +36,7 @@ const ModelessDialog = (props: ModelessDialogProps) => {
 
   const contentStyle = {
     marginLeft: '5em',
-    fontStyle: 'italic',
+    // fontStyle: 'italic',
     color: 'white',
   };
 

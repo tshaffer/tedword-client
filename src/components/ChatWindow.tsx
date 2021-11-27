@@ -59,16 +59,38 @@ const ChatWindow = (props: ChatWindowProps) => {
     );
   };
 
+  const getDateTimeString = (dt: Date): string => {
+    const month = (dt.getMonth() + 1).toString();
+    const d = dt.getDate().toString();
+    const y = (dt.getFullYear() - 2000).toString();
+
+    let h = dt.getHours();
+    let amPM = 'AM';
+    if (h === 0) {
+      h = 12;
+    } else if (h === 12) {
+      amPM = 'PM';
+    } else if (h > 12) {
+      h = h - 12;
+      amPM = 'PM';
+    }
+    const hS: string = h.toString();
+
+    const minute = dt.getMinutes().toString();
+    return (month + '/' + d + '/' + y + ', ' + hS + ':' + minute + ' ' + amPM);
+  };
+
   const getSenderOther = (chat: Chat): any => {
     return (
       <div className='sender-other'>
-        <div className='user-avatar'>
-          <div className='img-container'>
-            <img src='https://source.unsplash.com/random/35x35' />
-          </div>
-          <div className='other-message'>
-            {chat.message}
-          </div>
+        <div className='sender-date-time'>
+          {getDateTimeString(chat.timestamp)}
+        </div>
+        <div className='sender-name'>
+          {chat.sender}
+        </div>
+        <div className='other-message'>
+          {chat.message}
         </div>
       </div>
     );

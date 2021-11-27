@@ -19,16 +19,6 @@ export interface BoardTopProps {
   puzzleSpec: PuzzleSpec;
 }
 
-/*
-      <div style={{ position: 'absolute', bottom: '0px', left: '0px' }}>
-        <p>line one of pizza</p>
-        <p>line two of pizza</p>
-      </div>
-*/
-//       <Chat/>
-
-// for now, put chat window between BoardToobar and Board
-
 const BoardTop = (props: BoardTopProps) => {
 
   return (

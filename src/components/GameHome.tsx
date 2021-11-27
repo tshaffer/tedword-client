@@ -16,6 +16,7 @@ import {
 import NewGames from './NewGames';
 import ExistingGames from './ExistingGames';
 import PuzzleUpload from './PuzzleUpload';
+import Chat from './Chat';
 
 export interface GameHomeProps {
   currentUser: string;
@@ -78,9 +79,9 @@ const GameHome = (props: GameHomeProps) => {
           users.push(userKey);
         }
       }
-  
+
       if (users.length > 0) {
-        props.onSetUserName(users[0]);  
+        props.onSetUserName(users[0]);
       }
       props.onSetUiState(UiState.SelectUser);
     }
@@ -129,6 +130,7 @@ const GameHome = (props: GameHomeProps) => {
 
     return (
       <div>
+        <Chat />
         <div>
           <button onClick={handleSignout}>Signout</button>
         </div>

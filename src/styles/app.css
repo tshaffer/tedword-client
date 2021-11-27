@@ -106,6 +106,17 @@ body {
   padding: 8px;
 }
 
+.sender-date-time {
+  color: gray;
+  font-size: 12px;
+  margin: auto;
+}
+
+.sender-name {
+  color: gray;
+  font-size: 12px;
+}
+
 .sender-other .user-avatar .img-container img {
   width: 25px;
 }
@@ -119,6 +130,7 @@ body {
 
 .sender-other .other-message {
   background-color: #f1f0f0;
+  color: #000;
   border-radius: 25px;
   padding: 8px 11px;
   font-size: 14px;
