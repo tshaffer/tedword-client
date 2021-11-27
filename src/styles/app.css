@@ -104,6 +104,8 @@ body {
 
 .chat-body {
   padding: 8px;
+  max-height: 272px;
+  overflow-y:auto;
 }
 
 .sender-date-time {
