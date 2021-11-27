@@ -23,7 +23,7 @@ const ChatWindow = (props: ChatWindowProps) => {
   chatBubbleRef = React.createRef();
 
   const [chatBubbleOpen, setChatBubbleOpen] = React.useState<boolean>(false);
-
+  
   const [message, setMessage] = React.useState<string>('');
 
   const openChatBubble = () => {
@@ -51,7 +51,7 @@ const ChatWindow = (props: ChatWindowProps) => {
 
   const getSenderMe = (chat: Chat): any => {
     return (
-      <div className='sender-me' key={chat.timestamp.toString()}>
+      <div className='sender-me' key={chat.timestamp.toString()+ 'me'}>
         <div className='my-message'>
           {chat.message}
         </div>
@@ -82,7 +82,7 @@ const ChatWindow = (props: ChatWindowProps) => {
 
   const getSenderOther = (chat: Chat): any => {
     return (
-      <div className='sender-other' key={chat.timestamp.toString()}>
+      <div className='sender-other' key={chat.timestamp.toString() + chat.sender}>
         <div className='sender-date-time'>
           {getDateTimeString(chat.timestamp)}
         </div>
