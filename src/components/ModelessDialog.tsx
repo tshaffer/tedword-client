@@ -24,13 +24,10 @@ const ModelessDialog = (props: ModelessDialogProps) => {
     padding: '1em',
   };
 
-  // width: '60rem',
-  // height: '20rem',
-
   const dialogStyle: any = {
     position: 'fixed',
-    top: '50%',
-    left: '50%',
+    top: '90%',
+    left: '95%',
     transform: 'translate(-50%, -50%)',
     zIndex: 9999,
     boxShadow: 'rgba(0,0,0,.3) 0 0.3rem 1rem',
