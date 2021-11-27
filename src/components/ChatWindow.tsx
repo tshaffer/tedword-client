@@ -51,7 +51,7 @@ const ChatWindow = (props: ChatWindowProps) => {
 
   const getSenderMe = (chat: Chat): any => {
     return (
-      <div className='sender-me'>
+      <div className='sender-me' key={chat.timestamp.toString()}>
         <div className='my-message'>
           {chat.message}
         </div>
@@ -82,7 +82,7 @@ const ChatWindow = (props: ChatWindowProps) => {
 
   const getSenderOther = (chat: Chat): any => {
     return (
-      <div className='sender-other'>
+      <div className='sender-other' key={chat.timestamp.toString()}>
         <div className='sender-date-time'>
           {getDateTimeString(chat.timestamp)}
         </div>

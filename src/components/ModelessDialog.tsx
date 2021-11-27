@@ -15,8 +15,6 @@ export interface ModelessDialogProps {
 
 const ModelessDialog = (props: ModelessDialogProps) => {
 
-  console.log(props);
-
   const containerStyle = {
     marginLeft: 'auto',
     marginRight: 'auto',
