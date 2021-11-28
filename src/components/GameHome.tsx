@@ -128,9 +128,10 @@ const GameHome = (props: GameHomeProps) => {
     const settingsTabSelectRef = React.createRef<any>();
     const settingsContentRef = React.createRef<any>();
 
+    //         <Chat />
+
     return (
       <div>
-        <Chat />
         <div>
           <button onClick={handleSignout}>Signout</button>
         </div>

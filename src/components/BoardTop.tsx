@@ -21,9 +21,10 @@ export interface BoardTopProps {
 
 const BoardTop = (props: BoardTopProps) => {
 
+  //       <Chat/>
+
   return (
     <div style={{ position: 'relative', height: '1080px' }}>
-      <Chat/>
       <div style={{ maxHeight: '800px', overflow: 'auto' }}>
         <BoardToolbar />
         <Board />
