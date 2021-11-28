@@ -55,11 +55,11 @@ const Board = (props: BoardProps) => {
 
   if (!isNil(props.gameState)) {
     if (!isNil(props.gameState.focusedAcrossClue)) {
-      acrossClue = props.gameState.focusedAcrossClue.number.toString() + 'a (' + props.gameState.focusedAcrossClue.length.toString() + ')' + props.gameState.focusedAcrossClue.text;
+      acrossClue = props.gameState.focusedAcrossClue.number.toString() + ' Across (' + props.gameState.focusedAcrossClue.length.toString() + ')' + props.gameState.focusedAcrossClue.text;
       acrossUserEntry = getUserEntry('across', props.gameState.focusedAcrossClue.number.toString());
     }
     if (!isNil(props.gameState.focusedDownClue)) {
-      downClue = props.gameState.focusedDownClue.number.toString() + 'd (' + props.gameState.focusedDownClue.length.toString() + ')' + props.gameState.focusedDownClue.text;
+      downClue = props.gameState.focusedDownClue.number.toString() + ' Down (' + props.gameState.focusedDownClue.length.toString() + ')' + props.gameState.focusedDownClue.text;
       downUserEntry = getUserEntry('down', props.gameState.focusedDownClue.number.toString());
     }
   }
@@ -70,11 +70,22 @@ const Board = (props: BoardProps) => {
   }
 
   return (
-    <div>
-      <p>{acrossClue}</p>
-      <p>{acrossUserEntry}</p>
-      <p>{downClue}</p>
-      <p>{downUserEntry}</p>
+    <div style={{
+      width: '100%',
+      marginTop: '8px',
+      marginBottom: '16px',
+    }}>
+      <div style={{
+        marginRight: '32px',
+        float: 'left',
+      }}>
+        <p>{acrossClue}</p>
+        <p>{acrossUserEntry}</p>
+      </div>
+      <div>
+        <p>{downClue}</p>
+        <p>{downUserEntry}</p>
+      </div>
     </div>
   );
 };
