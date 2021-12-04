@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ThemeContext } from 'styled-components';
 import { CrosswordSizeContext } from './context';
 
-import { Guess } from '../../types';
+import { CrosswordCellCoordinate, Guess } from '../../types';
 
 export interface CellProps {
   row: number,
@@ -12,7 +12,7 @@ export interface CellProps {
   number: string,
   focus: boolean,
   highlight: boolean,
-  onClick: (cellData: any) => any;
+  onClick: (cellData: CrosswordCellCoordinate) => any;
 }
 
 const Cell = (props: CellProps) => {
@@ -47,6 +47,7 @@ const Cell = (props: CellProps) => {
   };
   const cellStyle = fillStyle;
 
+  // WHY IS THIS NOT INVOKED IF IT ALREADY HAS FOCUS??
   const handleClick = (event) => {
     event.preventDefault();
     props.onClick({ row, col });

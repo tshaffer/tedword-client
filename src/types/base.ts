@@ -207,6 +207,17 @@ export interface Guess {
 export type RowOfGuesses = Guess[];
 export type GuessesGrid = RowOfGuesses[];
 
+export interface CrosswordCellCoordinate {
+  row: number,
+  col: number,
+}
+
+export interface FakeCellData {
+  row: number,
+  col: number,
+  used: boolean,
+}
+
 export interface GridSquareSpec {
   used: boolean;
   number: string;

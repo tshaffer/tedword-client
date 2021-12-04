@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { Guess, CluesByDirection, GuessesGrid, GridSquare, GridSquareSpec, GridSpec } from '../../types';
+import { Guess, CluesByDirection, GuessesGrid, GridSquare, GridSquareSpec, GridSpec, CrosswordCellCoordinate, FakeCellData } from '../../types';
 
 import { ThemeContext, ThemeProvider } from 'styled-components';
 
@@ -64,7 +64,7 @@ const Crossword = (props: CrosswordProps) => {
 
   const contextTheme = React.useContext(ThemeContext);
 
-  const getCellData = (row, col) => {
+  const getCellData = (row, col) : GridSquareSpec | FakeCellData => {
     if (row >= 0 && row < props.size && col >= 0 && col < props.size) {
       return props.gridData[row][col];
     }
@@ -73,7 +73,7 @@ const Crossword = (props: CrosswordProps) => {
     return { row, col, used: false };
   };
 
-  const handleCellClick = (cellData) => {
+  const handleCellClick = (cellData: CrosswordCellCoordinate ) => {
     const { row, col } = cellData;
     const other = otherDirection(currentDirection);
 
@@ -82,6 +82,11 @@ const Crossword = (props: CrosswordProps) => {
     setFocusedCol(col);
 
     let direction = currentDirection;
+
+    // test - I think this will never happen - use of cellData[currentDirection] is bogus.
+    if (cellData[currentDirection]) {
+      debugger;
+    }
 
     // We switch to the "other" direction if (a) the current direction isn't
     // available in the clicked cell, or (b) we're already focused and the
@@ -92,12 +97,15 @@ const Crossword = (props: CrosswordProps) => {
       (focused &&
         row === focusedRow &&
         col === focusedCol &&
-        cellData[other])
+        cellData[other])  // **** How does cellData[other] evaluate to true when it's undefined????
     ) {
       setCurrentDirection(other);
       direction = other;
+    } else {
+      debugger;
     }
 
+    // !!!! the fact that this is bogus may explain why the clue isn't highlighted when a cell is first clicked
     setCurrentNumber(cellData[direction]);
 
     if (props.onFocusedCellChange) {
@@ -126,7 +134,7 @@ const Crossword = (props: CrosswordProps) => {
       direction = directionOverride;
     }
 
-    const candidate = getCellData(row, col);
+    const candidate: GridSquareSpec | FakeCellData = getCellData(row, col);
 
     if (!candidate.used) {
       return false;
@@ -207,7 +215,7 @@ const Crossword = (props: CrosswordProps) => {
       case ' ': // treat space like tab?
       case 'Tab': {
         const other = otherDirection(currentDirection);
-        const cellData = getCellData(focusedRow, focusedCol);
+        const cellData: GridSquareSpec | FakeCellData = getCellData(focusedRow, focusedCol);
         if (cellData[other]) {
           setCurrentDirection(other);
           setCurrentNumber(cellData[other]);
@@ -282,7 +290,7 @@ const Crossword = (props: CrosswordProps) => {
     // cell!
 
     const other = otherDirection(currentDirection);
-    const cellData = getCellData(focusedRow, focusedCol);
+    const cellData: GridSquareSpec | FakeCellData = getCellData(focusedRow, focusedCol);
 
     let direction = currentDirection;
 
