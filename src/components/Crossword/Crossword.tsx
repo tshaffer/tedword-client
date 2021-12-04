@@ -73,8 +73,9 @@ const Crossword = (props: CrosswordProps) => {
     return { row, col, used: false };
   };
 
-  const handleCellClick = (cellData: CrosswordCellCoordinate ) => {
-    const { row, col } = cellData;
+  const handleCellClick = (cellCoordinates: CrosswordCellCoordinate ) => {
+
+    const { row, col } = cellCoordinates;
     const other = otherDirection(currentDirection);
 
     // should this use moveTo?
@@ -83,9 +84,10 @@ const Crossword = (props: CrosswordProps) => {
 
     let direction = currentDirection;
 
-    // test - I think this will never happen - use of cellData[currentDirection] is bogus.
-    if (cellData[currentDirection]) {
-      debugger;
+    const cellData: GridSquareSpec | FakeCellData = getCellData(row, col);
+
+    if (!cellData.used) {
+      return false;
     }
 
     // We switch to the "other" direction if (a) the current direction isn't
@@ -101,11 +103,8 @@ const Crossword = (props: CrosswordProps) => {
     ) {
       setCurrentDirection(other);
       direction = other;
-    } else {
-      debugger;
     }
 
-    // !!!! the fact that this is bogus may explain why the clue isn't highlighted when a cell is first clicked
     setCurrentNumber(cellData[direction]);
 
     if (props.onFocusedCellChange) {
