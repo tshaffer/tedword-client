@@ -14,12 +14,21 @@ export interface ClueProps {
 
 const Clue = (props: ClueProps) => {
 
+  const clueRef = React.useRef(null);
+
   const { highlightBackground } = React.useContext(ThemeContext);
   const {
     focused,
     selectedDirection,
     selectedNumber,
   } = React.useContext(CrosswordContext);
+
+  React.useEffect(() => {
+    const becameFocused = focused && props.direction === selectedDirection && props.number === selectedNumber;
+    if (becameFocused && !isNil(clueRef) && !isNil(clueRef.current)) {
+      clueRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    }
+  }, [focused, selectedDirection, selectedNumber]);
 
   const handleClick = (event) => {
     event.preventDefault();
@@ -49,6 +58,7 @@ const Clue = (props: ClueProps) => {
 
   return (
     <div
+      ref={clueRef}
       style={innerStyle}
       onClick={handleClick}
     >
