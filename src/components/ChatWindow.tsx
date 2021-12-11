@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import '../styles/app.css';
 import { getCurrentUser, getJoinedChat, getChatMembers, getChats } from '../selectors';
 import { joinChat, sendMessage } from '../controllers';
-import { ChatMember, Chat } from 'src';
+import { ChatMember, Chat } from '../types';
+import { cloneDeep } from 'lodash';
 
 export interface ChatWindowProps {
   currentUser: string;
@@ -23,13 +24,13 @@ const ChatWindow = (props: ChatWindowProps) => {
   chatBubbleRef = React.createRef();
 
   const [chatBubbleOpen, setChatBubbleOpen] = React.useState<boolean>(false);
-  
+
   const [message, setMessage] = React.useState<string>('');
 
   const openChatBubble = () => {
     setChatBubbleOpen(true);
     chatBubbleRef.current.classList.toggle('open');
-    props.onJoinChat(props.currentUser);
+    // props.onJoinChat(props.currentUser);
   };
 
   const closeChatBubble = () => {
@@ -51,7 +52,7 @@ const ChatWindow = (props: ChatWindowProps) => {
 
   const getSenderMe = (chat: Chat): any => {
     return (
-      <div className='sender-me' key={chat.timestamp.toString()+ 'me'}>
+      <div className='sender-me' key={chat.timestamp.toString() + 'me'}>
         <div className='my-message'>
           {chat.message}
         </div>
@@ -113,6 +114,43 @@ const ChatWindow = (props: ChatWindowProps) => {
 
   const chatHistory = getChatHistory();
 
+  const getChatParticipantList = () => {
+    let chatParticipantList: string[] = [];
+    if (props.chatMembers.length === 0) {
+      chatParticipantList.push('ChatWindow');
+    } else {
+      chatParticipantList = props.chatMembers.map( (chatMember: ChatMember) => {
+        return chatMember.userName;
+      });
+    }
+
+    let chatParticipantListStr: string = '';
+    for (let i = 0; i < chatParticipantList.length; i++) {
+      chatParticipantListStr += chatParticipantList[i];
+      if (i < (chatParticipantList.length - 1)) {
+        chatParticipantListStr += ', ';
+      }
+    }
+
+    return (
+      <p>{chatParticipantListStr}</p>
+    );
+  };
+
+  const renderChatParticipants = () => {
+
+    const chatParticipantListJsx: any = getChatParticipantList();
+
+    return (
+      <div className='user-status-info'>
+        <a href='#'>
+          Chat Window
+        </a>
+        {chatParticipantListJsx}
+      </div>
+    );
+  };
+
   return (
     <div id='chat-bubble' ref={chatBubbleRef}>
       <div id='chat-container'>
@@ -121,12 +159,7 @@ const ChatWindow = (props: ChatWindowProps) => {
             <div className='img-container'>
               <img src='https://source.unsplash.com/random/35x35' />
             </div>
-            <div className='user-status-info'>
-              <a href='#'>
-                John Doe
-              </a>
-              <p>Active now</p>
-            </div>
+            {renderChatParticipants()}
           </div>
           <div className='chat-comm'>
             <a href='#' onClick={closeChatBubble}>

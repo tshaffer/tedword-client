@@ -10,6 +10,7 @@ import BoardToolbar from './BoardToolbar';
 import { getAppState, getBoard, getPuzzlesMetadata, getDisplayedPuzzle, getCellContents, getPuzzle } from '../selectors';
 import { AppState, BoardEntity, CellContentsMap, DisplayedPuzzle, PuzzlesMetadataMap, PuzzleSpec, UiState } from '../types';
 import { setUiState, } from '../models';
+import Chat from './Chat';
 
 export interface BoardTopProps {
   appState: AppState,
@@ -22,8 +23,6 @@ export interface BoardTopProps {
 
 const BoardTop = (props: BoardTopProps) => {
 
-  //       <Chat/>
-
   const handleHome = () => {
     console.log('handleHome');
     props.onSetUiState(UiState.SelectPuzzleOrBoard);
@@ -35,6 +34,7 @@ const BoardTop = (props: BoardTopProps) => {
         <button onClick={handleHome}>Home</button>
         <br />
         <BoardToolbar />
+        <Chat/>
         <Board />
         <BoardPlay
           appState={props.appState}

@@ -16,7 +16,6 @@ import {
 import NewGames from './NewGames';
 import ExistingGames from './ExistingGames';
 import PuzzleUpload from './PuzzleUpload';
-import Chat from './Chat';
 
 export interface GameHomeProps {
   currentUser: string;
@@ -127,8 +126,6 @@ const GameHome = (props: GameHomeProps) => {
     const inProgressGamesContentRef = React.createRef<any>();
     const settingsTabSelectRef = React.createRef<any>();
     const settingsContentRef = React.createRef<any>();
-
-    //         <Chat />
 
     return (
       <div>

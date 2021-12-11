@@ -21,19 +21,25 @@ export const joinChat = (username: string) => {
     ).then((response) => {
       dispatch(setJoined(true));
       userName = username;
+
       const channel = pusher.subscribe('presence-groupChat');
+      
       channel.bind('pusher:subscription_succeeded', (members: any) => {
+        console.log('controllers/chat.ts - pusher:subscription_succeeded');
+        console.log(channel.members);
         chatMembers = channel.members;
         const chatMemberNames: string[] = Object.keys(chatMembers.members);
         for (const chatMemberName of chatMemberNames) {
           dispatch(addChatMember(chatMemberName));
         }
       });
+      
       // User joins chat
       channel.bind('pusher:member_added', (member: any) => {
         console.log(`${member.id} joined the chat`);
         dispatch(addChatMember(member.id));
       });
+
       // Listen for chat messages
       dispatch(listen());
       return;

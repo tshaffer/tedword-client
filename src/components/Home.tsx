@@ -53,12 +53,21 @@ const Home = (props: HomeProps) => {
 
     pusher = new Pusher('c6addcc9977bdaa7e8a2', {
       cluster: 'us3',
-      // encrypted: true,
       encrypted: true,
       authEndpoint: 'pusher/auth'
     });
 
     const channel = pusher.subscribe('puzzle');
+
+    // channel.bind('subscription_succeeded', (members) => {
+    //   console.log('components/Home.tsx - pusher:');
+    //   console.log(members);
+    // });
+
+    channel.bind('member_added', (member) => {
+      console.log(`${member.id} joined the chat`);
+    });
+
     channel.bind('cell-change', data => {
 
       console.log(homeProps);
@@ -145,7 +154,7 @@ const Home = (props: HomeProps) => {
       startPage: StartPage.Standard,
       startupBoardId: null,
     };
-};
+  };
 
   React.useEffect(() => {
 

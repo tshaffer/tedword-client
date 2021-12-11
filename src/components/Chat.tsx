@@ -35,9 +35,10 @@ const Chat = (props: ChatProps) => {
 
   const [message, setMessage] = React.useState<string>('');
 
-  const padded = {
-    margin: '4px',
-  };
+  React.useEffect(() => {
+    console.log('Chat useEffect invoked');
+    props.onJoinChat(props.currentUser);
+  }, []);
 
   const chatDialogStyle = {
     width: '60rem',
@@ -58,11 +59,6 @@ const Chat = (props: ChatProps) => {
     color: 'white',
   };
 
-  const handleJoinChat = () => {
-    console.log('handleJoinChat invoked in Chat.tsx');
-    props.onJoinChat(props.currentUser);
-  };
-
   const handleMessageChanged = (event) => {
     setMessage(event.target.value);
   };
@@ -71,20 +67,6 @@ const Chat = (props: ChatProps) => {
     console.log('Send message ' + message);
     props.onSendMessage(message);
     setMessage('');
-  };
-
-  const getNotJoinedChatUI = () => {
-    return (
-      <div>
-        <button
-          style={padded}
-          onClick={handleJoinChat}
-        >
-          Join Chat
-        </button>
-        <br />
-      </div>
-    );
   };
 
   const getChatTo = () => {
@@ -119,48 +101,11 @@ const Chat = (props: ChatProps) => {
     return chatHistoryJsx;
   };
 
-  const getChatMessageToSend = () => {
-    return (
-      <div>
-        <span>Message:</span>
-        <input
-          type='text'
-          value={message}
-          onChange={handleMessageChanged}
-        />
-        <button
-          style={padded}
-          onClick={handleSendMessage}
-        >
-          Send Message
-        </button>
-      </div>
-    );
-  };
-
   const onCloseChat = () => {
     console.log('onCloseChat invoked');
   };
 
-  const getJoinedChatUI = () => {
-    // const chatTo = getChatTo();
-    // const chatHistory: JSX.Element[] = getChatHistory();
-    // const chatMessageToSend = getChatMessageToSend();
-    // return (
-    //   <div>
-    //     <p>{chatTo}</p>
-    //     <div>{chatHistory}</div>
-    //     {chatMessageToSend}
-    //   </div>
-    // );
-    /*
-        <div style={content}>
-          <h2>This is a dialog box</h2>
-          <button onClick={onCloseChat}>Close dialog</button>
-        </div>
-    */
-    //             <button onClick={onCloseChat}>Close dialog</button>
-
+  const getChatJsx = () => {
     return (
       <div>
         <ModelessDialog
@@ -178,17 +123,8 @@ const Chat = (props: ChatProps) => {
     );
   };
 
-  const getChatJsx = () => {
-    // if (!props.joined) {
-    //   return getNotJoinedChatUI();
-    // } else {
-    //   return getJoinedChatUI();
-    // }
-    return getJoinedChatUI();
-  };
-
   const chatJsx = getChatJsx();
-  //     <div style={{ position: 'absolute', bottom: '0px', left: '0px' }}>
+
   return (
     <div style={{ position: 'absolute', top: '0px', left: '0px' }}>
       {chatJsx}

@@ -116,12 +116,12 @@ const BoardToolbar = (props: BoardToolbarProps) => {
   };
 
   const handleVisibilityChange = () => {
-    console.log('handleVisibilityChange', elapsedGameTimerRef.current);
+    // console.log('handleVisibilityChange', elapsedGameTimerRef.current);
     if (document.hidden) {
-      console.log('crossword hidden');
+      // console.log('crossword hidden');
       pauseTimer();
     } else {
-      console.log('crossword visible');
+      // console.log('crossword visible');
       if (elapsedGameTimerRef.current) {
         startTimer();
       }
