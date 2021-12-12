@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import {
+  AppState,
   Chat,
   ChatMember,
 } from '../types';
@@ -11,6 +12,7 @@ import ModelessDialog from './ModelessDialog';
 
 import { joinChat, sendMessage } from '../controllers/chat';
 import {
+  getAppState,
   getChatMembers,
   getChats,
   getCurrentUser,
@@ -19,11 +21,12 @@ import {
 import ChatWindow from './ChatWindow';
 
 export interface ChatProps {
+  appState: AppState,
   currentUser: string;
   joined: boolean;
   chatMembers: ChatMember[];
   chats: Chat[];
-  onJoinChat: (userName: string) => any;
+  onJoinChat: (boardId: string, userName: string) => any;
   onSendMessage: (message: string) => any;
 }
 
@@ -37,7 +40,7 @@ const Chat = (props: ChatProps) => {
 
   React.useEffect(() => {
     console.log('Chat useEffect invoked');
-    props.onJoinChat(props.currentUser);
+    props.onJoinChat(props.appState.boardId, props.currentUser);
   }, []);
 
   const chatDialogStyle = {
@@ -134,6 +137,7 @@ const Chat = (props: ChatProps) => {
 
 function mapStateToProps(state: any) {
   return {
+    appState: getAppState(state),
     currentUser: getCurrentUser(state),
     joined: getJoinedChat(state),
     chatMembers: getChatMembers(state),

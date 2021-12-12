@@ -4,16 +4,14 @@ import { connect } from 'react-redux';
 
 import '../styles/app.css';
 import { getCurrentUser, getJoinedChat, getChatMembers, getChats } from '../selectors';
-import { joinChat, sendMessage } from '../controllers';
+import { sendMessage } from '../controllers';
 import { ChatMember, Chat } from '../types';
-import { cloneDeep } from 'lodash';
 
 export interface ChatWindowProps {
   currentUser: string;
   joined: boolean;
   chatMembers: ChatMember[];
   chats: Chat[];
-  onJoinChat: (userName: string) => any;
   onSendMessage: (message: string) => any;
 }
 
@@ -30,7 +28,6 @@ const ChatWindow = (props: ChatWindowProps) => {
   const openChatBubble = () => {
     setChatBubbleOpen(true);
     chatBubbleRef.current.classList.toggle('open');
-    // props.onJoinChat(props.currentUser);
   };
 
   const closeChatBubble = () => {
@@ -195,7 +192,6 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
-    onJoinChat: joinChat,
     onSendMessage: sendMessage,
   }, dispatch);
 };

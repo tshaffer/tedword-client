@@ -12,18 +12,22 @@ import {
 let chatMembers: any;
 let userName: string = '';
 
-export const joinChat = (username: string) => {
-  return (dispatch: any, getState) => {
+export const joinChat = (boardid: string, username: string) => {
+  return (dispatch: any) => {
     const path = serverUrl + apiUrlFragment + 'joinChat';
     axios.post(
       path,
-      { username },
+      {
+        boardid,
+        username
+      },
     ).then((response) => {
       dispatch(setJoined(true));
       userName = username;
 
-      const channel = pusher.subscribe('presence-groupChat');
-      
+      console.log('joinChat: ', 'presence-' + boardid);
+      const channel = pusher.subscribe('presence-' + boardid);
+
       channel.bind('pusher:subscription_succeeded', (members: any) => {
         console.log('controllers/chat.ts - pusher:subscription_succeeded');
         console.log(channel.members);
@@ -33,7 +37,7 @@ export const joinChat = (username: string) => {
           dispatch(addChatMember(chatMemberName));
         }
       });
-      
+
       // User joins chat
       channel.bind('pusher:member_added', (member: any) => {
         console.log(`${member.id} joined the chat`);
@@ -41,7 +45,7 @@ export const joinChat = (username: string) => {
       });
 
       // Listen for chat messages
-      dispatch(listen());
+      dispatch(listen(boardid));
       return;
     }).catch((error) => {
       console.log('error');
@@ -52,11 +56,15 @@ export const joinChat = (username: string) => {
 };
 
 export const sendMessage = (newMessage: string) => {
-  return (dispatch: any) => {
+  return (dispatch: any, getState: any) => {
+    const boardid = getState().appState.boardId;
+    console.log('sendMessage');
+    console.log('presence-' + boardid);
     const path = serverUrl + apiUrlFragment + 'sendMessage';
     axios.post(
       path,
       {
+        boardid,
         username: userName,
         message: newMessage,
       }
@@ -66,9 +74,11 @@ export const sendMessage = (newMessage: string) => {
   };
 };
 
-const listen = () => {
+const listen = (boardid: string) => {
   return (dispatch: any) => {
-    const channel = pusher.subscribe('presence-groupChat');
+    console.log('listen');
+    console.log('presence-' + boardid);
+    const channel = pusher.subscribe('presence-' + boardid);
     channel.bind('message_sent', (data) => {
       console.log('messageReceived', data);
       dispatch(addChat(data.username, data.message, new Date()));

@@ -41,7 +41,9 @@ const BoardTop = (props: BoardTopProps) => {
       authEndpoint: 'pusher/auth'
     });
 
-    const channel = pusher.subscribe('boardId');
+    console.log('initializePusher: ', props.appState.boardId);
+    
+    const channel = pusher.subscribe(props.appState.boardId);
 
     // channel.bind('subscription_succeeded', (members) => {
     //   console.log('components/Home.tsx - pusher:');
