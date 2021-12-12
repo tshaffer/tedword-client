@@ -119,7 +119,7 @@ const ChatWindow = (props: ChatWindowProps) => {
     if (props.chatMembers.length === 0) {
       chatParticipantList.push('ChatWindow');
     } else {
-      chatParticipantList = props.chatMembers.map( (chatMember: ChatMember) => {
+      chatParticipantList = props.chatMembers.map((chatMember: ChatMember) => {
         return chatMember.userName;
       });
     }
@@ -144,9 +144,8 @@ const ChatWindow = (props: ChatWindowProps) => {
     return (
       <div className='user-status-info'>
         <a href='#'>
-          Chat Window
+          {chatParticipantListJsx}
         </a>
-        {chatParticipantListJsx}
       </div>
     );
   };
