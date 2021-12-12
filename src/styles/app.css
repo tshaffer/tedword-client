@@ -131,6 +131,14 @@ body {
   bottom: 6px;
 }
 
+.sender-other-other-message {
+  background-color: #f1f0f0;
+  color: #000;
+  border-radius: 25px;
+  padding: 8px 11px;
+  font-size: 14px;
+}
+
 .sender-other .other-message {
   background-color: #f1f0f0;
   color: #000;
@@ -143,6 +151,14 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+}
+
+.sender-me-my-message {
+  background-color: #3578e5;
+  color: #fff;
+  border-radius: 25px;
+  padding: 8px 11px;
+  font-size: 14px;
 }
 
 .sender-me .my-message {

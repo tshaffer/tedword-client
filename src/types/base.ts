@@ -37,6 +37,20 @@ export interface ChatMember {
   userName: string;
 }
 
+export interface ChatsBySender {
+  sender: string;
+  messages: string[];
+}
+
+export interface ChatsAtTime {
+  chatsTime: Date;
+  chatsBySender: ChatsBySender[];
+}
+
+export interface OrderedChats {
+  chatsAtTime: ChatsAtTime[];
+}
+
 export interface Chat {
   sender: string;
   message: string;
