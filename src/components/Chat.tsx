@@ -36,8 +36,6 @@ const Chat = (props: ChatProps) => {
 
   chatProps = props;
 
-  const [message, setMessage] = React.useState<string>('');
-
   React.useEffect(() => {
     console.log('Chat useEffect invoked');
     props.onJoinChat(props.appState.boardId, props.currentUser);
@@ -60,48 +58,6 @@ const Chat = (props: ChatProps) => {
   const content = {
     marginLeft: '5em',
     color: 'white',
-  };
-
-  const handleMessageChanged = (event) => {
-    setMessage(event.target.value);
-  };
-
-  const handleSendMessage = () => {
-    console.log('Send message ' + message);
-    props.onSendMessage(message);
-    setMessage('');
-  };
-
-  const getChatTo = () => {
-    const chatUsers: string[] = [];
-    for (const chatMember of props.chatMembers) {
-      const { userName } = chatMember;
-      // filter out duplicates
-      if (chatUsers.indexOf(userName) < 0) {
-        chatUsers.push(userName);
-      }
-    }
-    const indexOfMe: number = chatUsers.indexOf(props.currentUser);
-    if (indexOfMe >= 0) {
-      chatUsers.splice(indexOfMe, 1);
-    }
-
-    const memberList = chatUsers.join(', ');
-    const chatTo = 'To: ' + memberList;
-    return chatTo;
-  };
-
-  const getChatMessage = (chat: Chat): JSX.Element => {
-    return (
-      <p>{'From: ' + chat.sender + '- ' + chat.message}</p>
-    );
-  };
-
-  const getChatHistory = (): JSX.Element[] => {
-    const chatHistoryJsx: JSX.Element[] = props.chats.map((chat: Chat) => {
-      return getChatMessage(chat);
-    });
-    return chatHistoryJsx;
   };
 
   const onCloseChat = () => {
