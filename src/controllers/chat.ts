@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { apiUrlFragment, serverUrl } from '../types';
+import { apiUrlFragment, serverUrl, Chat } from '../types';
 
 import { pusher } from '../components/BoardTop';
 
@@ -13,6 +13,13 @@ let chatMembers: any;
 let userName: string = '';
 
 export const joinChat = (boardid: string, username: string) => {
+  return (dispatch: any) => {
+    dispatch(executeJoinChat(boardid, username));
+    dispatch(executeFetchChatMessages(boardid));
+  };
+};
+
+const executeJoinChat = (boardid: string, username: string) => {
   return (dispatch: any) => {
     const path = serverUrl + apiUrlFragment + 'joinChat';
     axios.post(
@@ -53,6 +60,23 @@ export const joinChat = (boardid: string, username: string) => {
       return;
     });
   };
+
+};
+
+const executeFetchChatMessages = (boardid: string) => {
+  return ((dispatch: any, getState: any): any => {
+    const path = serverUrl + apiUrlFragment + 'chatMessages?id=' + boardid;
+    return axios.get(path)
+      .then((chatMessagesResponse: any) => {
+        console.log('chatMessagesResponse');
+        console.log(chatMessagesResponse);
+        const chats: Chat[] = chatMessagesResponse.data;
+        for (const chat of chats) {
+          const { sender, message, timestamp } = chat;
+          dispatch(addChat(sender, message, new Date(timestamp)));
+        }
+      });
+  });
 };
 
 export const sendMessage = (newMessage: string) => {
