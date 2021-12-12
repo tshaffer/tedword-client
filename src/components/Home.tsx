@@ -17,9 +17,6 @@ import BoardTop from './BoardTop';
 import { getCurrentUser } from '../selectors';
 import { getStartPage, getStartupBoardId } from '../selectors';
 
-// import * as Pusher from 'pusher-js';
-const Pusher = require('pusher-js');
-
 export interface HomeProps {
   startPage: StartPage,
   startupBoardId: string | null,
@@ -39,60 +36,9 @@ export interface HomeProps {
   onSetStartupBoardId: (boardId: string) => any;
 }
 
-let homeProps;
-
-export let pusher: any;
-
 const Home = (props: HomeProps) => {
 
   const [initializationComplete, setInitializationComplete] = React.useState<boolean>(false);
-
-  homeProps = props;
-
-  const initializePusher = () => {
-
-    pusher = new Pusher('c6addcc9977bdaa7e8a2', {
-      cluster: 'us3',
-      encrypted: true,
-      authEndpoint: 'pusher/auth'
-    });
-
-    const channel = pusher.subscribe('puzzle');
-
-    // channel.bind('subscription_succeeded', (members) => {
-    //   console.log('components/Home.tsx - pusher:');
-    //   console.log(members);
-    // });
-
-    channel.bind('member_added', (member) => {
-      console.log(`${member.id} joined the chat`);
-    });
-
-    channel.bind('cell-change', data => {
-
-      console.log(homeProps);
-
-      if (isNil(homeProps)) {
-        console.log('homeProps null - return');
-      }
-      console.log('websocket cell-change');
-      console.log(data);
-      console.log('current user is ', homeProps.appState.userName);
-      console.log('external event: ', homeProps.appState.userName !== data.user);
-
-      const { user, row, col, typedChar } = data;
-
-      const externalEvent: boolean = homeProps.appState.userName !== user;
-      if (externalEvent) {
-        const guess: Guess = {
-          value: typedChar,
-          guessIsRemote: true,
-          remoteUser: user,
-        };
-        homeProps.onUpdateGuess(row, col, guess);
-      }
-    });
-  };
 
   const getStartupParams = () => {
 
@@ -158,10 +104,7 @@ const Home = (props: HomeProps) => {
 
   React.useEffect(() => {
 
-    initializePusher();
-
     // TEDTODO - put these startup calls into a controller?
-
 
     const startupParams: any = getStartupParams();
 

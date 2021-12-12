@@ -8,9 +8,13 @@ import Board from './Board';
 import BoardPlay from './BoardPlay';
 import BoardToolbar from './BoardToolbar';
 import { getAppState, getBoard, getPuzzlesMetadata, getDisplayedPuzzle, getCellContents, getPuzzle } from '../selectors';
-import { AppState, BoardEntity, CellContentsMap, DisplayedPuzzle, PuzzlesMetadataMap, PuzzleSpec, UiState } from '../types';
+import { AppState, BoardEntity, CellContentsMap, DisplayedPuzzle, Guess, PuzzlesMetadataMap, PuzzleSpec, UiState } from '../types';
 import { setUiState, } from '../models';
 import Chat from './Chat';
+
+// import * as Pusher from 'pusher-js';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Pusher = require('pusher-js');
 
 export interface BoardTopProps {
   appState: AppState,
@@ -21,7 +25,63 @@ export interface BoardTopProps {
   onSetUiState: (uiState: UiState) => any;
 }
 
+export let pusher: any;
+
+let boardTopProps;
+
 const BoardTop = (props: BoardTopProps) => {
+
+  boardTopProps = props;
+
+  const initializePusher = () => {
+
+    pusher = new Pusher('c6addcc9977bdaa7e8a2', {
+      cluster: 'us3',
+      encrypted: true,
+      authEndpoint: 'pusher/auth'
+    });
+
+    const channel = pusher.subscribe('puzzle');
+
+    // channel.bind('subscription_succeeded', (members) => {
+    //   console.log('components/Home.tsx - pusher:');
+    //   console.log(members);
+    // });
+
+    channel.bind('member_added', (member) => {
+      console.log(`${member.id} joined the chat`);
+    });
+
+    channel.bind('cell-change', data => {
+
+      console.log(boardTopProps);
+
+      if (isNil(boardTopProps)) {
+        console.log('boardTopProps null - return');
+      }
+      console.log('websocket cell-change');
+      console.log(data);
+      console.log('current user is ', boardTopProps.appState.userName);
+      console.log('external event: ', boardTopProps.appState.userName !== data.user);
+
+      const { user, row, col, typedChar } = data;
+
+      const externalEvent: boolean = boardTopProps.appState.userName !== user;
+      if (externalEvent) {
+        const guess: Guess = {
+          value: typedChar,
+          guessIsRemote: true,
+          remoteUser: user,
+        };
+        boardTopProps.onUpdateGuess(row, col, guess);
+      }
+    });
+  };
+
+  React.useEffect(() => {
+    console.log('BoardTop useEffect invoked');
+    initializePusher();
+  }, []);
 
   const handleHome = () => {
     console.log('handleHome');
