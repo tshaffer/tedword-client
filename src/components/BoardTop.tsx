@@ -24,9 +24,9 @@ const BoardTop = () => {
 
   const gridItem = (content: string) => {
     return (
-    // From 0 to 600px wide (smart-phones), I take up 12 columns, or the whole device width!
-    // From 600-690px wide (tablets), I take up 6 out of 12 columns, so 2 columns fit the screen.
-    // From 960px wide and above, I take up 25% of the device (3/12), so 4 columns fit the screen.
+      // From 0 to 600px wide (smart-phones), I take up 12 columns, or the whole device width!
+      // From 600-690px wide (tablets), I take up 6 out of 12 columns, so 2 columns fit the screen.
+      // From 960px wide and above, I take up 25% of the device (3/12), so 4 columns fit the screen.
       /*
         xs, extra-small: 0px
         sm, small: 600px
@@ -42,15 +42,26 @@ const BoardTop = () => {
 
   return (
     <div>
-      <Grid container spacing={1} justify="center" style={{ minHeight: '10vh', maxWidth: '100%' }}>
+      <Grid container spacing={1} justify="center" style={{ minHeight: '5vh', maxWidth: '100%' }}>
         {gridItem('Timer/Pause')}
       </Grid>
-      <Grid container spacing={1} justify="center" style={{ minHeight: '10vh', maxWidth: '100%' }}>
+      <Grid container spacing={1} justify="center" style={{ minHeight: '5vh', maxWidth: '100%' }}>
         <Grid item xs={12} sm={6} md={3} lg={2} >
           <Paper className={classes.paper}>Across Clue</Paper>
         </Grid>
         <Grid item xs={12} sm={6} md={3} lg={2} >
           <Paper className={classes.paper}>Down Clue</Paper>
+        </Grid>
+      </Grid>
+      <Grid container spacing={1} justify="center" style={{ minHeight: '60vh', maxWidth: '100%', background: 'pink' }}>
+        <Grid item xs={8}>
+          <Paper className={classes.paper}>Board</Paper>
+        </Grid>
+        <Grid item xs={2}>
+          <Paper className={classes.paper}>Across Clues</Paper>
+        </Grid>
+        <Grid item xs={2}>
+          <Paper className={classes.paper}>Down Clues</Paper>
         </Grid>
       </Grid>
     </div>
