@@ -20,8 +20,9 @@ export let pusher: any;
 
 const BoardTop = () => {
 
-  const gridItem = () => {
-    const classes = useStyles();
+  const classes = useStyles();
+
+  const gridItem = (content: string) => {
     return (
     // From 0 to 600px wide (smart-phones), I take up 12 columns, or the whole device width!
     // From 600-690px wide (tablets), I take up 6 out of 12 columns, so 2 columns fit the screen.
@@ -34,17 +35,23 @@ const BoardTop = () => {
         xl, extra-large: 1536px      
       */
       <Grid item xs={12} sm={6} md={3} lg={2} >
-        <Paper className={classes.paper}>item</Paper>
+        <Paper className={classes.paper}>{content}</Paper>
       </Grid>
     );
   };
 
   return (
     <div>
-      <h3> Ex 4: Responsive Material UI Grid </h3>
-      {/* I am a container Grid with 1 (8px) spacing*/}
-      <Grid container spacing={1} justify="center" style={{ minHeight: '100vh', maxWidth: '100%' }}>
-        {gridItem()}
+      <Grid container spacing={1} justify="center" style={{ minHeight: '10vh', maxWidth: '100%' }}>
+        {gridItem('Timer/Pause')}
+      </Grid>
+      <Grid container spacing={1} justify="center" style={{ minHeight: '10vh', maxWidth: '100%' }}>
+        <Grid item xs={12} sm={6} md={3} lg={2} >
+          <Paper className={classes.paper}>Across Clue</Paper>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3} lg={2} >
+          <Paper className={classes.paper}>Down Clue</Paper>
+        </Grid>
       </Grid>
     </div>
   );
