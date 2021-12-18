@@ -473,6 +473,20 @@ const Crossword = (props: CrosswordProps) => {
   // style={{ minWidth: '20rem', maxWidth: '60rem', width: 'auto', flex: '2 1 50%' }}
   //           <Grid container spacing={1} justify="center" style={{ minHeight: '90%', maxWidth: '100%', background: 'pink' }}>
 
+  // 'across', 'down'
+  const getCluesComponent = (direction: string) => {
+    return (
+      <Grid item xs={12} md={6} style={{ background: 'gray' }}>
+        <DirectionClues
+          key={direction}
+          direction={direction}
+          cluesByNumber={props.cluesByDirection[direction]}
+          onClueSelected={handleClueSelected}
+        />
+      </Grid>
+    );
+  };
+
   const getCrosswordComponent = () => {
     return (
       <Grid item xs={8} style={{ minHeight: '100%' }}>
@@ -528,6 +542,8 @@ const Crossword = (props: CrosswordProps) => {
   };
 
   const crosswordComponent = getCrosswordComponent();
+  const acrossCluesComponent = getCluesComponent('across');
+  const downCluesComponent = getCluesComponent('down');
 
   return (
     <CrosswordContext.Provider value={context}>
@@ -539,12 +555,8 @@ const Crossword = (props: CrosswordProps) => {
             {crosswordComponent}
             <Grid item xs={4} container style={{ minHeight: '100%' }}>
               <Grid item container spacing={1} xs={12} style={{ height: '90%', maxWidth: '100%', background: 'cyan' }}>
-                <Grid item xs={12} md={6} style={{ background: 'orange' }}>
-                  <Paper style={{ padding: '1px', textAlign: 'center', color: 'brown' }}>Across Clues</Paper>
-                </Grid>
-                <Grid item xs={12} md={6} style={{ background: 'gray' }}>
-                  <Paper style={{ padding: '1px', textAlign: 'center', color: 'brown' }}>Down Clues</Paper>
-                </Grid>
+                {acrossCluesComponent}
+                {downCluesComponent}
               </Grid>
               <Grid item xs={12} style={{ height: '10%', background: 'lightGreen' }}>
                 <Paper style={{ padding: '1px', textAlign: 'center', color: 'brown' }}>Chat</Paper>
@@ -555,7 +567,6 @@ const Crossword = (props: CrosswordProps) => {
       </CrosswordSizeContext.Provider>
     </CrosswordContext.Provider>
   );
-
 };
 
 function mapStateToProps(state: any) {
