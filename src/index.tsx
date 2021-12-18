@@ -14,8 +14,10 @@ export const store = createStore(
     applyMiddleware(thunkMiddleware)
   ));
 
+//  height: '1080px',
+
 const divStyle = {
-  height: '1080px',
+  height: '870px',
 };
 
 ReactDOM.render(

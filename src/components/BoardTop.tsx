@@ -41,11 +41,11 @@ const BoardTop = () => {
   };
 
   return (
-    <div>
-      <Grid container spacing={1} justify="center" style={{ minHeight: '5vh', maxWidth: '100%' }}>
+    <div style={{ height: '100%' }}>
+      <Grid container spacing={1} justify="center" style={{ minHeight: '5%', maxWidth: '100%' }}>
         {gridItem('Timer/Pause')}
       </Grid>
-      <Grid container spacing={1} justify="center" style={{ minHeight: '5vh', maxWidth: '100%' }}>
+      <Grid container spacing={1} justify="center" style={{ minHeight: '5%', maxWidth: '100%' }}>
         <Grid item xs={12} sm={6} md={3} lg={2} >
           <Paper className={classes.paper}>Across Clue</Paper>
         </Grid>
@@ -54,15 +54,15 @@ const BoardTop = () => {
         </Grid>
       </Grid>
 
-      <Grid container spacing={1} justify="center" style={{ minHeight: '60vh', maxWidth: '100%', background: 'pink' }}>
+      <Grid container spacing={1} justify="center" style={{ minHeight: '90%', maxWidth: '100%', background: 'pink' }}>
         <Grid item xs={8}>
           <Paper className={classes.paper}>Board</Paper>
         </Grid>
-        <Grid item container spacing={1} xs={4} style={{ minHeight: '60vh', maxWidth: '100%', background: 'cyan' }}>
-          <Grid item xs={12} md={6}>
+        <Grid item container spacing={1} xs={4} style={{ minHeight: '60%', maxWidth: '100%', background: 'cyan' }}>
+          <Grid item xs={12} md={6} style={{ background: 'orange' }}>
             <Paper className={classes.paper}>Across Clues</Paper>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} style={{ background: 'gray' }}>
             <Paper className={classes.paper}>Down Clues</Paper>
           </Grid>
         </Grid>
