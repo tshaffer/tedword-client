@@ -53,27 +53,27 @@ const BoardTop = () => {
           <Paper className={classes.paper}>Down Clue</Paper>
         </Grid>
       </Grid>
+
       <Grid container spacing={1} justify="center" style={{ minHeight: '60vh', maxWidth: '100%', background: 'pink' }}>
         <Grid item xs={8}>
           <Paper className={classes.paper}>Board</Paper>
         </Grid>
-        <Grid item xs={2}>
-          <Paper className={classes.paper}>Across Clues</Paper>
-        </Grid>
-        <Grid item xs={2}>
-          <Paper className={classes.paper}>Down Clues</Paper>
+        <Grid item container spacing={1} xs={4} style={{ minHeight: '60vh', maxWidth: '100%', background: 'cyan' }}>
+          <Grid item xs={12} md={6}>
+            <Paper className={classes.paper}>Across Clues</Paper>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Paper className={classes.paper}>Down Clues</Paper>
+          </Grid>
         </Grid>
       </Grid>
     </div>
   );
 };
 
-function mapStateToProps(state: any) {
+function mapStateToProps() {
+  return {
+  };
 }
 
-const mapDispatchToProps = (dispatch: any) => {
-  return bindActionCreators({
-  }, dispatch);
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(BoardTop);
+export default connect(mapStateToProps)(BoardTop);
