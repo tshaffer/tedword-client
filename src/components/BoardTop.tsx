@@ -2,6 +2,9 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import BoardToolbar from './BoardToolbar';
+import Board from './Board';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -43,16 +46,9 @@ const BoardTop = () => {
   return (
     <div style={{ height: '100%' }}>
       <Grid container spacing={1} justify="center" style={{ minHeight: '5%', maxWidth: '100%' }}>
-        {gridItem('Timer/Pause')}
+        <BoardToolbar />
       </Grid>
-      <Grid container spacing={1} justify="center" style={{ minHeight: '5%', maxWidth: '100%' }}>
-        <Grid item xs={12} sm={6} md={3} lg={2} >
-          <Paper className={classes.paper}>Across Clue</Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3} lg={2} >
-          <Paper className={classes.paper}>Down Clue</Paper>
-        </Grid>
-      </Grid>
+      <Board/>
 
       <Grid container spacing={1} justify="center" style={{ minHeight: '90%', maxWidth: '100%', background: 'pink' }}>
         <Grid item xs={8} style={{ minHeight: '100%' }}>

@@ -196,6 +196,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
 
   const linkDiv = getLinkDiv();
 
+  /*
   return (
     <div>
       <div>
@@ -259,6 +260,23 @@ const BoardToolbar = (props: BoardToolbarProps) => {
       </button>
     </div>
   );
+  */
+
+  return (
+    <div>
+      {getElapsedTimeString()}
+      <button
+        onClick={() => handlePauseGame()}
+        disabled={!props.puzzlePlayActive}
+        style={buttonStyle}
+      >
+        {'Pause'}
+      </button>
+    </div>
+  );
+
+
+
 };
 
 function mapStateToProps(state: any) {

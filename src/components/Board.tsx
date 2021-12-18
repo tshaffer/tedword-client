@@ -2,6 +2,20 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+const useStyles = makeStyles((theme) => ({
+  gridStyle: {
+    height: '200px',
+  },
+  paper: {
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary
+  }
+}));
+
 import { ClueAtLocation, CluesByDirection, CluesByNumber, GameState, Guess, GuessesGrid } from '../types';
 import { getCrosswordClues, getGameState, getGuesses } from '../selectors';
 import { isNil } from 'lodash';
@@ -13,6 +27,8 @@ export interface BoardProps {
 }
 
 const Board = (props: BoardProps) => {
+
+  const classes = useStyles();
 
   const getUserEntry = (direction: string, clueNumber: string): string => {
 
@@ -69,25 +85,39 @@ const Board = (props: BoardProps) => {
     downClue = 'Working on it, harder than I thought';
   }
 
-  return (
-    <div style={{
-      width: '100%',
-      marginTop: '8px',
-      marginBottom: '16px',
-    }}>
+  /*
+    return (
       <div style={{
-        marginRight: '32px',
-        float: 'left',
+        width: '100%',
+        marginTop: '8px',
+        marginBottom: '16px',
       }}>
-        <p>{acrossClue}</p>
-        <p>{acrossUserEntry}</p>
+        <div style={{
+          marginRight: '32px',
+          float: 'left',
+        }}>
+          <p>{acrossClue}</p>
+          <p>{acrossUserEntry}</p>
+        </div>
+        <div>
+          <p>{downClue}</p>
+          <p>{downUserEntry}</p>
+        </div>
       </div>
-      <div>
-        <p>{downClue}</p>
-        <p>{downUserEntry}</p>
-      </div>
-    </div>
+    );
+  */
+
+  return (
+    <Grid container spacing={1} justify="flex-start" style={{ minHeight: '5%', maxWidth: '100%' }}>
+      <Grid item xs={12} sm={6} md={3} lg={2} >
+        <Paper className={classes.paper}>Across Clue</Paper>
+      </Grid>
+      <Grid item xs={12} sm={6} md={3} lg={2} >
+        <Paper className={classes.paper}>Down Clue</Paper>
+      </Grid>
+    </Grid>
   );
+
 };
 
 function mapStateToProps(state: any) {
