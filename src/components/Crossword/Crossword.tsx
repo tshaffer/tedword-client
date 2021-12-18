@@ -381,80 +381,6 @@ const Crossword = (props: CrosswordProps) => {
       });
     });
   }
-  /*
-    return (
-      <CrosswordContext.Provider value={context}>
-        <CrosswordSizeContext.Provider
-          value={{ cellSize, cellPadding, cellInner, cellHalf, fontSize }}
-        >
-          <ThemeProvider theme={finalTheme}>
-            <div style={{ margin: 0, padding: 0, border: 0, display: 'flex', flexDirection: 'row' }}>
-              <div style={{ minWidth: '20rem', maxWidth: '60rem', width: 'auto', flex: '2 1 50%' }}>
-                <div style={{ margin: 0, padding: 0, position: 'relative' }}>
-                  <svg viewBox="0 0 100 100">
-                    <rect
-                      x={0}
-                      y={0}
-                      width={100}
-                      height={100}
-                      fill={finalTheme.gridBackground}
-                    />
-                    {cells}
-                  </svg>
-                  <input
-                    ref={inputRef}
-                    aria-label="crossword-input"
-                    type="text"
-                    onChange={handleInputChange}
-                    onClick={handleInputClick}
-                    onKeyDown={handleInputKeyDown}
-                    value=""
-                    // onInput={this.handleInput}
-                    autoComplete="off"
-                    spellCheck="false"
-                    autoCorrect="off"
-                    style={{
-                      position: 'absolute',
-                      // In order to ensure the top/left positioning makes sense,
-                      // there is an absolutely-positioned <div> with no
-                      // margin/padding that we *don't* expose to consumers.  This
-                      // keeps the math much more reliable.  (But we're still
-                      // seeing a slight vertical deviation towards the bottom of
-                      // the grid!  The "* 0.995" seems to help.)
-                      top: `calc(${focusedRow * cellSize * 0.995}% + 2px)`,
-                      left: `calc(${focusedCol * cellSize}% + 2px)`,
-                      width: `calc(${cellSize}% - 4px)`,
-                      height: `calc(${cellSize}% - 4px)`,
-                      fontSize: `${fontSize * 6}px`, // waaay too small...?
-                      textAlign: 'center',
-                      textAnchor: 'middle',
-                      backgroundColor: 'transparent',
-                      caretColor: 'transparent',
-                      margin: 0,
-                      padding: 0,
-                      border: 0,
-                      cursor: 'default',
-                    }}
-                  />
-                </div>
-              </div >
-              <div style={{ height: '750px', overflowY: 'auto', padding: '0 1em', flex: '1 2 25%' }}>
-                {bothDirections.map((direction) => (
-                  <DirectionClues
-                    key={direction}
-                    direction={direction}
-                    cluesByNumber={props.cluesByDirection[direction]}
-                    onClueSelected={handleClueSelected}
-                  />
-                ))}
-  
-              </div>
-            </div>
-          </ThemeProvider>
-        </CrosswordSizeContext.Provider>
-      </CrosswordContext.Provider>
-    );
-  */
 
   // const useStyles = makeStyles((theme) => ({
   //   gridStyle: {
@@ -467,16 +393,9 @@ const Crossword = (props: CrosswordProps) => {
   //   }
   // }));
 
-  // const classes = useStyles();
-
-  //               <Paper style={{ padding: '1px', textAlign: 'center', color: 'brown' }}>Board</Paper>
-  // style={{ minWidth: '20rem', maxWidth: '60rem', width: 'auto', flex: '2 1 50%' }}
-  //           <Grid container spacing={1} justify="center" style={{ minHeight: '90%', maxWidth: '100%', background: 'pink' }}>
-
-  // 'across', 'down'
   const getCluesComponent = (direction: string) => {
     return (
-      <Grid item xs={12} md={6} style={{ background: 'gray' }}>
+      <Grid item xs={12} md={6} style={{ maxHeight: '100%', background: 'gray' }}>
         <DirectionClues
           key={direction}
           direction={direction}
@@ -489,7 +408,7 @@ const Crossword = (props: CrosswordProps) => {
 
   const getCrosswordComponent = () => {
     return (
-      <Grid item xs={8} style={{ minHeight: '100%' }}>
+      <Grid item xs={8} style={{ minHeight: '100%', maxHeight: '100%' }}>
         <div style={{ margin: 0, padding: 0, position: 'relative' }}>
           <svg viewBox="0 0 100 100">
             <rect
@@ -551,9 +470,9 @@ const Crossword = (props: CrosswordProps) => {
         value={{ cellSize, cellPadding, cellInner, cellHalf, fontSize }}
       >
         <ThemeProvider theme={finalTheme}>
-          <Grid container spacing={1} justify="center" style={{ maxWidth: '100%', background: 'pink' }}>
+          <Grid container spacing={1} justify="center" style={{ maxWidth: '100%', height: '100%', background: 'pink' }}>
             {crosswordComponent}
-            <Grid item xs={4} container style={{ minHeight: '100%' }}>
+            <Grid item xs={4} container style={{ minHeight: '100%', maxHeight: '100%' }}>
               <Grid item container spacing={1} xs={12} style={{ height: '90%', maxWidth: '100%', background: 'cyan' }}>
                 {acrossCluesComponent}
                 {downCluesComponent}

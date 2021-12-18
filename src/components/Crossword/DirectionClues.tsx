@@ -30,7 +30,7 @@ const DirectionClues = (props: DirectionClueProps) => {
   return (
     <div style={{
       marginBottom: '2em',
-      maxHeight: '50%',
+      maxHeight: '95%',
       overflowY: 'auto',
     }}>
       <h3 style={{ marginTop: 0, marginBottom: '0.5em' }}>{props.direction.toUpperCase()}</h3>

@@ -63,7 +63,7 @@ const BoardPlay = (props: BoardPlayProps) => {
   }
 
   return (
-    <div style={{ height: '100%' }}>
+    <div style={{ height: '90%' }}>
       <Crossword
         onInput={handleInputEvent}
         onFocusedCellChange={handleFocusedCellChange}
