@@ -3,6 +3,10 @@ import { useState } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+
 import { Guess, CluesByDirection, GuessesGrid, GridSquare, GridSquareSpec, GridSpec, CrosswordCellCoordinate, FakeCellData } from '../../types';
 
 import { ThemeContext, ThemeProvider } from 'styled-components';
@@ -64,7 +68,7 @@ const Crossword = (props: CrosswordProps) => {
 
   const contextTheme = React.useContext(ThemeContext);
 
-  const getCellData = (row, col) : GridSquareSpec | FakeCellData => {
+  const getCellData = (row, col): GridSquareSpec | FakeCellData => {
     if (row >= 0 && row < props.size && col >= 0 && col < props.size) {
       return props.gridData[row][col];
     }
@@ -73,7 +77,7 @@ const Crossword = (props: CrosswordProps) => {
     return { row, col, used: false };
   };
 
-  const handleCellClick = (cellCoordinates: CrosswordCellCoordinate ) => {
+  const handleCellClick = (cellCoordinates: CrosswordCellCoordinate) => {
 
     const { row, col } = cellCoordinates;
     const other = otherDirection(currentDirection);
@@ -377,6 +381,93 @@ const Crossword = (props: CrosswordProps) => {
       });
     });
   }
+  /*
+    return (
+      <CrosswordContext.Provider value={context}>
+        <CrosswordSizeContext.Provider
+          value={{ cellSize, cellPadding, cellInner, cellHalf, fontSize }}
+        >
+          <ThemeProvider theme={finalTheme}>
+            <div style={{ margin: 0, padding: 0, border: 0, display: 'flex', flexDirection: 'row' }}>
+              <div style={{ minWidth: '20rem', maxWidth: '60rem', width: 'auto', flex: '2 1 50%' }}>
+                <div style={{ margin: 0, padding: 0, position: 'relative' }}>
+                  <svg viewBox="0 0 100 100">
+                    <rect
+                      x={0}
+                      y={0}
+                      width={100}
+                      height={100}
+                      fill={finalTheme.gridBackground}
+                    />
+                    {cells}
+                  </svg>
+                  <input
+                    ref={inputRef}
+                    aria-label="crossword-input"
+                    type="text"
+                    onChange={handleInputChange}
+                    onClick={handleInputClick}
+                    onKeyDown={handleInputKeyDown}
+                    value=""
+                    // onInput={this.handleInput}
+                    autoComplete="off"
+                    spellCheck="false"
+                    autoCorrect="off"
+                    style={{
+                      position: 'absolute',
+                      // In order to ensure the top/left positioning makes sense,
+                      // there is an absolutely-positioned <div> with no
+                      // margin/padding that we *don't* expose to consumers.  This
+                      // keeps the math much more reliable.  (But we're still
+                      // seeing a slight vertical deviation towards the bottom of
+                      // the grid!  The "* 0.995" seems to help.)
+                      top: `calc(${focusedRow * cellSize * 0.995}% + 2px)`,
+                      left: `calc(${focusedCol * cellSize}% + 2px)`,
+                      width: `calc(${cellSize}% - 4px)`,
+                      height: `calc(${cellSize}% - 4px)`,
+                      fontSize: `${fontSize * 6}px`, // waaay too small...?
+                      textAlign: 'center',
+                      textAnchor: 'middle',
+                      backgroundColor: 'transparent',
+                      caretColor: 'transparent',
+                      margin: 0,
+                      padding: 0,
+                      border: 0,
+                      cursor: 'default',
+                    }}
+                  />
+                </div>
+              </div >
+              <div style={{ height: '750px', overflowY: 'auto', padding: '0 1em', flex: '1 2 25%' }}>
+                {bothDirections.map((direction) => (
+                  <DirectionClues
+                    key={direction}
+                    direction={direction}
+                    cluesByNumber={props.cluesByDirection[direction]}
+                    onClueSelected={handleClueSelected}
+                  />
+                ))}
+  
+              </div>
+            </div>
+          </ThemeProvider>
+        </CrosswordSizeContext.Provider>
+      </CrosswordContext.Provider>
+    );
+  */
+
+  // const useStyles = makeStyles((theme) => ({
+  //   gridStyle: {
+  //     height: '200px',
+  //   },
+  //   paper: {
+  //     padding: theme.spacing(1),
+  //     textAlign: 'center',
+  //     color: theme.palette.text.secondary
+  //   }
+  // }));
+
+  // const classes = useStyles();
 
   return (
     <CrosswordContext.Provider value={context}>
@@ -384,72 +475,29 @@ const Crossword = (props: CrosswordProps) => {
         value={{ cellSize, cellPadding, cellInner, cellHalf, fontSize }}
       >
         <ThemeProvider theme={finalTheme}>
-          <div style={{ margin: 0, padding: 0, border: 0, display: 'flex', flexDirection: 'row' }}>
-            <div style={{ minWidth: '20rem', maxWidth: '60rem', width: 'auto', flex: '2 1 50%' }}>
-              <div style={{ margin: 0, padding: 0, position: 'relative' }}>
-                <svg viewBox="0 0 100 100">
-                  <rect
-                    x={0}
-                    y={0}
-                    width={100}
-                    height={100}
-                    fill={finalTheme.gridBackground}
-                  />
-                  {cells}
-                </svg>
-                <input
-                  ref={inputRef}
-                  aria-label="crossword-input"
-                  type="text"
-                  onChange={handleInputChange}
-                  onClick={handleInputClick}
-                  onKeyDown={handleInputKeyDown}
-                  value=""
-                  // onInput={this.handleInput}
-                  autoComplete="off"
-                  spellCheck="false"
-                  autoCorrect="off"
-                  style={{
-                    position: 'absolute',
-                    // In order to ensure the top/left positioning makes sense,
-                    // there is an absolutely-positioned <div> with no
-                    // margin/padding that we *don't* expose to consumers.  This
-                    // keeps the math much more reliable.  (But we're still
-                    // seeing a slight vertical deviation towards the bottom of
-                    // the grid!  The "* 0.995" seems to help.)
-                    top: `calc(${focusedRow * cellSize * 0.995}% + 2px)`,
-                    left: `calc(${focusedCol * cellSize}% + 2px)`,
-                    width: `calc(${cellSize}% - 4px)`,
-                    height: `calc(${cellSize}% - 4px)`,
-                    fontSize: `${fontSize * 6}px`, // waaay too small...?
-                    textAlign: 'center',
-                    textAnchor: 'middle',
-                    backgroundColor: 'transparent',
-                    caretColor: 'transparent',
-                    margin: 0,
-                    padding: 0,
-                    border: 0,
-                    cursor: 'default',
-                  }}
-                />
-              </div>
-            </div >
-            <div style={{ height: '750px', overflowY: 'auto', padding: '0 1em', flex: '1 2 25%' }}>
-              {bothDirections.map((direction) => (
-                <DirectionClues
-                  key={direction}
-                  direction={direction}
-                  cluesByNumber={props.cluesByDirection[direction]}
-                  onClueSelected={handleClueSelected}
-                />
-              ))}
-
-            </div>
-          </div>
+          <Grid container spacing={1} justify="center" style={{ minHeight: '90%', maxWidth: '100%', background: 'pink' }}>
+            <Grid item xs={8} style={{ minHeight: '100%' }}>
+              <Paper style={{ padding: '1px', textAlign: 'center', color: 'brown' }}>Board</Paper>
+            </Grid>
+            <Grid item xs={4} container style={{ minHeight: '100%' }}>
+              <Grid item container spacing={1} xs={12} style={{ height: '90%', maxWidth: '100%', background: 'cyan' }}>
+                <Grid item xs={12} md={6} style={{ background: 'orange' }}>
+                  <Paper style={{ padding: '1px', textAlign: 'center', color: 'brown' }}>Across Clues</Paper>
+                </Grid>
+                <Grid item xs={12} md={6} style={{ background: 'gray' }}>
+                  <Paper style={{ padding: '1px', textAlign: 'center', color: 'brown' }}>Down Clues</Paper>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} style={{ height: '10%', background: 'lightGreen' }}>
+                <Paper style={{ padding: '1px', textAlign: 'center', color: 'brown' }}>Chat</Paper>
+              </Grid>
+            </Grid>
+          </Grid>
         </ThemeProvider>
       </CrosswordSizeContext.Provider>
     </CrosswordContext.Provider>
   );
+
 };
 
 function mapStateToProps(state: any) {

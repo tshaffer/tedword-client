@@ -46,7 +46,7 @@ const BoardTop = (props: BoardTopProps) => {
     });
 
     console.log('initializePusher: ', props.appState.boardId);
-    
+
     const channel = pusher.subscribe(props.appState.boardId);
 
     // channel.bind('subscription_succeeded', (members) => {
@@ -114,13 +114,7 @@ const BoardTop = (props: BoardTopProps) => {
         xl, extra-large: 1536px      
   */
 
-  return (
-    <div style={{ height: '100%' }}>
-      <Grid container spacing={1} justify="center" style={{ minHeight: '5%', maxWidth: '100%' }}>
-        <BoardToolbar />
-      </Grid>
-      <Board />
-
+  /*
       <Grid container spacing={1} justify="center" style={{ minHeight: '90%', maxWidth: '100%', background: 'pink' }}>
         <Grid item xs={8} style={{ minHeight: '100%' }}>
           <Paper className={classes.paper}>Board</Paper>
@@ -139,6 +133,21 @@ const BoardTop = (props: BoardTopProps) => {
           </Grid>
         </Grid>
       </Grid>
+  */
+
+  return (
+    <div style={{ height: '100%' }}>
+      <Grid container spacing={1} justify="center" style={{ minHeight: '5%', maxWidth: '100%' }}>
+        <BoardToolbar />
+      </Grid>
+      <Board />
+      <BoardPlay
+        appState={props.appState}
+        cellContents={props.cellContents}
+        displayedPuzzle={props.displayedPuzzle}
+        puzzlesMetadata={props.puzzlesMetadata}
+        puzzleSpec={props.puzzleSpec}
+      />
     </div>
   );
 };
