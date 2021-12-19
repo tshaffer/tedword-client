@@ -114,27 +114,6 @@ const BoardTop = (props: BoardTopProps) => {
         xl, extra-large: 1536px      
   */
 
-  /*
-      <Grid container spacing={1} justify="center" style={{ minHeight: '90%', maxWidth: '100%', background: 'pink' }}>
-        <Grid item xs={8} style={{ minHeight: '100%' }}>
-          <Paper className={classes.paper}>Board</Paper>
-        </Grid>
-        <Grid item xs={4} container style={{ minHeight: '100%' }}>
-          <Grid item container spacing={1} xs={12} style={{ height: '90%', maxWidth: '100%', background: 'cyan' }}>
-            <Grid item xs={12} md={6} style={{ background: 'orange' }}>
-              <Paper className={classes.paper}>Across Clues</Paper>
-            </Grid>
-            <Grid item xs={12} md={6} style={{ background: 'gray' }}>
-              <Paper className={classes.paper}>Down Clues</Paper>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} style={{ height: '10%', background: 'lightGreen' }}>
-            <Paper className={classes.paper}>Chat</Paper>
-          </Grid>
-        </Grid>
-      </Grid>
-  */
-
   return (
     <div style={{ height: '100%' }}>
       <Grid container spacing={1} justify="center" style={{ minHeight: '5%', maxWidth: '100%' }}>
