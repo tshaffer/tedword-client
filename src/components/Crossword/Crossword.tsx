@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
@@ -47,11 +46,14 @@ export interface CrosswordProps extends CrosswordPropsFromParent {
 
 const Crossword = (props: CrosswordProps) => {
 
+  const cluesContainerGridRef = React.useRef(null);
+
   const [focused, setFocused] = useState(false);
   const [focusedRow, setFocusedRow] = useState(0);
   const [focusedCol, setFocusedCol] = useState(0);
   const [currentDirection, setCurrentDirection] = useState('across');
   const [currentNumber, setCurrentNumber] = useState('1');
+  const [cluesSideBySide, setCluesSideBySide] = useState(true);
 
   React.useEffect(() => {
     if (props.onFocusedCellChange) {
@@ -61,7 +63,6 @@ const Crossword = (props: CrosswordProps) => {
     setFocusedCol(0);
     setCurrentDirection('across');
     setCurrentNumber('1');
-
   }, [props.size, props.gridData]);
 
   const inputRef = React.useRef();
@@ -382,20 +383,10 @@ const Crossword = (props: CrosswordProps) => {
     });
   }
 
-  // const useStyles = makeStyles((theme) => ({
-  //   gridStyle: {
-  //     height: '200px',
-  //   },
-  //   paper: {
-  //     padding: theme.spacing(1),
-  //     textAlign: 'center',
-  //     color: theme.palette.text.secondary
-  //   }
-  // }));
-
   const getCluesComponent = (direction: string) => {
+    const maxHeight = cluesSideBySide ? '100%' : '50%';
     return (
-      <Grid item xs={12} md={6} style={{ maxHeight: '50%', background: 'gray' }}>
+      <Grid item xs={12} md={6} style={{ maxHeight, background: 'gray' }}>
         <DirectionClues
           key={direction}
           direction={direction}
@@ -464,6 +455,34 @@ const Crossword = (props: CrosswordProps) => {
   const acrossCluesComponent = getCluesComponent('across');
   const downCluesComponent = getCluesComponent('down');
 
+  if (!isNil(cluesContainerGridRef) && !isNil(cluesContainerGridRef.current)) {
+    if (cluesContainerGridRef.current.childElementCount === 2) {
+      const acrossGridItem = cluesContainerGridRef.current.children[0];
+      const acrossRect: DOMRect = acrossGridItem.getBoundingClientRect();
+
+      const downGridItem = cluesContainerGridRef.current.children[1];
+      const downRect: DOMRect = downGridItem.getBoundingClientRect();
+
+      // console.log(acrossRect);
+      // console.log(downRect);
+
+      let newCluesSideBySide = cluesSideBySide;
+      if (acrossRect.top !== downRect.top && cluesSideBySide) {
+        setCluesSideBySide(false);
+        newCluesSideBySide = false;
+        console.log('invoke setCluesSideBySide(false)');
+      } else if (acrossRect.left !== downRect.left && !cluesSideBySide) {
+        setCluesSideBySide(true);
+        newCluesSideBySide = true;
+        console.log('invoke setCluesSideBySide(true)');
+      }
+      if (newCluesSideBySide !== cluesSideBySide) {
+        console.log('newCluesSideBySide: ', newCluesSideBySide);
+      }
+
+    }
+  }
+
   return (
     <CrosswordContext.Provider value={context}>
       <CrosswordSizeContext.Provider
@@ -473,7 +492,7 @@ const Crossword = (props: CrosswordProps) => {
           <Grid container spacing={1} justify="center" style={{ maxWidth: '100%', height: '100%', background: 'pink' }}>
             {crosswordComponent}
             <Grid item xs={4} container style={{ minHeight: '100%', maxHeight: '100%' }}>
-              <Grid item container spacing={1} xs={12} style={{ height: '90%', maxWidth: '100%', background: 'cyan' }}>
+              <Grid item container spacing={1} xs={12} style={{ height: '90%', maxWidth: '100%', background: 'cyan' }} ref={cluesContainerGridRef}>
                 {acrossCluesComponent}
                 {downCluesComponent}
               </Grid>
