@@ -32,6 +32,7 @@ const DirectionClues = (props: DirectionClueProps) => {
       marginBottom: '2em',
       maxHeight: '95%',
       overflowY: 'auto',
+      background: 'white',
     }}>
       <h3 style={{ marginTop: 0, marginBottom: '0.5em' }}>{props.direction.toUpperCase()}</h3>
       {clueData.map(({ number, clue, completelyFilledIn }) => (

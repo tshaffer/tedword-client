@@ -395,7 +395,7 @@ const Crossword = (props: CrosswordProps) => {
 
   const getCluesComponent = (direction: string) => {
     return (
-      <Grid item xs={12} md={6} style={{ maxHeight: '100%', background: 'gray' }}>
+      <Grid item xs={12} md={6} style={{ maxHeight: '100%', background: 'red' }}>
         <DirectionClues
           key={direction}
           direction={direction}
@@ -406,9 +406,11 @@ const Crossword = (props: CrosswordProps) => {
     );
   };
 
+  //       <Grid item xs={8} style={{ minHeight: '100%', maxHeight: '100%', background: 'chartreuse' }}>
+
   const getCrosswordComponent = () => {
     return (
-      <Grid item xs={8} style={{ minHeight: '100%', maxHeight: '100%' }}>
+      <Grid item xs={8} style={{ background: 'chartreuse' }}>
         <div style={{ margin: 0, padding: 0, position: 'relative' }}>
           <svg viewBox="0 0 100 100">
             <rect
@@ -473,9 +475,13 @@ const Crossword = (props: CrosswordProps) => {
           <Grid container spacing={1} justify="center" style={{ maxWidth: '100%', height: '100%', background: 'pink' }}>
             {crosswordComponent}
             <Grid item xs={4} container style={{ minHeight: '100%', maxHeight: '100%' }}>
-              <Grid item container spacing={1} xs={12} style={{ height: '90%', maxWidth: '100%', background: 'cyan' }}>
-                {acrossCluesComponent}
-                {downCluesComponent}
+              <Grid item container spacing={1} xs={12} style={{ height: '90%', maxHeight: '90%', maxWidth: '100%', background: 'cyan' }}>
+                <div style={{ maxHeight: '348px', background: 'purple' }}>
+                  {acrossCluesComponent}
+                </div>
+                <div style={{ maxHeight: '348px', background: 'yellow' }}>
+                  {downCluesComponent}
+                </div>
               </Grid>
               <Grid item xs={12} style={{ height: '10%', background: 'lightGreen' }}>
                 <Paper style={{ padding: '1px', textAlign: 'center', color: 'brown' }}>Chat</Paper>
