@@ -395,7 +395,7 @@ const Crossword = (props: CrosswordProps) => {
 
   const getCluesComponent = (direction: string) => {
     return (
-      <Grid item xs={12} md={6} style={{ maxHeight: '100%', background: 'gray' }}>
+      <Grid item xs={12} md={6} style={{ maxHeight: '50%', background: 'gray' }}>
         <DirectionClues
           key={direction}
           direction={direction}
