@@ -397,10 +397,12 @@ const Crossword = (props: CrosswordProps) => {
     );
   };
 
+  // minHeight: '100%', 
+  // <svg viewBox="0 0 100 100" style={{ height: '100%', maxHeight: '100%'}}>
   const getCrosswordComponent = () => {
     return (
-      <Grid item xs={8} style={{ minHeight: '100%', maxHeight: '100%' }}>
-        <div style={{ margin: 0, padding: 0, position: 'relative' }}>
+      <Grid item xs={8} style={{ maxHeight: '100%' }}>
+        <div style={{ maxHeight: '100%', margin: 0, padding: 0, position: 'relative' }}>
           <svg viewBox="0 0 100 100">
             <rect
               x={0}

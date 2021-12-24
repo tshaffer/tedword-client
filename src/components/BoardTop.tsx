@@ -91,9 +91,6 @@ const BoardTop = (props: BoardTopProps) => {
 
 
   const useStyles = makeStyles((theme) => ({
-    gridStyle: {
-      height: '200px',
-    },
     paper: {
       padding: theme.spacing(1),
       textAlign: 'center',

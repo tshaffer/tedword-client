@@ -15,9 +15,10 @@ export const store = createStore(
   ));
 
 //  height: '1080px',
+//    height: '870px',
 
 const divStyle = {
-  height: '870px',
+  height: '98vh',
 };
 
 ReactDOM.render(
