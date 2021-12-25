@@ -399,9 +399,11 @@ const Crossword = (props: CrosswordProps) => {
 
   // minHeight: '100%', 
   // <svg viewBox="0 0 100 100" style={{ height: '100%', maxHeight: '100%'}}>
+  //       <Grid item xs={6} lg={4} style={{ maxHeight: '100%' }}>
+
   const getCrosswordComponent = () => {
     return (
-      <Grid item xs={8} style={{ maxHeight: '100%' }}>
+      <Grid item xs={8} sm={7} md={6} lg={5} xl={4} style={{ maxHeight: '100%' }}>
         <div style={{ maxHeight: '100%', margin: 0, padding: 0, position: 'relative' }}>
           <svg viewBox="0 0 100 100">
             <rect
@@ -485,6 +487,7 @@ const Crossword = (props: CrosswordProps) => {
     }
   }
 
+  // <Grid item xs={6} lg={8} container style={{ minHeight: '100%', maxHeight: '100%' }}>
   return (
     <CrosswordContext.Provider value={context}>
       <CrosswordSizeContext.Provider
@@ -493,7 +496,7 @@ const Crossword = (props: CrosswordProps) => {
         <ThemeProvider theme={finalTheme}>
           <Grid container spacing={1} justify="center" style={{ maxWidth: '100%', height: '100%', background: 'pink' }}>
             {crosswordComponent}
-            <Grid item xs={4} container style={{ minHeight: '100%', maxHeight: '100%' }}>
+            <Grid item xs={4} sm={5} md={6} lg={7} xl={8} container style={{ minHeight: '100%', maxHeight: '100%' }}>
               <Grid item container spacing={1} xs={12} style={{ height: '90%', maxWidth: '100%', background: 'cyan' }} ref={cluesContainerGridRef}>
                 {acrossCluesComponent}
                 {downCluesComponent}
