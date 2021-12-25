@@ -24,7 +24,7 @@ const ModelessDialog = (props: ModelessDialogProps) => {
 
   const dialogStyle: any = {
     position: 'fixed',
-    top: '90%',
+    top: '95%',
     left: '95%',
     transform: 'translate(-50%, -50%)',
     zIndex: 9999,
@@ -34,7 +34,6 @@ const ModelessDialog = (props: ModelessDialogProps) => {
 
   const contentStyle = {
     marginLeft: '5em',
-    // fontStyle: 'italic',
     color: 'white',
   };
 

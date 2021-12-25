@@ -193,13 +193,7 @@ const ChatHistory = (props: ChatHistoryProps) => {
 
   const chatHistory = getChatHistory();
 
-  const chatHistoryJsx = renderChatHistory(chatHistory);
-
-  return (
-    <div className='chat-body'>
-      {chatHistoryJsx}
-    </div>
-  );
+  return renderChatHistory(chatHistory);
 };
 
 function mapStateToProps(state: any) {

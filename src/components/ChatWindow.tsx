@@ -174,9 +174,6 @@ const ChatWindow = (props: ChatWindowProps) => {
     );
   };
 
-  // <ChatHistory />
-  //           {chatHistory}
-
   return (
     <div id='chat-bubble' ref={chatBubbleRef}>
       <div id='chat-container'>
@@ -193,9 +190,7 @@ const ChatWindow = (props: ChatWindowProps) => {
             </a>
           </div>
         </div>
-        <div className='chat-body'>
-          <ChatHistory />
-        </div>
+        <ChatHistory />
 
         <div className='chat-footer'>
           <input

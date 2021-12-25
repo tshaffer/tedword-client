@@ -3,8 +3,9 @@ import { useState } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+
+import Chat from '../Chat';
 
 import { Guess, CluesByDirection, GuessesGrid, GridSquare, GridSquareSpec, GridSpec, CrosswordCellCoordinate, FakeCellData } from '../../types';
 
@@ -502,7 +503,7 @@ const Crossword = (props: CrosswordProps) => {
                 {downCluesComponent}
               </Grid>
               <Grid item xs={12} style={{ height: '10%', background: 'lightGreen' }}>
-                <Paper style={{ padding: '1px', textAlign: 'center', color: 'brown' }}>Chat</Paper>
+                <Chat/>
               </Grid>
             </Grid>
           </Grid>
