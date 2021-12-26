@@ -384,7 +384,33 @@ const Crossword = (props: CrosswordProps) => {
     });
   }
 
-  const getCluesComponent = (direction: string) => {
+  const setCluesLayout = () => {
+    if (!isNil(cluesContainerGridRef) && !isNil(cluesContainerGridRef.current)) {
+      if (cluesContainerGridRef.current.childElementCount === 2) {
+        const acrossGridItem = cluesContainerGridRef.current.children[0];
+        const acrossRect: DOMRect = acrossGridItem.getBoundingClientRect();
+
+        const downGridItem = cluesContainerGridRef.current.children[1];
+        const downRect: DOMRect = downGridItem.getBoundingClientRect();
+
+        let newCluesSideBySide = cluesSideBySide;
+        if (acrossRect.top !== downRect.top && cluesSideBySide) {
+          setCluesSideBySide(false);
+          newCluesSideBySide = false;
+          console.log('invoke setCluesSideBySide(false)');
+        } else if (acrossRect.left !== downRect.left && !cluesSideBySide) {
+          setCluesSideBySide(true);
+          newCluesSideBySide = true;
+          console.log('invoke setCluesSideBySide(true)');
+        }
+        if (newCluesSideBySide !== cluesSideBySide) {
+          console.log('newCluesSideBySide: ', newCluesSideBySide);
+        }
+      }
+    }
+  };
+
+  const renderCluesComponent = (direction: string) => {
     const maxHeight = cluesSideBySide ? '100%' : '50%';
     return (
       <Grid item xs={12} md={6} style={{ maxHeight, background: 'gray' }}>
@@ -402,11 +428,29 @@ const Crossword = (props: CrosswordProps) => {
   // <svg viewBox="0 0 100 100" style={{ height: '100%', maxHeight: '100%'}}>
   //       <Grid item xs={6} lg={4} style={{ maxHeight: '100%' }}>
 
-  const getCrosswordComponent = () => {
+  // height='782px'
+  // <svg viewBox="0 0 100 100" style={{ height: '782px' }}>
+
+  //           <svg viewBox="0 0 100 100" style={{ width: '83%' }}>
+
+  /* this works
+          <div style={{ margin: 0, padding: 0, position: 'relative', height: '772px' }}>
+          <svg viewBox="0 0 100 100" width='auto' height='100%' style={{ maxWidth: '100%' }}>
+  */
+
+  /* this also works
+        <div style={{ margin: 0, padding: 0, position: 'relative', height: '100%' }}>
+          <svg viewBox="0 0 100 100" width='auto' height='100%' style={{ maxWidth: '100%' }}>
+  */
+
+  /*
+      <Grid item xs={8} sm={7} md={6} lg={6} xl={4} style={{ maxHeight: '100%' }}>
+  */
+  const renderCrosswordComponent = () => {
     return (
-      <Grid item xs={8} sm={7} md={6} lg={5} xl={4} style={{ maxHeight: '100%' }}>
-        <div style={{ maxHeight: '100%', margin: 0, padding: 0, position: 'relative' }}>
-          <svg viewBox="0 0 100 100">
+      <Grid item xs={8} style={{ maxHeight: '100%' }}>
+        <div style={{ margin: 0, padding: 0, position: 'relative', height: '100%' }}>
+          <svg viewBox="0 0 100 100" width='auto' height='100%' style={{ maxWidth: '100%' }}>
             <rect
               x={0}
               y={0}
@@ -456,39 +500,16 @@ const Crossword = (props: CrosswordProps) => {
     );
   };
 
-  const crosswordComponent = getCrosswordComponent();
-  const acrossCluesComponent = getCluesComponent('across');
-  const downCluesComponent = getCluesComponent('down');
+  const crosswordComponent = renderCrosswordComponent();
+  const acrossCluesComponent = renderCluesComponent('across');
+  const downCluesComponent = renderCluesComponent('down');
 
-  if (!isNil(cluesContainerGridRef) && !isNil(cluesContainerGridRef.current)) {
-    if (cluesContainerGridRef.current.childElementCount === 2) {
-      const acrossGridItem = cluesContainerGridRef.current.children[0];
-      const acrossRect: DOMRect = acrossGridItem.getBoundingClientRect();
-
-      const downGridItem = cluesContainerGridRef.current.children[1];
-      const downRect: DOMRect = downGridItem.getBoundingClientRect();
-
-      // console.log(acrossRect);
-      // console.log(downRect);
-
-      let newCluesSideBySide = cluesSideBySide;
-      if (acrossRect.top !== downRect.top && cluesSideBySide) {
-        setCluesSideBySide(false);
-        newCluesSideBySide = false;
-        console.log('invoke setCluesSideBySide(false)');
-      } else if (acrossRect.left !== downRect.left && !cluesSideBySide) {
-        setCluesSideBySide(true);
-        newCluesSideBySide = true;
-        console.log('invoke setCluesSideBySide(true)');
-      }
-      if (newCluesSideBySide !== cluesSideBySide) {
-        console.log('newCluesSideBySide: ', newCluesSideBySide);
-      }
-
-    }
-  }
+  setCluesLayout();
 
   // <Grid item xs={6} lg={8} container style={{ minHeight: '100%', maxHeight: '100%' }}>
+  /*
+            <Grid item xs={4} sm={5} md={6} lg={6} xl={8} container style={{ minHeight: '100%', maxHeight: '100%' }}>
+  */
   return (
     <CrosswordContext.Provider value={context}>
       <CrosswordSizeContext.Provider
@@ -497,13 +518,13 @@ const Crossword = (props: CrosswordProps) => {
         <ThemeProvider theme={finalTheme}>
           <Grid container spacing={1} justify="center" style={{ maxWidth: '100%', height: '100%', background: 'pink' }}>
             {crosswordComponent}
-            <Grid item xs={4} sm={5} md={6} lg={7} xl={8} container style={{ minHeight: '100%', maxHeight: '100%' }}>
+            <Grid item xs={4} container style={{ minHeight: '100%', maxHeight: '100%' }}>
               <Grid item container spacing={1} xs={12} style={{ height: '90%', maxWidth: '100%', background: 'cyan' }} ref={cluesContainerGridRef}>
                 {acrossCluesComponent}
                 {downCluesComponent}
               </Grid>
               <Grid item xs={12} style={{ height: '10%', background: 'lightGreen' }}>
-                <Chat/>
+                <Chat />
               </Grid>
             </Grid>
           </Grid>
