@@ -36,9 +36,17 @@ const ChatWindow = (props: ChatWindowProps) => {
     setMessage(event.target.value);
   };
 
-  const handleKeyDown = (event) => {
+  // const handleKeyDown = (event) => {
+  //   if (event.key === 'Enter') {
+  //     console.log('send message:', message);
+  //     props.onSendMessage(message);
+  //     setMessage('');
+  //   }
+  // };
+
+  const handleKeyPress = (event: React.KeyboardEvent) => {
+    // if (event.charCode === 13) {
     if (event.key === 'Enter') {
-      console.log('send message:', message);
       props.onSendMessage(message);
       setMessage('');
     }
@@ -174,6 +182,8 @@ const ChatWindow = (props: ChatWindowProps) => {
     );
   };
 
+  // onKeyDown={handleKeyDown}
+
   return (
     <div id='chat-bubble' ref={chatBubbleRef}>
       <div id='chat-container'>
@@ -197,7 +207,7 @@ const ChatWindow = (props: ChatWindowProps) => {
             type='text'
             value={message}
             onChange={handleMessageChanged}
-            onKeyDown={handleKeyDown}
+            onKeyPress={handleKeyPress}
             placeholder={'Type a message...'}
           />
         </div>
