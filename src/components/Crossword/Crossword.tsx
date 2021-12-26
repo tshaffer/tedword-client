@@ -448,9 +448,9 @@ const Crossword = (props: CrosswordProps) => {
   */
   const renderCrosswordComponent = () => {
     return (
-      <Grid item xs={8} style={{ maxHeight: '100%' }}>
-        <div style={{ margin: 0, padding: 0, position: 'relative', height: '100%' }}>
-          <svg viewBox="0 0 100 100" width='auto' height='100%' style={{ maxWidth: '100%' }}>
+      <Grid item xs={8} sm={7} md={6} lg={5} xl={4} style={{ maxHeight: '100%' }}>
+        <div style={{ maxHeight: '100%', margin: 0, padding: 0, position: 'relative' }}>
+          <svg viewBox="0 0 100 100">
             <rect
               x={0}
               y={0}
@@ -518,12 +518,12 @@ const Crossword = (props: CrosswordProps) => {
         <ThemeProvider theme={finalTheme}>
           <Grid container spacing={1} justify="center" style={{ maxWidth: '100%', height: '100%' }}>
             {crosswordComponent}
-            <Grid item xs={4} container style={{ minHeight: '100%', maxHeight: '100%' }}>
+            <Grid item xs={4} sm={5} md={6} lg={7} xl={8} container style={{ minHeight: '100%', maxHeight: '100%' }}>
               <Grid item container spacing={1} xs={12} style={{ height: '90%', maxWidth: '100%' }} ref={cluesContainerGridRef}>
                 {acrossCluesComponent}
                 {downCluesComponent}
               </Grid>
-              <Grid item xs={12} style={{ height: '10%'}}>
+              <Grid item xs={12} style={{ height: '10%' }}>
                 <Chat />
               </Grid>
             </Grid>
