@@ -6,10 +6,10 @@ import * as QueryString from 'query-string';
 
 import { isEmpty, isNil, isString } from 'lodash';
 
-import { AppState, DisplayedPuzzle, Guess, StartPage, UiState, UsersMap } from '../types';
+import { AppState, StartPage, UiState, UsersMap } from '../types';
 import { launchExistingGame, loadBoards, loadPuzzlesMetadata, loadUsers, loginPersistentUser, } from '../controllers';
-import { getAppState, getDisplayedPuzzle, getUsers } from '../selectors';
-import { setUiState, setUserName, updateGuess, setStartPage, setStartupBoardId, } from '../models';
+import { getAppState, getUsers } from '../selectors';
+import { setUiState, setStartPage, setStartupBoardId, } from '../models';
 
 import Login from './Login';
 import GameHome from './GameHome';
@@ -23,14 +23,11 @@ export interface HomeProps {
   appState: AppState,
   currentUser: string | null,
   users: UsersMap;
-  onSetUserName: (userName: string) => any;
   onSetUiState: (uiState: UiState) => any;
-  displayedPuzzle: DisplayedPuzzle;
   onLoadBoards: () => any;
   onLoadPuzzlesMetadata: () => any;
   onLoadUsers: () => any;
   onLoginPersistentUser: () => any;
-  onUpdateGuess: (row: number, col: number, puzzleGuess: Guess) => any;
   onLaunchExistingGame: (boardId: string) => any;
   onSetStartPage: (startPage: StartPage) => any;
   onSetStartupBoardId: (boardId: string) => any;
@@ -162,19 +159,16 @@ function mapStateToProps(state: any) {
     appState: getAppState(state),
     currentUser: getCurrentUser(state),
     users: getUsers(state),
-    displayedPuzzle: getDisplayedPuzzle(state),
   };
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
-    onSetUserName: setUserName,
     onSetUiState: setUiState,
     onLoadBoards: loadBoards,
     onLoadPuzzlesMetadata: loadPuzzlesMetadata,
     onLoadUsers: loadUsers,
     onLoginPersistentUser: loginPersistentUser,
-    onUpdateGuess: updateGuess,
     onLaunchExistingGame: launchExistingGame,
     onSetStartPage: setStartPage,
     onSetStartupBoardId: setStartupBoardId,

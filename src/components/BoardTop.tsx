@@ -3,7 +3,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 import { isNil } from 'lodash';
@@ -13,8 +12,7 @@ import BoardPlay from './BoardPlay';
 import BoardToolbar from './BoardToolbar';
 import { getAppState, getBoard, getPuzzlesMetadata, getDisplayedPuzzle, getCellContents, getPuzzle } from '../selectors';
 import { AppState, BoardEntity, CellContentsMap, DisplayedPuzzle, Guess, PuzzlesMetadataMap, PuzzleSpec, UiState } from '../types';
-import { setUiState, } from '../models';
-import Chat from './Chat';
+import { setUiState, updateGuess } from '../models';
 
 // import * as Pusher from 'pusher-js';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -27,6 +25,7 @@ export interface BoardTopProps {
   puzzlesMetadata: PuzzlesMetadataMap;
   puzzleSpec: PuzzleSpec;
   onSetUiState: (uiState: UiState) => any;
+  onUpdateGuess: (row: number, col: number, puzzleGuess: Guess) => any;
 }
 
 export let pusher: any;
@@ -145,6 +144,7 @@ function mapStateToProps(state: any) {
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onSetUiState: setUiState,
+    onUpdateGuess: updateGuess,
   }, dispatch);
 };
 

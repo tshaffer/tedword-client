@@ -6,7 +6,7 @@ import ReactModal = require('react-modal');
 
 import { isNil } from 'lodash';
 
-import { GameState, serverUrl, User, UsersMap } from '../types';
+import { GameState, serverUrl, UsersMap } from '../types';
 import { updateElapsedTime } from '../controllers';
 import { setPuzzlePlayActive } from '../models';
 import { getBoardId, getElapsedTime, getGameState, getPuzzlePlayActive, getUsers } from '../selectors';
