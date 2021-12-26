@@ -182,11 +182,11 @@ const BoardToolbar = (props: BoardToolbarProps) => {
     const path = serverUrl + '/?startpage=joinGame&boardId=' + props.boardId;
     console.log('path');
     console.log(path);
-    
-    navigator.clipboard.writeText(path).then(function() {
+
+    navigator.clipboard.writeText(path).then(function () {
       /* clipboard successfully set */
       console.log('success');
-    }, function() {
+    }, function () {
       /* clipboard write failed */
       console.log('failure');
     });
@@ -196,7 +196,7 @@ const BoardToolbar = (props: BoardToolbarProps) => {
 
   const linkDiv = getLinkDiv();
 
-  /*
+
   return (
     <div>
       <div>
@@ -260,23 +260,6 @@ const BoardToolbar = (props: BoardToolbarProps) => {
       </button>
     </div>
   );
-  */
-
-  return (
-    <div>
-      {getElapsedTimeString()}
-      <button
-        onClick={() => handlePauseGame()}
-        disabled={!props.puzzlePlayActive}
-        style={buttonStyle}
-      >
-        {'Pause'}
-      </button>
-    </div>
-  );
-
-
-
 };
 
 function mapStateToProps(state: any) {
