@@ -82,34 +82,12 @@ const Board = (props: BoardProps) => {
     downClue = 'Working on it, harder than I thought';
   }
 
-  /*
-    return (
-      <div style={{
-        width: '100%',
-        marginTop: '8px',
-        marginBottom: '16px',
-      }}>
-        <div style={{
-          marginRight: '32px',
-          float: 'left',
-        }}>
-          <p>{acrossClue}</p>
-          <p>{acrossUserEntry}</p>
-        </div>
-        <div>
-          <p>{downClue}</p>
-          <p>{downUserEntry}</p>
-        </div>
-      </div>
-    );
-  */
-
   return (
     <Grid container spacing={1} justify="flex-start" style={{ minHeight: '5%', maxWidth: '100%' }}>
-      <Grid item xs={12} sm={6} md={3} lg={2} >
+      <Grid item xs='auto'>
         <Paper className={classes.paper}>{acrossClue}</Paper>
       </Grid>
-      <Grid item xs={12} sm={6} md={3} lg={2} >
+      <Grid item xs='auto'>
         <Paper className={classes.paper}>{downClue}</Paper>
       </Grid>
     </Grid>
