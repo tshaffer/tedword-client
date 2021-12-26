@@ -413,7 +413,7 @@ const Crossword = (props: CrosswordProps) => {
   const renderCluesComponent = (direction: string) => {
     const maxHeight = cluesSideBySide ? '100%' : '50%';
     return (
-      <Grid item xs={12} md={6} style={{ maxHeight, background: 'gray' }}>
+      <Grid item xs={12} md={6} style={{ maxHeight }}>
         <DirectionClues
           key={direction}
           direction={direction}
@@ -516,14 +516,14 @@ const Crossword = (props: CrosswordProps) => {
         value={{ cellSize, cellPadding, cellInner, cellHalf, fontSize }}
       >
         <ThemeProvider theme={finalTheme}>
-          <Grid container spacing={1} justify="center" style={{ maxWidth: '100%', height: '100%', background: 'pink' }}>
+          <Grid container spacing={1} justify="center" style={{ maxWidth: '100%', height: '100%' }}>
             {crosswordComponent}
             <Grid item xs={4} container style={{ minHeight: '100%', maxHeight: '100%' }}>
-              <Grid item container spacing={1} xs={12} style={{ height: '90%', maxWidth: '100%', background: 'cyan' }} ref={cluesContainerGridRef}>
+              <Grid item container spacing={1} xs={12} style={{ height: '90%', maxWidth: '100%' }} ref={cluesContainerGridRef}>
                 {acrossCluesComponent}
                 {downCluesComponent}
               </Grid>
-              <Grid item xs={12} style={{ height: '10%', background: 'lightGreen' }}>
+              <Grid item xs={12} style={{ height: '10%'}}>
                 <Chat />
               </Grid>
             </Grid>
