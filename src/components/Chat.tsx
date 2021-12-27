@@ -74,9 +74,7 @@ const Chat = (props: ChatProps) => {
           clickBackdropToClose={false}
           style={chatDialogStyle}
           containerClassName={container}>
-          <div style={content}>
-            <ChatWindow />
-          </div>
+          <ChatWindow />
         </ModelessDialog>
       </div >
     );
