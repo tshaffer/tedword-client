@@ -8,8 +8,6 @@ import {
   ChatMember,
 } from '../types';
 
-import ModelessDialog from './ModelessDialog';
-
 import { joinChat, sendMessage } from '../controllers/chat';
 import {
   getAppState,
@@ -41,11 +39,26 @@ const Chat = (props: ChatProps) => {
     props.onJoinChat(props.appState.boardId, props.currentUser);
   }, []);
 
+  const chatContainerStyle: any = {
+    marginRight: 'auto',
+    maxWidth: '290px',
+    padding: '1em',
+    position: 'fixed',
+    top: '95%',
+    left: '95%',
+    transform: 'translate(-50%, -50%)',
+    zIndex: 9999,
+    boxShadow: 'rgba(0,0,0,.3) 0 0.3rem 1rem',
+    background: 'red',
+    marginLeft: '5em',
+    color: 'white',
+  };
+
   const getChatJsx = () => {
     return (
-      <ModelessDialog>
+      <div style={chatContainerStyle}>
         <ChatWindow />
-      </ModelessDialog>
+      </div>
     );
   };
 
