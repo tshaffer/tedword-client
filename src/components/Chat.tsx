@@ -66,17 +66,15 @@ const Chat = (props: ChatProps) => {
 
   const getChatJsx = () => {
     return (
-      <div>
-        <ModelessDialog
-          isOpen={true}
-          onClose={onCloseChat}
-          noBackdrop={true}
-          clickBackdropToClose={false}
-          style={chatDialogStyle}
-          containerClassName={container}>
-          <ChatWindow />
-        </ModelessDialog>
-      </div >
+      <ModelessDialog
+        isOpen={true}
+        onClose={onCloseChat}
+        noBackdrop={true}
+        clickBackdropToClose={false}
+        style={chatDialogStyle}
+        containerClassName={container}>
+        <ChatWindow />
+      </ModelessDialog>
     );
   };
 
