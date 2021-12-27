@@ -4,75 +4,28 @@ import { connect } from 'react-redux';
 
 export interface ModelessDialogProps {
   children: any;
-  className: string;
-  containerClassName: string;
-  backdropClassName: string;
-  noBackdrop: boolean;
-  clickBackdropToClose: boolean;
-
-  onClose: () => any;
 }
 
 const ModelessDialog = (props: ModelessDialogProps) => {
 
-  const containerStyle = {
-    marginLeft: 'auto',
+  const chatContainerStyle: any = {
     marginRight: 'auto',
     maxWidth: '290px',
     padding: '1em',
-  };
-
-  const dialogStyle: any = {
     position: 'fixed',
     top: '95%',
     left: '95%',
     transform: 'translate(-50%, -50%)',
     zIndex: 9999,
     boxShadow: 'rgba(0,0,0,.3) 0 0.3rem 1rem',
-    background: 'red'
-  };
-
-  const contentStyle = {
+    background: 'red',
     marginLeft: '5em',
     color: 'white',
   };
 
-  const defaultDialogStyle = {
-    position: 'fixed',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    zIndex: 9999,
-    background: 'rgba(255, 255, 255, 1)'
-  };
-
-  const defaultBackdropStyle = {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: 9998,
-    background: 'rgba(0, 0, 0, 0.3)'
-  };
-
-  const finalDialogStyle = Object.assign({}, defaultDialogStyle) as any;
-  const finalBackdropStyle = Object.assign({}, defaultBackdropStyle) as any;
-
-  const close = (e) => {
-    e.preventDefault();
-    if (props.onClose) {
-      props.onClose();
-    }
-  };
-
   return (
-    <div style={containerStyle}>
-      <div style={dialogStyle}>
-        <div style={contentStyle}>
-          {props.children}
-        </div>
-      </div>
+    <div style={chatContainerStyle}>
+      {props.children}
     </div>
   );
 };
@@ -80,12 +33,6 @@ const ModelessDialog = (props: ModelessDialogProps) => {
 function mapStateToProps(state: any, ownProps: any) {
   return {
     children: ownProps.children,
-    className: ownProps.className,
-    containerClassName: ownProps.containerClassName,
-    backdropClassName: ownProps.backdropClassName,
-    noBackdrop: ownProps.noBackdrop,
-    clickBackdropToClose: ownProps.clickBackdropToClose,
-    onClose: ownProps.onClose,
   };
 }
 

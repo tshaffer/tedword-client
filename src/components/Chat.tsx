@@ -41,38 +41,9 @@ const Chat = (props: ChatProps) => {
     props.onJoinChat(props.appState.boardId, props.currentUser);
   }, []);
 
-  const chatDialogStyle = {
-    width: '60rem',
-    height: '20rem',
-    boxShadow: 'rgba(0,0,0,.3) 0 0.3rem 1rem',
-    background: 'red'
-  };
-
-  const container = {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    maxWidth: '720px',
-    padding: '1em',
-  };
-
-  const content = {
-    marginLeft: '5em',
-    color: 'white',
-  };
-
-  const onCloseChat = () => {
-    console.log('onCloseChat invoked');
-  };
-
   const getChatJsx = () => {
     return (
-      <ModelessDialog
-        isOpen={true}
-        onClose={onCloseChat}
-        noBackdrop={true}
-        clickBackdropToClose={false}
-        style={chatDialogStyle}
-        containerClassName={container}>
+      <ModelessDialog>
         <ChatWindow />
       </ModelessDialog>
     );

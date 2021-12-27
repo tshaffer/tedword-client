@@ -107,16 +107,9 @@ const ChatWindow = (props: ChatWindowProps) => {
     }
   };
 
-  const getChatHistory = () => {
-    const allChats = props.chats.map((chat: Chat) => {
-      return getChat(chat);
-    });
-    return allChats;
-  };
-
   const msecToTriggerNewMessageGroup = 60000;
 
-  const getChatHistoryTest = () => {
+  const getChatHistory = () => {
     let timeOfPriorMessage: number = new Date(0).getTime();
     let lastSender: string = '';
 
@@ -139,9 +132,7 @@ const ChatWindow = (props: ChatWindowProps) => {
     }
   };
 
-  getChatHistoryTest();
-
-  const chatHistory = getChatHistory();
+  getChatHistory();
 
   const getChatParticipantList = () => {
 
@@ -181,8 +172,6 @@ const ChatWindow = (props: ChatWindowProps) => {
       </div>
     );
   };
-
-  // onKeyDown={handleKeyDown}
 
   return (
     <div id='chat-bubble' ref={chatBubbleRef}>
