@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 
 import '../../styles/app.css';
 
@@ -16,7 +17,6 @@ import {
   getCurrentUser,
 } from '../../selectors';
 import { isNil } from 'lodash';
-import _ = require('lodash');
 
 export interface ChatHistoryProps {
   currentUser: string;
@@ -24,6 +24,14 @@ export interface ChatHistoryProps {
 }
 
 const ChatHistory = (props: ChatHistoryProps) => {
+
+  const chatBodyRef = React.useRef(null);
+
+  if (!isNil(chatBodyRef) && !isNil(chatBodyRef.current)) {
+    console.log('pizza');
+    // chatBodyRef.current.scrollTop=chatBodyRef.current.clientHeight
+    // scrolls div to the bottom
+  }
 
   const getDateTimeString = (dt: Date): string => {
     const month = (dt.getMonth() + 1).toString();
@@ -42,7 +50,10 @@ const ChatHistory = (props: ChatHistoryProps) => {
     }
     const hS: string = h.toString();
 
-    const minute = dt.getMinutes().toString();
+    let minute = dt.getMinutes().toString();
+    if (minute.length === 1) {
+      minute = '0' + minute;
+    }
     return (month + '/' + d + '/' + y + ', ' + hS + ':' + minute + ' ' + amPM);
   };
 
@@ -126,7 +137,7 @@ const ChatHistory = (props: ChatHistoryProps) => {
 
   const renderChatMessageFromMe = (message: string) => {
     return (
-      <div className='sender-me-my-message'>
+      <div key={uuidv4()} className='sender-me-my-message'>
         {message}
       </div>
     );
@@ -134,7 +145,7 @@ const ChatHistory = (props: ChatHistoryProps) => {
 
   const renderChatMessageFromOther = (message: string) => {
     return (
-      <div className='sender-other-other-message'>
+      <div key={uuidv4()} className='sender-other-other-message'>
         {message}
       </div>
     );
@@ -142,7 +153,7 @@ const ChatHistory = (props: ChatHistoryProps) => {
 
   const renderChatMessageOtherSender = (sender: string) => {
     return (
-      <div className='sender-name'>
+      <div key={uuidv4()} className='sender-name'>
         {sender}
       </div>
     );
@@ -150,7 +161,7 @@ const ChatHistory = (props: ChatHistoryProps) => {
 
   const renderChatMessageAtTime = (timestamp: Date) => {
     return (
-      <div className='sender-date-time'>
+      <div key={uuidv4()} className='sender-date-time'>
         {getDateTimeString(timestamp)}
       </div>
     );
@@ -162,7 +173,7 @@ const ChatHistory = (props: ChatHistoryProps) => {
 
     for (const chatsAtTime of chatHistory.chatsAtTime) {
       const { chatsTime, chatsBySender } = chatsAtTime;
-      const chatMessageAtTime = renderChatMessageAtTime(chatsTime)
+      const chatMessageAtTime = renderChatMessageAtTime(chatsTime);
       chatJSX.push(chatMessageAtTime);
 
       for (const chatMessagesBySender of chatsBySender) {
@@ -183,7 +194,7 @@ const ChatHistory = (props: ChatHistoryProps) => {
     }
 
     return (
-      <div className='chat-body'>
+      <div key={uuidv4()} className='chat-body' ref={chatBodyRef}>
         {chatJSX}
       </div>
     );
