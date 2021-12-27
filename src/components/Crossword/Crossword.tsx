@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import Grid from '@material-ui/core/Grid';
 
-import Chat from '../Chat';
+import Chat from '../Chat/Chat';
 
 import { Guess, CluesByDirection, GuessesGrid, GridSquare, GridSquareSpec, GridSpec, CrosswordCellCoordinate, FakeCellData } from '../../types';
 

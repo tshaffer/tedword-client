@@ -6,16 +6,16 @@ import {
   AppState,
   Chat,
   ChatMember,
-} from '../types';
+} from '../../types';
 
-import { joinChat, sendMessage } from '../controllers/chat';
+import { joinChat, sendMessage } from '../../controllers/chat';
 import {
   getAppState,
   getChatMembers,
   getChats,
   getCurrentUser,
   getJoinedChat,
-} from '../selectors';
+} from '../../selectors';
 import ChatWindow from './ChatWindow';
 
 export interface ChatProps {

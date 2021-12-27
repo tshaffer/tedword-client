@@ -2,19 +2,19 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import '../styles/app.css';
+import '../../styles/app.css';
 
 import {
   Chat,
   ChatsAtTime,
   ChatsBySender,
   OrderedChats,
-} from '../types';
+} from '../../types';
 
 import {
   getChats,
   getCurrentUser,
-} from '../selectors';
+} from '../../selectors';
 import { isNil } from 'lodash';
 import _ = require('lodash');
 
@@ -45,8 +45,6 @@ const ChatHistory = (props: ChatHistoryProps) => {
     const minute = dt.getMinutes().toString();
     return (month + '/' + d + '/' + y + ', ' + hS + ':' + minute + ' ' + amPM);
   };
-
-
 
   const msecToTriggerNewMessageGroup = 60000;
 
