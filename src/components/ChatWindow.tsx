@@ -186,31 +186,28 @@ const ChatWindow = (props: ChatWindowProps) => {
 
   return (
     <div id='chat-bubble' ref={chatBubbleRef}>
-      <div id='chat-container'>
-        <div className='chat-header'>
-          <div className='user-avatar' onClick={openChatBubble}>
-            <div className='img-container'>
-              <img src='https://source.unsplash.com/random/35x35' />
-            </div>
-            {renderChatParticipants()}
+      <div className='chat-header'>
+        <div className='user-avatar' onClick={openChatBubble}>
+          <div className='img-container'>
+            <img src='https://source.unsplash.com/random/35x35' />
           </div>
-          <div className='chat-comm'>
-            <a href='#' onClick={closeChatBubble}>
-              <img src='../icons/closeIcon.svg' />
-            </a>
-          </div>
+          {renderChatParticipants()}
         </div>
-        <ChatHistory />
-
-        <div className='chat-footer'>
-          <input
-            type='text'
-            value={message}
-            onChange={handleMessageChanged}
-            onKeyPress={handleKeyPress}
-            placeholder={'Type a message...'}
-          />
+        <div className='chat-comm'>
+          <a href='#' onClick={closeChatBubble}>
+            <img src='../icons/closeIcon.svg' />
+          </a>
         </div>
+      </div>
+      <ChatHistory />
+      <div className='chat-footer'>
+        <input
+          type='text'
+          value={message}
+          onChange={handleMessageChanged}
+          onKeyPress={handleKeyPress}
+          placeholder={'Type a message...'}
+        />
       </div>
     </div>
   );
