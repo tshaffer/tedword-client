@@ -86,9 +86,11 @@ const Board = (props: BoardProps) => {
     <Grid container spacing={1} justify="flex-start" style={{ minHeight: '5%', maxWidth: '100%' }}>
       <Grid item xs='auto'>
         <Paper className={classes.paper}>{acrossClue}</Paper>
+        <Paper className={classes.paper}>{acrossUserEntry}</Paper>
       </Grid>
       <Grid item xs='auto'>
         <Paper className={classes.paper}>{downClue}</Paper>
+        <Paper className={classes.paper}>{downUserEntry}</Paper>
       </Grid>
     </Grid>
   );
