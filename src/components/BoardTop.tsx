@@ -2,7 +2,6 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
 import { isNil } from 'lodash';
@@ -88,14 +87,6 @@ const BoardTop = (props: BoardTopProps) => {
     initializePusher();
   }, []);
 
-
-  const useStyles = makeStyles((theme) => ({
-    paper: {
-      padding: theme.spacing(1),
-      textAlign: 'center',
-      color: theme.palette.text.secondary
-    }
-  }));
 
   const handleHome = () => {
     console.log('handleHome');
