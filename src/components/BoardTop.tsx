@@ -97,7 +97,11 @@ const BoardTop = (props: BoardTopProps) => {
     }
   }));
 
-  const classes = useStyles();
+  const handleHome = () => {
+    console.log('handleHome');
+    props.onSetUiState(UiState.SelectPuzzleOrBoard);
+  };
+
 
   /*
     // From 0 to 600px wide (smart-phones), I take up 12 columns, or the whole device width!
@@ -112,6 +116,9 @@ const BoardTop = (props: BoardTopProps) => {
 
   return (
     <div style={{ height: '100%' }}>
+      <div>
+        <button onClick={handleHome}>Home</button>
+      </div>
       <Grid container spacing={1} justify="center" style={{ minHeight: '5%', maxWidth: '100%' }}>
         <BoardToolbar />
       </Grid>
