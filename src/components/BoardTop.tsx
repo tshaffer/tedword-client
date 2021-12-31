@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 
 import { isNil } from 'lodash';
 
-import Board from './Board';
+import FocusedClues from './FocusedClues';
 import BoardPlay from './BoardPlay';
 import BoardToolbar from './BoardToolbar';
 import { getAppState, getBoard, getPuzzlesMetadata, getDisplayedPuzzle, getCellContents, getPuzzle } from '../selectors';
@@ -113,7 +113,7 @@ const BoardTop = (props: BoardTopProps) => {
       <Grid container spacing={1} justify="center" style={{ minHeight: '5%', maxWidth: '100%' }}>
         <BoardToolbar />
       </Grid>
-      <Board />
+      <FocusedClues />
       <BoardPlay
         appState={props.appState}
         cellContents={props.cellContents}

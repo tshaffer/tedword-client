@@ -17,13 +17,13 @@ import { ClueAtLocation, CluesByDirection, CluesByNumber, GameState, Guess, Gues
 import { getCrosswordClues, getGameState, getGuesses } from '../selectors';
 import { isNil } from 'lodash';
 
-export interface BoardProps {
+export interface FocusedCluesProps {
   gameState: GameState,
   cluesByDirection: CluesByDirection;
   guesses: GuessesGrid;
 }
 
-const Board = (props: BoardProps) => {
+const FocusedClues = (props: FocusedCluesProps) => {
 
   const classes = useStyles();
 
@@ -110,4 +110,4 @@ const mapDispatchToProps = (dispatch: any) => {
   }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Board);
+export default connect(mapStateToProps, mapDispatchToProps)(FocusedClues);

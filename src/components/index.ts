@@ -1,4 +1,4 @@
-export * from './Board';
+export * from './FocusedClues';
 export * from './BoardPlay';
 export * from './BoardTop';
 export * from './Chat';
