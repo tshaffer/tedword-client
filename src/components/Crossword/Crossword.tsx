@@ -387,25 +387,42 @@ const Crossword = (props: CrosswordProps) => {
   const setCluesLayout = () => {
     if (!isNil(cluesContainerGridRef) && !isNil(cluesContainerGridRef.current)) {
       if (cluesContainerGridRef.current.childElementCount === 2) {
+
         const acrossGridItem = cluesContainerGridRef.current.children[0];
-        const acrossRect: DOMRect = acrossGridItem.getBoundingClientRect();
-
         const downGridItem = cluesContainerGridRef.current.children[1];
-        const downRect: DOMRect = downGridItem.getBoundingClientRect();
 
-        let newCluesSideBySide = cluesSideBySide;
-        if (acrossRect.top !== downRect.top && cluesSideBySide) {
-          setCluesSideBySide(false);
-          newCluesSideBySide = false;
-          console.log('invoke setCluesSideBySide(false)');
-        } else if (acrossRect.left !== downRect.left && !cluesSideBySide) {
-          setCluesSideBySide(true);
-          newCluesSideBySide = true;
-          console.log('invoke setCluesSideBySide(true)');
+        const cluesContainerGridHeight = cluesContainerGridRef.current.offsetHeight;
+        const acrossGridItemHeight = acrossGridItem.offsetHeight;
+        const downGridItemHeight = downGridItem.offsetHeight;
+
+        // if the height of container is the same as the height of the across and down grids, then it's a side by side layout
+        // if the height of the container is larger than the height of the across and down grids, then it's a top / bottom layout
+        if ((cluesContainerGridHeight > acrossGridItemHeight) && (cluesContainerGridHeight > downGridItemHeight)) {
+          // top / bottom layout
+          if (cluesSideBySide) {
+            setCluesSideBySide(false);
+          }
+        } else {
+          // side by side layout
+          if (!cluesSideBySide) {
+            setCluesSideBySide(true);
+          }
         }
-        if (newCluesSideBySide !== cluesSideBySide) {
-          console.log('newCluesSideBySide: ', newCluesSideBySide);
-        }
+        // const acrossRect: DOMRect = acrossGridItem.getBoundingClientRect();
+        // const downRect: DOMRect = downGridItem.getBoundingClientRect();
+        // let newCluesSideBySide = cluesSideBySide;
+        // if (acrossRect.top !== downRect.top && cluesSideBySide) {
+        //   setCluesSideBySide(false);
+        //   newCluesSideBySide = false;
+        //   console.log('invoke setCluesSideBySide(false)');
+        // } else if (acrossRect.left !== downRect.left && !cluesSideBySide) {
+        //   setCluesSideBySide(true);
+        //   newCluesSideBySide = true;
+        //   console.log('invoke setCluesSideBySide(true)');
+        // }
+        // if (newCluesSideBySide !== cluesSideBySide) {
+        //   console.log('newCluesSideBySide: ', newCluesSideBySide);
+        // }
       }
     }
   };
