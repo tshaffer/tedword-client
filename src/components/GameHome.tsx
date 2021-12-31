@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
+import ReactModal = require('react-modal');
 
 import { UiState, PuzzleMetadata, BoardEntity, UsersMap } from '../types';
 import { getCurrentUser, getUsers } from '../selectors';
@@ -16,6 +17,8 @@ import {
 import NewGames from './NewGames';
 import ExistingGames from './ExistingGames';
 import PuzzleUpload from './PuzzleUpload';
+
+import { version } from '../version';
 
 export interface GameHomeProps {
   currentUser: string;
@@ -32,6 +35,21 @@ export interface GameHomeProps {
 }
 
 const GameHome = (props: GameHomeProps) => {
+
+  const [showAboutModal, setShowAboutModal] = React.useState(false);
+
+  const modalStyle = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      minHeight: '105px',
+      minWidth: '150px',
+    },
+  };
 
   const handleOpenBoard = (boardEntity: BoardEntity) => {
     props.onLaunchExistingGame(boardEntity.id);
@@ -85,6 +103,15 @@ const GameHome = (props: GameHomeProps) => {
       props.onSetUiState(UiState.SelectUser);
     }
 
+    const handleShowAbout = () => {
+      setShowAboutModal(true);
+    };
+
+    const handleHideAbout = () => {
+      setShowAboutModal(false);
+    };
+
+
     function handleSelectTab(evt: any) {
 
       const selectedTabId = evt.target.id;
@@ -130,7 +157,35 @@ const GameHome = (props: GameHomeProps) => {
     return (
       <div>
         <div>
+          <ReactModal
+            isOpen={showAboutModal}
+            style={modalStyle}
+            ariaHideApp={false}
+          >
+            <div>
+              <div>
+                <p style={{ marginBottom: '6px' }}>tedword</p>
+                {'Version: ' + version}
+              </div>
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: '10px',
+                  right: '10px',
+                }}
+              >
+                <button
+                  onClick={handleHideAbout}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </ReactModal>
+        </div>
+        <div>
           <button onClick={handleSignout}>Signout</button>
+          <button onClick={handleShowAbout}>About</button>
         </div>
         <div style={tab}>
           <button style={tabLinks} onClick={handleSelectTab} id='newGameTabSelect' ref={newGameTabSelectRef}>New Games</button>
