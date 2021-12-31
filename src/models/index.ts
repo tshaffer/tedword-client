@@ -9,3 +9,4 @@ export * from './gameState';
 export * from './guessesState';
 export * from './puzzles';
 export * from './users';
+export * from './versionInfo';

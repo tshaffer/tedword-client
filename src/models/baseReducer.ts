@@ -11,6 +11,7 @@ import { guessesStateReducer } from './guessesState';
 import { derivedCrosswordDataReducer } from './derivedCrosswordData';
 import { chatStateReducer } from './chat';
 import { appParametersReducer } from './appParameters';
+import { versionInfoReducer } from './versionInfo';
 
 // -----------------------------------------------------------------------
 // Reducers
@@ -25,7 +26,7 @@ export const rootReducer = combineReducers<TedwordState>({
   gameState: gameStateReducer,
   derivedCrosswordData: derivedCrosswordDataReducer,
   guessesState: guessesStateReducer,
-
+  versionInfo: versionInfoReducer,
 });
 
 // -----------------------------------------------------------------------

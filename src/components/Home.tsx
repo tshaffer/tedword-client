@@ -7,7 +7,7 @@ import * as QueryString from 'query-string';
 import { isEmpty, isNil, isString } from 'lodash';
 
 import { AppState, StartPage, UiState, UsersMap } from '../types';
-import { launchExistingGame, loadBoards, loadPuzzlesMetadata, loadUsers, loginPersistentUser, } from '../controllers';
+import { getVersions, launchExistingGame, loadBoards, loadPuzzlesMetadata, loadUsers, loginPersistentUser, } from '../controllers';
 import { getAppState, getUsers } from '../selectors';
 import { setUiState, setStartPage, setStartupBoardId, } from '../models';
 
@@ -23,6 +23,7 @@ export interface HomeProps {
   appState: AppState,
   currentUser: string | null,
   users: UsersMap;
+  onGetVersions: () => any;
   onSetUiState: (uiState: UiState) => any;
   onLoadBoards: () => any;
   onLoadPuzzlesMetadata: () => any;
@@ -101,6 +102,8 @@ const Home = (props: HomeProps) => {
 
   React.useEffect(() => {
 
+    props.onGetVersions();
+
     // TEDTODO - put these startup calls into a controller?
 
     const startupParams: any = getStartupParams();
@@ -164,6 +167,7 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onGetVersions: getVersions,
     onSetUiState: setUiState,
     onLoadBoards: loadBoards,
     onLoadPuzzlesMetadata: loadPuzzlesMetadata,

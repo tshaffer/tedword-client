@@ -1,9 +1,10 @@
-// export const serverUrl = 'http://localhost:8000';
-export const serverUrl = 'https://tedword.herokuapp.com';
+export const serverUrl = 'http://localhost:8000';
+// export const serverUrl = 'https://tedword.herokuapp.com';
 
 export const apiUrlFragment = '/api/v1/';
 
 export interface TedwordState {
+  versionInfo: VersionInfo;
   appParameters: AppParameters;
   appState: AppState;
   boardsState: BoardsState;
@@ -13,6 +14,11 @@ export interface TedwordState {
   guessesState: GuessesState;
   puzzlesState: PuzzlesState,
   users: UsersMap;
+}
+
+export interface VersionInfo {
+  clientVersion: string;
+  serverVersion: string;
 }
 
 export interface AppParameters {

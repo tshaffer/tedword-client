@@ -8,3 +8,5 @@ export * from './guesses';
 export * from './puzzle';
 export * from './puzzlesMetadata';
 export * from './users';
+export * from './versionInfo';
+

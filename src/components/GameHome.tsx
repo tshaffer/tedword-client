@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 
 import ReactModal = require('react-modal');
 
-import { UiState, PuzzleMetadata, BoardEntity, UsersMap } from '../types';
-import { getCurrentUser, getUsers } from '../selectors';
+import { UiState, PuzzleMetadata, BoardEntity, UsersMap, VersionInfo } from '../types';
+import { getCurrentUser, getUsers, getVersionInfo } from '../selectors';
 import { setBoardId, setPuzzleId, setUiState, setFileUploadStatus, setUserName } from '../models';
 import {
   addUserToExistingBoard,
@@ -18,9 +18,8 @@ import NewGames from './NewGames';
 import ExistingGames from './ExistingGames';
 import PuzzleUpload from './PuzzleUpload';
 
-import { version } from '../version';
-
 export interface GameHomeProps {
+  versionInfo: VersionInfo;
   currentUser: string;
   users: UsersMap,
   onAddUserToBoard: (id: string, userName: string) => any;
@@ -163,9 +162,10 @@ const GameHome = (props: GameHomeProps) => {
             ariaHideApp={false}
           >
             <div>
-              <div>
+              <div style={{ marginBottom: '10px' }}>
                 <p style={{ marginBottom: '6px' }}>tedword</p>
-                {'Version: ' + version}
+                <p>{'Client version: ' + props.versionInfo.clientVersion}</p>
+                <p>{'Server version: ' + props.versionInfo.serverVersion}</p>
               </div>
               <div
                 style={{
@@ -214,6 +214,7 @@ const GameHome = (props: GameHomeProps) => {
 
 function mapStateToProps(state: any) {
   return {
+    versionInfo: getVersionInfo(state),
     currentUser: getCurrentUser(state),
     users: getUsers(state),
   };
