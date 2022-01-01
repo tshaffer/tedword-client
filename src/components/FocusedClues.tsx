@@ -3,15 +3,15 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+// import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary
-  }
-}));
+// const useStyles = makeStyles((theme) => ({
+//   paper: {
+//     padding: theme.spacing(1),
+//     textAlign: 'center',
+//     color: theme.palette.text.secondary
+//   }
+// }));
 
 import { ClueAtLocation, CluesByDirection, CluesByNumber, GameState, Guess, GuessesGrid } from '../types';
 import { getCrosswordClues, getGameState, getGuesses } from '../selectors';
@@ -25,7 +25,7 @@ export interface FocusedCluesProps {
 
 const FocusedClues = (props: FocusedCluesProps) => {
 
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const getUserEntry = (direction: string, clueNumber: string): string => {
 
@@ -84,13 +84,13 @@ const FocusedClues = (props: FocusedCluesProps) => {
 
   return (
     <Grid container spacing={1} justify="flex-start" style={{ minHeight: '5%', maxWidth: '100%' }}>
-      <Grid item xs='auto'>
-        <Paper className={classes.paper}>{acrossClue}</Paper>
-        <Paper className={classes.paper}>{acrossUserEntry}</Paper>
+      <Grid item xs='auto' style={{ marginRight: '16px' }}>
+        <p>{acrossClue}</p>
+        <p>{acrossUserEntry}</p>
       </Grid>
       <Grid item xs='auto'>
-        <Paper className={classes.paper}>{downClue}</Paper>
-        <Paper className={classes.paper}>{downUserEntry}</Paper>
+        <p>{downClue}</p>
+        <p>{downUserEntry}</p>
       </Grid>
     </Grid>
   );
