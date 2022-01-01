@@ -388,6 +388,7 @@ const Board = (props: BoardProps) => {
           {cells}
         </svg>
         <input
+          className='board-input'
           ref={(e: HTMLInputElement) => {
             console.log('assign inputRef.current: ', e);
             (inputRef.current as HTMLInputElement) = e; // you can still assign to ref

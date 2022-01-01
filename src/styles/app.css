@@ -12,6 +12,10 @@ body {
   padding: 16px;
 }
 
+.board-input:focus {
+  outline: none;
+}  
+
 #chat-bubble {
   height: 55px;
   overflow: hidden;
