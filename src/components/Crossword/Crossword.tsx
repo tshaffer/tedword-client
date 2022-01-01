@@ -64,8 +64,6 @@ export interface CrosswordProps extends CrosswordPropsFromParent {
   focused: boolean;
   currentDirection: string;
   currentNumber: string;
-  focusedRow: number;
-  focusedCol: number;
   onSetFocused: (focused: boolean) => any;
   onSetCurrentDirection: (direction: string) => any;
   onSetCurrentNumber: (currentNumber: string) => any;
@@ -266,7 +264,7 @@ const Crossword = (props: CrosswordProps) => {
   );
 };
 
-function mapStateToProps(state: any): Partial<CrosswordProps> {
+function mapStateToProps(state: any) {
   return {
     cluesByDirection: getCrosswordClues(state),
     size: getSize(state),
