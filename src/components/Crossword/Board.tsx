@@ -175,18 +175,14 @@ const Board = (props: BoardProps) => {
       direction = otherDirection(direction);
     }
 
-    if (props.onFocusedCellChange) {
-      props.onFocusedCellChange(row, col, direction);
-    }
+    props.onFocusedCellChange(row, col, direction);
     props.onSetFocusedRow(row);
     props.onSetFocusedCol(col);
     props.onSetCurrentDirection(direction);
     props.onSetCurrentNumber(candidate[direction]);
-
-    return candidate;
   };
 
-  const moveRelative = (dRow, dCol) => {
+  const moveRelative = (dRow: number, dCol: number) => {
     // We expect *only* one of dRow or dCol to have a non-zero value, and
     // that's the direction we will "prefer".  If *both* are set (or zero),
     // we don't change the direction.

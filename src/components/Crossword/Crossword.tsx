@@ -2,6 +2,8 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import { isNil } from 'lodash';
+
 import { ThemeContext, ThemeProvider } from 'styled-components';
 
 import Grid from '@material-ui/core/Grid';
@@ -10,18 +12,26 @@ import Board from './Board';
 import Clues from './Clues';
 import Chat from '../Chat/Chat';
 
-import { GridSpec } from '../../types';
+import { otherDirection } from '../../utilities';
+
+import {
+  GridSquareSpec,
+  GridSpec,
+  FakeCellData
+} from '../../types';
 
 import {
   setCurrentDirection,
   setCurrentNumber,
+  setFocusedRow,
+  setFocusedCol,
 } from '../../models';
 
 import {
   getSize,
   getGridData,
+  getCurrentDirection,
 } from '../../selectors';
-
 
 import {
   CrosswordSizeContext,
@@ -47,8 +57,11 @@ export interface CrosswordPropsFromParent {
 export interface CrosswordProps extends CrosswordPropsFromParent {
   size: number;
   gridData: GridSpec;
+  currentDirection: string;
   onSetCurrentDirection: (direction: string) => any;
   onSetCurrentNumber: (currentNumber: string) => any;
+  onSetFocusedRow: (row: number) => any;
+  onSetFocusedCol: (col: number) => any;
 }
 
 const Crossword = (props: CrosswordProps) => {
@@ -79,6 +92,40 @@ const Crossword = (props: CrosswordProps) => {
   // };
   const finalTheme = { ...defaultTheme, ...(contextTheme as any) };
 
+  const getCellData = (row, col): GridSquareSpec | FakeCellData => {
+    if (row >= 0 && row < props.size && col >= 0 && col < props.size) {
+      return props.gridData[row][col];
+    }
+
+    // fake cellData to represent "out of bounds"
+    return { row, col, used: false };
+  };
+
+  const handleMoveTo = (row: number, col: number, directionOverride: string) => {
+    let direction: string;
+    if (isNil(directionOverride)) {
+      direction = props.currentDirection;
+    } else {
+      direction = directionOverride;
+    }
+
+    const candidate: GridSquareSpec | FakeCellData = getCellData(row, col);
+
+    if (!candidate.used) {
+      return false;
+    }
+
+    if (!candidate[direction]) {
+      direction = otherDirection(direction);
+    }
+
+    props.onFocusedCellChange(row, col, direction);
+    props.onSetFocusedRow(row);
+    props.onSetFocusedCol(col);
+    props.onSetCurrentDirection(direction);
+    props.onSetCurrentNumber(candidate[direction]);
+  };
+
   const renderBoardComponent = () => {
     return (
       <Board
@@ -101,6 +148,7 @@ const Crossword = (props: CrosswordProps) => {
       <Clues
         onInput={props.onInput}
         onFocusedCellChange={props.onFocusedCellChange}
+        onMoveTo={handleMoveTo}
       />
     );
   };
@@ -130,6 +178,8 @@ function mapStateToProps(state: any) {
   return {
     size: getSize(state),
     gridData: getGridData(state),
+    currentDirection: getCurrentDirection(state),
+
   };
 }
 
@@ -137,6 +187,8 @@ const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onSetCurrentDirection: setCurrentDirection,
     onSetCurrentNumber: setCurrentNumber,
+    onSetFocusedRow: setFocusedRow,
+    onSetFocusedCol: setFocusedCol,
   }, dispatch);
 };
 

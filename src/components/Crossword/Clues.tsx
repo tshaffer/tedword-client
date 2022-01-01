@@ -6,48 +6,29 @@ import { isNil } from 'lodash';
 
 import Grid from '@material-ui/core/Grid';
 
-import { CluesByDirection, GridSquareSpec, GridSpec, FakeCellData } from '../../types';
+import { CluesByDirection } from '../../types';
 
 import {
   setFocused,
-  setCurrentDirection,
-  setCurrentNumber,
-  setFocusedRow,
-  setFocusedCol,
 } from '../../models';
 
 import {
   getCrosswordClues,
-  getSize,
-  getGridData,
-  getFocused,
-  getCurrentDirection,
-  getCurrentNumber,
   getInputElement,
 } from '../../selectors';
 
 import DirectionClues from './DirectionClues';
 
-import { otherDirection } from '../../utilities';
-
 export interface CluesPropsFromParent {
   onInput: (row: number, col: number, char: string) => any;
   onFocusedCellChange: (row: any, col: any, direction: any) => any;
+  onMoveTo: (row: number, col: number, directionOverride: string) => any;
 }
 
 export interface CluesProps extends CluesPropsFromParent {
   inputElement: HTMLInputElement;
   cluesByDirection: CluesByDirection;
-  size: number;
-  gridData: GridSpec;
-  focused: boolean;
-  currentDirection: string;
-  currentNumber: string;
   onSetFocused: (focused: boolean) => any;
-  onSetCurrentDirection: (direction: string) => any;
-  onSetCurrentNumber: (currentNumber: string) => any;
-  onSetFocusedRow: (row: number) => any;
-  onSetFocusedCol: (col: number) => any;
 }
 
 const Clues = (props: CluesProps) => {
@@ -99,16 +80,6 @@ const Clues = (props: CluesProps) => {
     }
   };
 
-  const getCellData = (row, col): GridSquareSpec | FakeCellData => {
-    if (row >= 0 && row < props.size && col >= 0 && col < props.size) {
-      return props.gridData[row][col];
-    }
-
-    // fake cellData to represent "out of bounds"
-    return { row, col, used: false };
-  };
-
-
   // focus and movement
   const focus = () => {
     if (!isNil(props.inputElement)) {
@@ -118,40 +89,9 @@ const Clues = (props: CluesProps) => {
     props.onSetFocused(true);
   };
 
-  const moveTo = (row, col, directionOverride) => {
-
-    let direction: string;
-    if (isNil(directionOverride)) {
-      direction = props.currentDirection;
-    } else {
-      direction = directionOverride;
-    }
-
-    const candidate: GridSquareSpec | FakeCellData = getCellData(row, col);
-
-    if (!candidate.used) {
-      return false;
-    }
-
-    if (!candidate[direction]) {
-      direction = otherDirection(direction);
-    }
-
-    if (props.onFocusedCellChange) {
-      props.onFocusedCellChange(row, col, direction);
-    }
-    props.onSetFocusedRow(row);
-    props.onSetFocusedCol(col);
-    props.onSetCurrentDirection(direction);
-    props.onSetCurrentNumber(candidate[direction]);
-
-    return candidate;
-  };
-
   const handleClueSelected = (direction, number) => {
     const info = props.cluesByDirection[direction][number];
-    // TODO: sanity-check info?
-    moveTo(info.row, info.col, direction);
+    props.onMoveTo(info.row, info.col, direction);
     focus();
   };
 
@@ -185,21 +125,12 @@ function mapStateToProps(state: any) {
   return {
     inputElement: getInputElement(state),
     cluesByDirection: getCrosswordClues(state),
-    size: getSize(state),
-    gridData: getGridData(state),
-    focused: getFocused(state),
-    currentDirection: getCurrentDirection(state),
-    currentNumber: getCurrentNumber(state),
   };
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onSetFocused: setFocused,
-    onSetCurrentDirection: setCurrentDirection,
-    onSetCurrentNumber: setCurrentNumber,
-    onSetFocusedRow: setFocusedRow,
-    onSetFocusedCol: setFocusedCol,
   }, dispatch);
 };
 
