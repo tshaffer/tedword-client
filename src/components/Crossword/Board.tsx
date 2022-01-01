@@ -24,7 +24,6 @@ import {
 } from '../../types';
 
 import {
-  setFocused,
   setCurrentDirection,
   setCurrentNumber,
   setFocusedRow,
@@ -59,6 +58,7 @@ const defaultTheme = {
 
 export interface BoardPropsFromParent {
   onInput: (row: number, col: number, char: string) => any;
+  onSetFocus: () => any;
   onFocusedCellChange: (row: any, col: any, direction: any) => any;
   onMoveTo: (row: number, col: number, directionOverride: string) => any;
 }
@@ -73,7 +73,6 @@ export interface BoardProps extends BoardPropsFromParent {
   currentNumber: string;
   focusedRow: number;
   focusedCol: number;
-  onSetFocused: (focused: boolean) => any;
   onSetCurrentDirection: (direction: string) => any;
   onSetCurrentNumber: (currentNumber: string) => any;
   onSetFocusedRow: (row: number) => any;
@@ -143,18 +142,10 @@ const Board = (props: BoardProps) => {
       props.onFocusedCellChange(row, col, direction);
     }
 
-    focus();
+    props.onSetFocus();
   };
 
   // focus and movement
-  const focus = () => {
-    if (!isNil(inputRef) && !isNil(inputRef.current)) {
-      (inputRef as any).current.focus();
-      props.onSetFocused(true);
-    }
-    props.onSetFocused(true);
-  };
-
   const moveRelative = (dRow: number, dCol: number) => {
     // We expect *only* one of dRow or dCol to have a non-zero value, and
     // that's the direction we will "prefer".  If *both* are set (or zero),
@@ -300,7 +291,7 @@ const Board = (props: BoardProps) => {
     }
 
     props.onSetCurrentNumber(cellData[direction]);
-    focus();
+    props.onSetFocus();
   };
 
 
@@ -456,7 +447,6 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
-    onSetFocused: setFocused,
     onSetCurrentDirection: setCurrentDirection,
     onSetCurrentNumber: setCurrentNumber,
     onSetFocusedRow: setFocusedRow,

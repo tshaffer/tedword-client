@@ -23,6 +23,7 @@ import {
 import {
   setCurrentDirection,
   setCurrentNumber,
+  setFocused,
   setFocusedRow,
   setFocusedCol,
 } from '../../models';
@@ -31,6 +32,7 @@ import {
   getSize,
   getGridData,
   getCurrentDirection,
+  getInputElement,
 } from '../../selectors';
 
 import {
@@ -55,11 +57,13 @@ export interface CrosswordPropsFromParent {
 }
 
 export interface CrosswordProps extends CrosswordPropsFromParent {
+  inputElement: HTMLInputElement;
   size: number;
   gridData: GridSpec;
   currentDirection: string;
   onSetCurrentDirection: (direction: string) => any;
   onSetCurrentNumber: (currentNumber: string) => any;
+  onSetFocused: (focused: boolean) => any;
   onSetFocusedRow: (row: number) => any;
   onSetFocusedCol: (col: number) => any;
 }
@@ -101,6 +105,14 @@ const Crossword = (props: CrosswordProps) => {
     return { row, col, used: false };
   };
 
+  const handleSetFocus = () => {
+    if (!isNil(props.inputElement)) {
+      props.inputElement.focus();
+      props.onSetFocused(true);
+    }
+    props.onSetFocused(true);
+  };
+
   const handleMoveTo = (row: number, col: number, directionOverride: string) => {
     let direction: string;
     if (isNil(directionOverride)) {
@@ -130,6 +142,7 @@ const Crossword = (props: CrosswordProps) => {
     return (
       <Board
         onInput={props.onInput}
+        onSetFocus={handleSetFocus}
         onFocusedCellChange={props.onFocusedCellChange}
         onMoveTo={handleMoveTo}
       />
@@ -148,6 +161,7 @@ const Crossword = (props: CrosswordProps) => {
     return (
       <Clues
         onInput={props.onInput}
+        onSetFocus={handleSetFocus}
         onFocusedCellChange={props.onFocusedCellChange}
         onMoveTo={handleMoveTo}
       />
@@ -177,6 +191,7 @@ const Crossword = (props: CrosswordProps) => {
 
 function mapStateToProps(state: any) {
   return {
+    inputElement: getInputElement(state),
     size: getSize(state),
     gridData: getGridData(state),
     currentDirection: getCurrentDirection(state),
@@ -188,6 +203,7 @@ const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onSetCurrentDirection: setCurrentDirection,
     onSetCurrentNumber: setCurrentNumber,
+    onSetFocused: setFocused,
     onSetFocusedRow: setFocusedRow,
     onSetFocusedCol: setFocusedCol,
   }, dispatch);

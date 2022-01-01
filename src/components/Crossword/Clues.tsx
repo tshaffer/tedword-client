@@ -9,10 +9,6 @@ import Grid from '@material-ui/core/Grid';
 import { CluesByDirection } from '../../types';
 
 import {
-  setFocused,
-} from '../../models';
-
-import {
   getCrosswordClues,
   getInputElement,
 } from '../../selectors';
@@ -21,6 +17,7 @@ import DirectionClues from './DirectionClues';
 
 export interface CluesPropsFromParent {
   onInput: (row: number, col: number, char: string) => any;
+  onSetFocus: () => any;
   onFocusedCellChange: (row: any, col: any, direction: any) => any;
   onMoveTo: (row: number, col: number, directionOverride: string) => any;
 }
@@ -28,7 +25,6 @@ export interface CluesPropsFromParent {
 export interface CluesProps extends CluesPropsFromParent {
   inputElement: HTMLInputElement;
   cluesByDirection: CluesByDirection;
-  onSetFocused: (focused: boolean) => any;
 }
 
 const Clues = (props: CluesProps) => {
@@ -80,19 +76,10 @@ const Clues = (props: CluesProps) => {
     }
   };
 
-  // focus and movement
-  const focus = () => {
-    if (!isNil(props.inputElement)) {
-      props.inputElement.focus();
-      props.onSetFocused(true);
-    }
-    props.onSetFocused(true);
-  };
-
   const handleClueSelected = (direction, number) => {
     const info = props.cluesByDirection[direction][number];
     props.onMoveTo(info.row, info.col, direction);
-    focus();
+    props.onSetFocus();
   };
 
   const renderCluesComponent = (direction: string) => {
@@ -130,7 +117,6 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
-    onSetFocused: setFocused,
   }, dispatch);
 };
 
