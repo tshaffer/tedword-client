@@ -72,7 +72,7 @@ const BoardPlay = (props: BoardPlayProps) => {
   );
 };
 
-function mapStateToProps(state: any, ownProps: any) {
+function mapStateToProps(state: any, ownProps: any): Partial<BoardPlayProps> {
   return {
     puzzlesMetadata: ownProps.puzzleMetadata,
     appState: ownProps.appState,

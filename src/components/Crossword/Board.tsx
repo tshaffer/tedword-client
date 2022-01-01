@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useContext, useState, useRef } from 'react';
+import { useContext, useRef } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -29,6 +29,7 @@ import {
   setCurrentNumber,
   setFocusedRow,
   setFocusedCol,
+  setInputElement,
 } from '../../models';
 
 import {
@@ -56,9 +57,7 @@ const defaultTheme = {
   highlightBackground: 'rgb(255,255,204)',
 };
 
-
 export interface BoardPropsFromParent {
-  onSetInputElement: (e: HTMLInputElement) => any;
   onInput: (row: number, col: number, char: string) => any;
   onFocusedCellChange: (row: any, col: any, direction: any) => any;
 }
@@ -78,12 +77,10 @@ export interface BoardProps extends BoardPropsFromParent {
   onSetCurrentNumber: (currentNumber: string) => any;
   onSetFocusedRow: (row: number) => any;
   onSetFocusedCol: (col: number) => any;
+  onSetInputElement: (inputElement: HTMLInputElement) => any;
 }
 
 const Board = (props: BoardProps) => {
-
-  // const [focusedRow, setFocusedRow] = useState(0);
-  // const [focusedCol, setFocusedCol] = useState(0);
 
   React.useEffect(() => {
     if (props.onFocusedCellChange) {
@@ -115,7 +112,6 @@ const Board = (props: BoardProps) => {
     const { row, col } = cellCoordinates;
     const other = otherDirection(props.currentDirection);
 
-    // should this use moveTo?
     props.onSetFocusedRow(row);
     props.onSetFocusedCol(col);
 
@@ -136,7 +132,7 @@ const Board = (props: BoardProps) => {
       (props.focused &&
         row === props.focusedRow &&
         col === props.focusedCol &&
-        cellData[other])  // **** How does cellData[other] evaluate to true when it's undefined????
+        cellData[other])
     ) {
       props.onSetCurrentDirection(other);
       direction = other;
@@ -496,6 +492,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetCurrentNumber: setCurrentNumber,
     onSetFocusedRow: setFocusedRow,
     onSetFocusedCol: setFocusedCol,
+    onSetInputElement: setInputElement,
   }, dispatch);
 };
 

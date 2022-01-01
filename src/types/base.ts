@@ -282,4 +282,5 @@ export interface BoardProperties {
   selectedNumber: string;
   focusedRow: number;
   focusedCol: number;
+  inputElement: HTMLInputElement;
 }
