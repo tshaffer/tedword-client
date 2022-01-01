@@ -60,6 +60,7 @@ const defaultTheme = {
 export interface BoardPropsFromParent {
   onInput: (row: number, col: number, char: string) => any;
   onFocusedCellChange: (row: any, col: any, direction: any) => any;
+  onMoveTo: (row: number, col: number, directionOverride: string) => any;
 }
 
 export interface BoardProps extends BoardPropsFromParent {
@@ -83,9 +84,7 @@ export interface BoardProps extends BoardPropsFromParent {
 const Board = (props: BoardProps) => {
 
   React.useEffect(() => {
-    if (props.onFocusedCellChange) {
-      props.onFocusedCellChange(0, 0, 'across');
-    }
+    props.onFocusedCellChange(0, 0, 'across');
     props.onSetFocusedRow(0);
     props.onSetFocusedCol(0);
     props.onSetCurrentDirection('across');
@@ -156,32 +155,6 @@ const Board = (props: BoardProps) => {
     props.onSetFocused(true);
   };
 
-  const moveTo = (row, col, directionOverride) => {
-
-    let direction: string;
-    if (isNil(directionOverride)) {
-      direction = props.currentDirection;
-    } else {
-      direction = directionOverride;
-    }
-
-    const candidate: GridSquareSpec | FakeCellData = getCellData(row, col);
-
-    if (!candidate.used) {
-      return false;
-    }
-
-    if (!candidate[direction]) {
-      direction = otherDirection(direction);
-    }
-
-    props.onFocusedCellChange(row, col, direction);
-    props.onSetFocusedRow(row);
-    props.onSetFocusedCol(col);
-    props.onSetCurrentDirection(direction);
-    props.onSetCurrentNumber(candidate[direction]);
-  };
-
   const moveRelative = (dRow: number, dCol: number) => {
     // We expect *only* one of dRow or dCol to have a non-zero value, and
     // that's the direction we will "prefer".  If *both* are set (or zero),
@@ -193,7 +166,7 @@ const Board = (props: BoardProps) => {
       direction = 'across';
     }
 
-    const cell = moveTo(props.focusedRow + dRow, props.focusedCol + dCol, direction);
+    const cell = props.onMoveTo(props.focusedRow + dRow, props.focusedCol + dCol, direction);
 
     return cell;
   };
@@ -279,7 +252,7 @@ const Board = (props: BoardProps) => {
           }
         }
 
-        moveTo(row, col, null);
+        props.onMoveTo(row, col, null);
         break;
       }
 

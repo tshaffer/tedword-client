@@ -131,6 +131,7 @@ const Crossword = (props: CrosswordProps) => {
       <Board
         onInput={props.onInput}
         onFocusedCellChange={props.onFocusedCellChange}
+        onMoveTo={handleMoveTo}
       />
     );
   };
