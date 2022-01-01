@@ -1,4 +1,7 @@
 import axios from 'axios';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Buffer = require('buffer/').Buffer;
+
 import { CellContentsMap, CellContentsValue, ClueAtLocation, CluesByDirection, CluesByNumber, DerivedCrosswordData, Guess, GuessesGrid, ParsedClue, PuzzleEntity, PuzzleMetadata, PuzzleSpec, TedwordState } from '../types';
 import {
   addPuzzle,
@@ -247,6 +250,52 @@ const buildCluesInDirection = (cluesByDirection: CluesByDirection, direction: st
   }
 };
 
+export const uploadPuzzleBuffer = (puzFiles: File[]) => {
+
+  return (dispatch: any) => {
+    readPuzzleFile(puzFiles[0])
+      .then((puzzleBuffer: Buffer) => {
+        const path = serverUrl + apiUrlFragment + 'uploadPuzzleBuffer';
+        const uploadPuzzlesRequestBody: any = {
+          uploadDateTime: Date.now(),
+          sourceFileName: puzFiles[0].name,
+          puzzleBuffer,
+        };
+        return axios.post(
+          path,
+          uploadPuzzlesRequestBody,
+        ).then((response) => {
+          dispatch(setFileUploadStatus('Upload successful'));
+          return;
+        }).catch((error) => {
+          console.log('error');
+          console.log(error);
+          dispatch(setFileUploadStatus('Upload failed: ' + error.toString()));
+          return;
+        });
+
+      });
+
+  };
+};
+
+const readPuzzleFile = (puzFile: File): Promise<Buffer> => {
+
+  return new Promise((resolve, reject) => {
+
+    const fileReader: FileReader = new FileReader();
+
+    // TEDTODO - err event
+    fileReader.onload = function () {
+      const puzData: Buffer = Buffer.from(fileReader.result as ArrayBuffer);
+      resolve(puzData);
+    };
+
+    fileReader.readAsArrayBuffer(puzFile);
+  });
+};
+
+
 export const uploadPuzFiles = (puzFiles: File[]) => {
 
   return (dispatch: any) => {
@@ -273,6 +322,7 @@ export const uploadPuzFiles = (puzFiles: File[]) => {
       });
   };
 };
+
 
 const parsePuzzleFile = (puzFile: File): Promise<PuzzleSpec> => {
 

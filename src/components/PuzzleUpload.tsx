@@ -8,7 +8,7 @@ import { AppState, PuzzleExistsByFileNameMap } from '../types';
 import { getAppState, getPuzzleExistsByFileNameMap } from '../selectors';
 import { setFileUploadStatus } from '../models';
 import {
-  uploadPuzFiles,
+  uploadPuzFiles, uploadPuzzleBuffer,
 } from '../controllers';
 
 export interface PuzzleUploadProps {
@@ -203,7 +203,7 @@ function mapStateToProps(state: any) {
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onSetFileUploadStatus: setFileUploadStatus,
-    onUploadPuzFiles: uploadPuzFiles,
+    onUploadPuzFiles: uploadPuzzleBuffer,
   }, dispatch);
 };
 
