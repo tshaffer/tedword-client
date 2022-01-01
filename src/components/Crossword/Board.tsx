@@ -58,6 +58,7 @@ const defaultTheme = {
 
 
 export interface BoardPropsFromParent {
+  onSetInputElement: (e: HTMLInputElement) => any;
   onInput: (row: number, col: number, char: string) => any;
   onFocusedCellChange: (row: any, col: any, direction: any) => any;
 }
@@ -431,7 +432,11 @@ const Board = (props: BoardProps) => {
           {cells}
         </svg>
         <input
-          ref={inputRef}
+          ref={(e: HTMLInputElement) => {
+            console.log('assign inputRef.current: ', e);
+            (inputRef.current as HTMLInputElement) = e; // you can still assign to ref
+            props.onSetInputElement(e);
+          }}
           aria-label="crossword-input"
           type="text"
           onChange={handleInputChange}

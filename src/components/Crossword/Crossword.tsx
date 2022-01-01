@@ -75,6 +75,8 @@ export interface CrosswordProps extends CrosswordPropsFromParent {
 
 const Crossword = (props: CrosswordProps) => {
 
+  let inputElement: HTMLInputElement | null = null;
+
   const cluesContainerGridRef = React.useRef(null);
 
   const [cluesSideBySide, setCluesSideBySide] = useState(true);
@@ -86,8 +88,6 @@ const Crossword = (props: CrosswordProps) => {
     props.onSetCurrentDirection('across');
     props.onSetCurrentNumber('1');
   }, [props.size, props.gridData]);
-
-  const inputRef = React.useRef();
 
   const contextTheme = React.useContext(ThemeContext);
 
@@ -102,8 +102,8 @@ const Crossword = (props: CrosswordProps) => {
 
   // focus and movement
   const focus = () => {
-    if (!isNil(inputRef) && !isNil(inputRef.current)) {
-      (inputRef as any).current.focus();
+    if (!isNil(inputElement)) {
+      inputElement.focus();
       props.onSetFocused(true);
     }
     props.onSetFocused(true);
@@ -220,9 +220,14 @@ const Crossword = (props: CrosswordProps) => {
     );
   };
 
+  const handleSetInputElement = (e: HTMLInputElement) => {
+    inputElement = e;
+  };
+  
   const renderBoardComponent = () => {
     return (
       <Board
+        onSetInputElement={handleSetInputElement}
         onInput={props.onInput}
         onFocusedCellChange={props.onFocusedCellChange}
       />
@@ -261,7 +266,7 @@ const Crossword = (props: CrosswordProps) => {
   );
 };
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: any): Partial<CrosswordProps> {
   return {
     cluesByDirection: getCrosswordClues(state),
     size: getSize(state),
