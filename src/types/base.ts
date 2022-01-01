@@ -14,6 +14,7 @@ export interface TedwordState {
   guessesState: GuessesState;
   puzzlesState: PuzzlesState,
   users: UsersMap;
+  boardProperties: BoardProperties;
 }
 
 export interface VersionInfo {
@@ -273,3 +274,12 @@ export interface FileInput {
   lastModifiedDate: string;
 }
 
+export interface BoardProperties {
+  focused: boolean;
+  currentDirection: string;
+  currentNumber: string;
+  selectedDirection: string;
+  selectedNumber: string;
+  focusedRow: number;
+  focusedCol: number;
+}

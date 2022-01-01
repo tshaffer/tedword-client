@@ -1,13 +1,13 @@
 import React from 'react';
 
 // To pass focus/highlight/etc., it's cleaner to use a context.
-export const CrosswordContext = React.createContext({
-  focused: false,
-  selectedDirection: null,
-  selectedNumber: null,
+// export const CrosswordContext = React.createContext({
+//   focused: false,
+//   selectedDirection: null,
+//   selectedNumber: null,
 
-  // correct answers?
-});
+//   // correct answers?
+// });
 
 export const CrosswordSizeContext = React.createContext({
   cellSize: 0,

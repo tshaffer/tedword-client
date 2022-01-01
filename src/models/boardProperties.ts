@@ -1,0 +1,169 @@
+import { BoardProperties } from '../types';
+import { TedwordModelBaseAction } from './baseAction';
+
+// ------------------------------------
+// Constants
+// ------------------------------------
+export const SET_FOCUSED = 'SET_FOCUSED';
+export const SET_CURRENT_DIRECTION = 'SET_CURRENT_DIRECTION';
+export const SET_CURRENT_NUMBER = 'SET_CURRENT_NUMBER';
+export const SET_SELECTED_DIRECTION = 'SET_SELECTED_DIRECTION';
+export const SET_SELECTED_NUMBER = 'SET_SELECTED_NUMBER';
+export const SET_FOCUSED_ROW = 'SET_FOCUSED_ROW';
+export const SET_FOCUSED_COL = 'SET_FOCUSED_COL';
+
+// ------------------------------------
+// Actions
+// ------------------------------------
+
+export interface SetFocusedPayload {
+  focused: boolean;
+}
+
+export const setFocused = (
+  focused: boolean,
+): any => {
+  return {
+    type: SET_FOCUSED,
+    payload: {
+      focused,
+    },
+  };
+};
+
+export interface SetCurrentDirectionPayload {
+  currentDirection: string;
+}
+
+export const setCurrentDirection = (
+  currentDirection: string,
+): any => {
+  return {
+    type: SET_CURRENT_DIRECTION,
+    payload: {
+      currentDirection,
+    },
+  };
+};
+
+export interface SetCurrentNumberPayload {
+  currentNumber: string;
+}
+
+export const setCurrentNumber = (
+  currentNumber: string,
+): any => {
+  return {
+    type: SET_CURRENT_NUMBER,
+    payload: {
+      currentNumber,
+    },
+  };
+};
+
+export interface SetSelectedDirectionPayload {
+  selectedDirection: string;
+}
+
+export const setSelectedDirection = (
+  selectedDirection: string,
+): any => {
+  return {
+    type: SET_SELECTED_DIRECTION,
+    payload: {
+      selectedDirection,
+    },
+  };
+};
+
+export interface SetSelectedNumberPayload {
+  selectedNumber: string;
+}
+
+export const setSelectedNumber = (
+  selectedNumber: string,
+): any => {
+  return {
+    type: SET_SELECTED_NUMBER,
+    payload: {
+      selectedNumber,
+    },
+  };
+};
+
+
+export interface SetFocusedRowPayload {
+  focusedRow: number;
+}
+
+export const setFocusedRow = (
+  focusedRow: number,
+): any => {
+  return {
+    type: SET_FOCUSED_ROW,
+    payload: {
+      focusedRow,
+    },
+  };
+};
+
+export interface SetFocusedColPayload {
+  focusedCol: number;
+}
+
+export const setFocusedCol = (
+  focusedCol: number,
+): any => {
+  return {
+    type: SET_FOCUSED_COL,
+    payload: {
+      focusedCol,
+    },
+  };
+};
+
+
+// ------------------------------------
+// Reducer
+// ------------------------------------
+
+const initialState: BoardProperties = {
+  focused: false,
+  currentDirection: 'across',
+  currentNumber: '1',
+  selectedDirection: 'across',
+  selectedNumber: '1',
+  focusedRow: 0,
+  focusedCol: 0,
+};
+
+export const boardPropertiesReducer = (
+  state: BoardProperties = initialState,
+  action: TedwordModelBaseAction<SetFocusedPayload & SetCurrentDirectionPayload & SetCurrentNumberPayload & SetSelectedDirectionPayload & SetSelectedNumberPayload & SetFocusedRowPayload & SetFocusedColPayload>
+): BoardProperties => {
+  switch (action.type) {
+    case SET_FOCUSED: {
+      return { ...state, focused: action.payload.focused };
+    }
+    case SET_CURRENT_DIRECTION: {
+      return { ...state, currentDirection: action.payload.currentDirection };
+    }
+    case SET_CURRENT_NUMBER: {
+      return { ...state, currentNumber: action.payload.currentNumber };
+    }
+    case SET_SELECTED_DIRECTION: {
+      return { ...state, selectedDirection: action.payload.selectedDirection };
+    }
+    case SET_SELECTED_NUMBER: {
+      return { ...state, selectedNumber: action.payload.selectedNumber };
+    }
+    case SET_FOCUSED_ROW: {
+      return { ...state, focusedRow: action.payload.focusedRow };
+    }
+    case SET_FOCUSED_COL: {
+      return { ...state, focusedCol: action.payload.focusedCol };
+    }
+    default:
+      return state;
+  }
+};

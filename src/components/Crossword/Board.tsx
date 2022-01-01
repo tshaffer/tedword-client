@@ -12,10 +12,36 @@ import { ThemeContext } from 'styled-components';
 
 import Cell from './Cell';
 
-import { Guess, CluesByDirection, GuessesGrid, GridSquare, GridSquareSpec, GridSpec, CrosswordCellCoordinate, FakeCellData } from '../../types';
+import {
+  Guess,
+  CluesByDirection,
+  GuessesGrid,
+  GridSquare,
+  GridSquareSpec,
+  GridSpec,
+  CrosswordCellCoordinate,
+  FakeCellData
+} from '../../types';
 
-import { getCrosswordClues, getGuesses } from '../../selectors';
-import { getSize, getGridData } from '../../selectors';
+import {
+  setFocused,
+  setCurrentDirection,
+  setCurrentNumber,
+  setFocusedRow,
+  setFocusedCol,
+} from '../../models';
+
+import {
+  getCrosswordClues,
+  getGuesses,
+  getSize,
+  getGridData,
+  getFocused,
+  getCurrentDirection,
+  getCurrentNumber,
+  getFocusedRow,
+  getFocusedCol,
+} from '../../selectors';
 import { isAcross, otherDirection } from '../../utilities';
 
 const defaultTheme = {
@@ -41,24 +67,31 @@ export interface BoardProps extends BoardPropsFromParent {
   gridData: GridSpec;
   guesses: GuessesGrid;
   size: number;
+  focused: boolean;
+  currentDirection: string;
+  currentNumber: string;
+  focusedRow: number;
+  focusedCol: number;
+  onSetFocused: (focused: boolean) => any;
+  onSetCurrentDirection: (direction: string) => any;
+  onSetCurrentNumber: (currentNumber: string) => any;
+  onSetFocusedRow: (row: number) => any;
+  onSetFocusedCol: (col: number) => any;
 }
 
 const Board = (props: BoardProps) => {
 
-  const [focused, setFocused] = useState(false);
-  const [focusedRow, setFocusedRow] = useState(0);
-  const [focusedCol, setFocusedCol] = useState(0);
-  const [currentDirection, setCurrentDirection] = useState('across');
-  const [currentNumber, setCurrentNumber] = useState('1');
+  // const [focusedRow, setFocusedRow] = useState(0);
+  // const [focusedCol, setFocusedCol] = useState(0);
 
   React.useEffect(() => {
     if (props.onFocusedCellChange) {
       props.onFocusedCellChange(0, 0, 'across');
     }
-    setFocusedRow(0);
-    setFocusedCol(0);
-    setCurrentDirection('across');
-    setCurrentNumber('1');
+    props.onSetFocusedRow(0);
+    props.onSetFocusedCol(0);
+    props.onSetCurrentDirection('across');
+    props.onSetCurrentNumber('1');
   }, [props.size, props.gridData]);
 
   const inputRef = useRef();
@@ -79,13 +112,13 @@ const Board = (props: BoardProps) => {
   const handleCellClick = (cellCoordinates: CrosswordCellCoordinate) => {
 
     const { row, col } = cellCoordinates;
-    const other = otherDirection(currentDirection);
+    const other = otherDirection(props.currentDirection);
 
     // should this use moveTo?
-    setFocusedRow(row);
-    setFocusedCol(col);
+    props.onSetFocusedRow(row);
+    props.onSetFocusedCol(col);
 
-    let direction = currentDirection;
+    let direction = props.currentDirection;
 
     const cellData: GridSquareSpec | FakeCellData = getCellData(row, col);
 
@@ -98,17 +131,17 @@ const Board = (props: BoardProps) => {
     // clicked cell is the focused cell, *and* the other direction is
     // available.
     if (
-      !cellData[currentDirection] ||
-      (focused &&
-        row === focusedRow &&
-        col === focusedCol &&
+      !cellData[props.currentDirection] ||
+      (props.focused &&
+        row === props.focusedRow &&
+        col === props.focusedCol &&
         cellData[other])  // **** How does cellData[other] evaluate to true when it's undefined????
     ) {
-      setCurrentDirection(other);
+      props.onSetCurrentDirection(other);
       direction = other;
     }
 
-    setCurrentNumber(cellData[direction]);
+    props.onSetCurrentNumber(cellData[direction]);
 
     if (props.onFocusedCellChange) {
       props.onFocusedCellChange(row, col, direction);
@@ -121,17 +154,16 @@ const Board = (props: BoardProps) => {
   const focus = () => {
     if (!isNil(inputRef) && !isNil(inputRef.current)) {
       (inputRef as any).current.focus();
-      setFocused(true);
+      props.onSetFocused(true);
     }
-    setFocused(true);
+    props.onSetFocused(true);
   };
 
   const moveTo = (row, col, directionOverride) => {
 
-    // let direction = directionOverride ?? currentDirection;
     let direction: string;
     if (isNil(directionOverride)) {
-      direction = currentDirection;
+      direction = props.currentDirection;
     } else {
       direction = directionOverride;
     }
@@ -149,10 +181,10 @@ const Board = (props: BoardProps) => {
     if (props.onFocusedCellChange) {
       props.onFocusedCellChange(row, col, direction);
     }
-    setFocusedRow(row);
-    setFocusedCol(col);
-    setCurrentDirection(direction);
-    setCurrentNumber(candidate[direction]);
+    props.onSetFocusedRow(row);
+    props.onSetFocusedCol(col);
+    props.onSetCurrentDirection(direction);
+    props.onSetCurrentNumber(candidate[direction]);
 
     return candidate;
   };
@@ -168,18 +200,18 @@ const Board = (props: BoardProps) => {
       direction = 'across';
     }
 
-    const cell = moveTo(focusedRow + dRow, focusedCol + dCol, direction);
+    const cell = moveTo(props.focusedRow + dRow, props.focusedCol + dCol, direction);
 
     return cell;
   };
 
   const moveForward = () => {
-    const across = isAcross(currentDirection);
+    const across = isAcross(props.currentDirection);
     moveRelative(across ? 0 : 1, across ? 1 : 0);
   };
 
   const moveBackward = () => {
-    const across = isAcross(currentDirection);
+    const across = isAcross(props.currentDirection);
     moveRelative(across ? 0 : -1, across ? -1 : 0);
   };
 
@@ -216,11 +248,11 @@ const Board = (props: BoardProps) => {
 
       case ' ': // treat space like tab?
       case 'Tab': {
-        const other = otherDirection(currentDirection);
-        const cellData: GridSquareSpec | FakeCellData = getCellData(focusedRow, focusedCol);
+        const other = otherDirection(props.currentDirection);
+        const cellData: GridSquareSpec | FakeCellData = getCellData(props.focusedRow, props.focusedCol);
         if (cellData[other]) {
-          setCurrentDirection(other);
-          setCurrentNumber(cellData[other]);
+          props.onSetCurrentDirection(other);
+          props.onSetCurrentNumber(cellData[other]);
         }
         break;
       }
@@ -229,7 +261,7 @@ const Board = (props: BoardProps) => {
       // Delete:    delete the current cell, but don't move
       case 'Backspace':
       case 'Delete': {
-        props.onInput(focusedRow, focusedCol, '');
+        props.onInput(props.focusedRow, props.focusedCol, '');
         if (key === 'Backspace') {
           moveBackward();
         }
@@ -240,13 +272,13 @@ const Board = (props: BoardProps) => {
       case 'End': {
 
         // move to beginning/end of this entry?
-        const info = props.cluesByDirection[currentDirection][currentNumber];
+        const info = props.cluesByDirection[props.currentDirection][props.currentNumber];
         const {
           answer: { length },
         } = info;
         let { row, col } = info;
         if (key === 'End') {
-          const across = isAcross(currentDirection);
+          const across = isAcross(props.currentDirection);
           if (across) {
             col += length - 1;
           } else {
@@ -267,7 +299,7 @@ const Board = (props: BoardProps) => {
           break;
         }
 
-        props.onInput(focusedRow, focusedCol, key.toUpperCase());
+        props.onInput(props.focusedRow, props.focusedCol, key.toUpperCase());
         moveForward();
 
         break;
@@ -291,17 +323,17 @@ const Board = (props: BoardProps) => {
     // Unlike cell clicks, we *know* we're clicking on the already-focused
     // cell!
 
-    const other = otherDirection(currentDirection);
-    const cellData: GridSquareSpec | FakeCellData = getCellData(focusedRow, focusedCol);
+    const other = otherDirection(props.currentDirection);
+    const cellData: GridSquareSpec | FakeCellData = getCellData(props.focusedRow, props.focusedCol);
 
-    let direction = currentDirection;
+    let direction = props.currentDirection;
 
-    if (focused && cellData[other]) {
-      setCurrentDirection(other);
+    if (props.focused && cellData[other]) {
+      props.onSetCurrentDirection(other);
       direction = other;
     }
 
-    setCurrentNumber(cellData[direction]);
+    props.onSetCurrentNumber(cellData[direction]);
     focus();
   };
 
@@ -350,11 +382,11 @@ const Board = (props: BoardProps) => {
             col={gridSquare.col}
             guess={gridSquare.guess}
             number={gridSquare.number}
-            focus={focused && row === focusedRow && col === focusedCol}
+            focus={props.focused && row === props.focusedRow && col === props.focusedCol}
             highlight={
-              focused &&
-              currentNumber &&
-              gridSquare[currentDirection] === currentNumber
+              props.focused &&
+              props.currentNumber &&
+              gridSquare[props.currentDirection] === props.currentNumber
             }
             onClick={handleCellClick}
           />
@@ -418,8 +450,8 @@ const Board = (props: BoardProps) => {
             // keeps the math much more reliable.  (But we're still
             // seeing a slight vertical deviation towards the bottom of
             // the grid!  The "* 0.995" seems to help.)
-            top: `calc(${focusedRow * cellSize * 0.995}% + 2px)`,
-            left: `calc(${focusedCol * cellSize}% + 2px)`,
+            top: `calc(${props.focusedRow * cellSize * 0.995}% + 2px)`,
+            left: `calc(${props.focusedCol * cellSize}% + 2px)`,
             width: `calc(${cellSize}% - 4px)`,
             height: `calc(${cellSize}% - 4px)`,
             fontSize: `${fontSize * 6}px`, // waaay too small...?
@@ -444,11 +476,21 @@ function mapStateToProps(state: any) {
     guesses: getGuesses(state),
     gridData: getGridData(state),
     size: getSize(state),
+    focused: getFocused(state),
+    currentDirection: getCurrentDirection(state),
+    currentNumber: getCurrentNumber(state),
+    focusedRow: getFocusedRow(state),
+    focusedCol: getFocusedCol(state),
   };
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onSetFocused: setFocused,
+    onSetCurrentDirection: setCurrentDirection,
+    onSetCurrentNumber: setCurrentNumber,
+    onSetFocusedRow: setFocusedRow,
+    onSetFocusedCol: setFocusedCol,
   }, dispatch);
 };
 
