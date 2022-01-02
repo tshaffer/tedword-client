@@ -55,7 +55,7 @@ const CrosswordGameMgr = (props: CrosswordGameMgrProps) => {
     cellContents = {};
   }
 
-  console.log('CrosswordGameMgr.tsx - re-render');
+  // console.log('CrosswordGameMgr.tsx - re-render');
 
   return (
     <div style={{ height: '85%' }}>

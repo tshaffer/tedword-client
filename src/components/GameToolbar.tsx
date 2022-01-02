@@ -199,7 +199,7 @@ const GameToolbar = (props: GameToolbarProps) => {
   const linkDiv = getLinkDiv();
 
 
-  console.log('GameToolbar.tsx - re-render');
+  // console.log('GameToolbar.tsx - re-render');
 
   return (
     <div>

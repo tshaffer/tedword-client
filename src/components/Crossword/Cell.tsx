@@ -53,7 +53,7 @@ const Cell = (props: CellProps) => {
     props.onClick({ row, col });
   };
 
-  console.log('Cell.tsx - re-render');
+  // console.log('Cell.tsx - re-render');
 
   return (
     <g

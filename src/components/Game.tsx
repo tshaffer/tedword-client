@@ -105,7 +105,7 @@ const Game = (props: GameProps) => {
         xl, extra-large: 1536px      
   */
 
-  console.log('Game.tsx - re-render');
+  // console.log('Game.tsx - re-render');
 
   return (
     <div style={{ height: '100%' }}>
