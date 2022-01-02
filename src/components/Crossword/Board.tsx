@@ -417,6 +417,9 @@ const Board = (props: BoardProps) => {
   /*
       <Grid item xs={8} sm={7} md={6} lg={6} xl={4} style={{ maxHeight: '100%' }}>
   */
+
+  console.log('Board.tsx - re-render');
+
   return (
     <Grid item xs={8} sm={7} md={6} lg={5} xl={4} style={{ maxHeight: '100%' }}>
       <div style={{ maxHeight: '100%', margin: 0, padding: 0, position: 'relative' }}>

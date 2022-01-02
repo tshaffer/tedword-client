@@ -53,6 +53,8 @@ const Cell = (props: CellProps) => {
     props.onClick({ row, col });
   };
 
+  console.log('Cell.tsx - re-render');
+
   return (
     <g
       style={{ cursor: 'default', fontSize: `${fontSize}px` }}

@@ -11,7 +11,9 @@ import {
   DisplayedPuzzle,
   DisplayedPuzzleCell,
   CellContentsMap,
-  PuzzleSpec} from '../types';
+  PuzzleSpec,
+  CellContentsValue
+} from '../types';
 import { setPuzzleId, setUiState } from '../models';
 import {
   processInputEvent,
@@ -53,6 +55,8 @@ const CrosswordGameMgr = (props: CrosswordGameMgrProps) => {
     cellContents = {};
   }
 
+  console.log('CrosswordGameMgr.tsx - re-render');
+
   return (
     <div style={{ height: '85%' }}>
       <CrosswordGame
@@ -89,24 +93,57 @@ export default React.memo(
   )(CrosswordGameMgr),
   (props: CrosswordGameMgrPropsFromParent, nextProps: CrosswordGameMgrPropsFromParent) => {
     if (props.appState !== nextProps.appState) {
+      console.log('**************** appState changed');
       return false;
     }
-    if (props.cellContents !== nextProps.cellContents) {
+    const cellContentsIdentical: boolean = cellContentsEqual(props.cellContents, nextProps.cellContents);
+    if (!cellContentsIdentical) {
+      console.log('**************** cellContentsIdentical FALSE');
       return false;
     }
     if (props.puzzlesMetadata !== nextProps.puzzlesMetadata) {
+      console.log('**************** puzzlesMetadata changed');
       return false;
     }
     if (props.puzzleSpec !== nextProps.puzzleSpec) {
+      console.log('**************** puzzleSpec changed');
       return false;
     }
     const displayedPuzzlesIdentical: boolean = displayedPuzzlesEqual(props.displayedPuzzle, nextProps.displayedPuzzle);
     if (!displayedPuzzlesIdentical) {
+      console.log('**************** displayedPuzzlesIdentical FALSE');
       return false;
     }
     return displayedPuzzlesIdentical;
   }
 );
+
+// cell contents are equal even if the _id properties are not equal
+const cellContentsEqual = (cc1: CellContentsMap, cc2: CellContentsMap): boolean => {
+
+  let cellContentsValue1: CellContentsValue;
+  let cellContentsValue2: CellContentsValue;
+
+  for (const cellId in cc1) {
+    if (Object.prototype.hasOwnProperty.call(cc1, cellId)) {
+      cellContentsValue1 = cc1[cellId];
+    } else {
+      return false;
+    }
+    if (Object.prototype.hasOwnProperty.call(cc2, cellId)) {
+      cellContentsValue2 = cc2[cellId];
+    } else {
+      return false;
+    }
+    if (cellContentsValue1.user !== cellContentsValue2.user) {
+      return false;
+    }
+    if (cellContentsValue1.typedChar !== cellContentsValue2.typedChar) {
+      return false;
+    }
+  }
+  return true;
+}
 
 const displayedPuzzlesEqual = (dp1: DisplayedPuzzle, dp2: DisplayedPuzzle): boolean => {
   for (const id in dp1.across) {

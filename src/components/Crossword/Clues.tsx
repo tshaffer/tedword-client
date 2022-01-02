@@ -107,7 +107,7 @@ const Clues = (props: CluesProps) => {
   const acrossCluesComponent = renderCluesComponent('across');
   const downCluesComponent = renderCluesComponent('down');
 
-  console.log('Clues component - rerender');
+  console.log('Clues.tsx - re-render');
 
   return (
     <Grid item container spacing={1} xs={12} style={{ height: '90%', maxWidth: '100%' }} ref={cluesContainerGridRef}>

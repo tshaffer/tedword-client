@@ -58,6 +58,8 @@ const Clue = (props: ClueProps) => {
     };
   }
 
+  console.log('Clue.tsx - re-render');
+
   return (
     <div
       ref={clueRef}

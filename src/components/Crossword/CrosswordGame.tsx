@@ -100,7 +100,7 @@ const CrosswordGame = (props: CrosswordGameProps) => {
   const cluesComponent = renderCluesComponent();
   const chatComponent = renderChatComponent();
 
-  console.log('CrosswordGame component - rerender');
+  console.log('CrosswordGame.tsx - re-render');
 
   return (
     <CrosswordSizeContext.Provider

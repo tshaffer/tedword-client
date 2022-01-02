@@ -129,6 +129,8 @@ const GameToolbar = (props: GameToolbarProps) => {
   };
 
   const handleTimerTimeout = () => {
+    console.log('GameToolbar.tsx - handleTimerTimeout invoked');
+
     const currentElapsedTimeInSeconds = currentElapsedTime;
     const newElapsedTimeInSeconds = currentElapsedTimeInSeconds + 1;
     if (!isNil(currentBoardId) && (currentElapsedTime >= 0)) {
@@ -196,6 +198,8 @@ const GameToolbar = (props: GameToolbarProps) => {
 
   const linkDiv = getLinkDiv();
 
+
+  console.log('GameToolbar.tsx - re-render');
 
   return (
     <div>
