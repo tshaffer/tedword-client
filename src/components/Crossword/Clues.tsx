@@ -9,6 +9,10 @@ import Grid from '@material-ui/core/Grid';
 import { CluesByDirection } from '../../types';
 
 import {
+  moveTo
+} from '../../controllers';
+
+import {
   getCrosswordClues,
   getInputElement,
 } from '../../selectors';
@@ -19,12 +23,12 @@ export interface CluesPropsFromParent {
   onInput: (row: number, col: number, char: string) => any;
   onSetFocus: () => any;
   onFocusedCellChange: (row: any, col: any, direction: any) => any;
-  onMoveTo: (row: number, col: number, directionOverride: string) => any;
 }
 
 export interface CluesProps extends CluesPropsFromParent {
   inputElement: HTMLInputElement;
   cluesByDirection: CluesByDirection;
+  onMoveTo: (row: number, col: number, directionOverride: string) => any;
 }
 
 const Clues = (props: CluesProps) => {
@@ -117,6 +121,7 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onMoveTo: moveTo,
   }, dispatch);
 };
 

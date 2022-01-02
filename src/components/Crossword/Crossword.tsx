@@ -53,7 +53,7 @@ const defaultTheme = {
 
 export interface CrosswordPropsFromParent {
   onInput: (row: number, col: number, char: string) => any;
-  onFocusedCellChange: (row: any, col: any, direction: any) => any;
+  onFocusedCellChange: (row: any, col: any) => any;
 }
 
 export interface CrosswordProps extends CrosswordPropsFromParent {
@@ -71,14 +71,13 @@ export interface CrosswordProps extends CrosswordPropsFromParent {
 const Crossword = (props: CrosswordProps) => {
 
   React.useEffect(() => {
-    props.onFocusedCellChange(0, 0, 'across');
+    props.onFocusedCellChange(0, 0);
     props.onSetCurrentDirection('across');
     props.onSetCurrentNumber('1');
   }, [props.size, props.gridData]);
 
   const contextTheme = React.useContext(ThemeContext);
 
-  // focus and movement
   if (props.size === 0) {
     return null;
   }
@@ -89,21 +88,7 @@ const Crossword = (props: CrosswordProps) => {
   const cellHalf = cellSize / 2;
   const fontSize = cellInner * 0.7;
 
-  // const context = {
-  //   focused: props.focused,
-  //   selectedDirection: props.currentDirection,
-  //   selectedNumber: props.currentNumber,
-  // };
   const finalTheme = { ...defaultTheme, ...(contextTheme as any) };
-
-  const getCellData = (row, col): GridSquareSpec | FakeCellData => {
-    if (row >= 0 && row < props.size && col >= 0 && col < props.size) {
-      return props.gridData[row][col];
-    }
-
-    // fake cellData to represent "out of bounds"
-    return { row, col, used: false };
-  };
 
   const handleSetFocus = () => {
     if (!isNil(props.inputElement)) {
@@ -113,38 +98,12 @@ const Crossword = (props: CrosswordProps) => {
     props.onSetFocused(true);
   };
 
-  const handleMoveTo = (row: number, col: number, directionOverride: string) => {
-    let direction: string;
-    if (isNil(directionOverride)) {
-      direction = props.currentDirection;
-    } else {
-      direction = directionOverride;
-    }
-
-    const candidate: GridSquareSpec | FakeCellData = getCellData(row, col);
-
-    if (!candidate.used) {
-      return false;
-    }
-
-    if (!candidate[direction]) {
-      direction = otherDirection(direction);
-    }
-
-    props.onFocusedCellChange(row, col, direction);
-    props.onSetFocusedRow(row);
-    props.onSetFocusedCol(col);
-    props.onSetCurrentDirection(direction);
-    props.onSetCurrentNumber(candidate[direction]);
-  };
-
   const renderBoardComponent = () => {
     return (
       <Board
         onInput={props.onInput}
         onSetFocus={handleSetFocus}
         onFocusedCellChange={props.onFocusedCellChange}
-        onMoveTo={handleMoveTo}
       />
     );
   };
@@ -163,7 +122,6 @@ const Crossword = (props: CrosswordProps) => {
         onInput={props.onInput}
         onSetFocus={handleSetFocus}
         onFocusedCellChange={props.onFocusedCellChange}
-        onMoveTo={handleMoveTo}
       />
     );
   };

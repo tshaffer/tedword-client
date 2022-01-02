@@ -24,6 +24,10 @@ import {
 } from '../../types';
 
 import {
+  moveTo
+} from '../../controllers';
+
+import {
   setCurrentDirection,
   setCurrentNumber,
   setFocusedRow,
@@ -60,7 +64,6 @@ export interface BoardPropsFromParent {
   onInput: (row: number, col: number, char: string) => any;
   onSetFocus: () => any;
   onFocusedCellChange: (row: any, col: any, direction: any) => any;
-  onMoveTo: (row: number, col: number, directionOverride: string) => any;
 }
 
 export interface BoardProps extends BoardPropsFromParent {
@@ -78,6 +81,7 @@ export interface BoardProps extends BoardPropsFromParent {
   onSetFocusedRow: (row: number) => any;
   onSetFocusedCol: (col: number) => any;
   onSetInputElement: (inputElement: HTMLInputElement) => any;
+  onMoveTo: (row: number, col: number, directionOverride: string) => any;
 }
 
 const Board = (props: BoardProps) => {
@@ -453,6 +457,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetFocusedRow: setFocusedRow,
     onSetFocusedCol: setFocusedCol,
     onSetInputElement: setInputElement,
+    onMoveTo: moveTo,
   }, dispatch);
 };
 
