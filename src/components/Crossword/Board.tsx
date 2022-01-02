@@ -20,7 +20,9 @@ import {
   GridSquareSpec,
   GridSpec,
   CrosswordCellCoordinate,
-  FakeCellData
+  FakeCellData,
+  CluesByNumber,
+  ClueAtLocation
 } from '../../types';
 
 import {
@@ -47,7 +49,11 @@ import {
   getFocusedRow,
   getFocusedCol,
 } from '../../selectors';
-import { isAcross, otherDirection } from '../../utilities';
+import {
+  bothDirections,
+  isAcross,
+  otherDirection,
+} from '../../utilities';
 
 const defaultTheme = {
   columnBreakpoint: '768px',  // currently unused
@@ -95,6 +101,12 @@ const Board = (props: BoardProps) => {
     props.onSetCurrentNumber('1');
   }, [props.size, props.gridData]);
 
+  React.useEffect(() => {
+    console.log('******** useEffect - guesses changed');
+    const puzzleIsCompleteAndCorrect = isPuzzleCompleteAndCorrect();
+    console.log('puzzleCompleteAndCorrect', puzzleIsCompleteAndCorrect);
+  }, [props.guesses]);
+
   const inputRef = useRef();
 
   const contextTheme = useContext(ThemeContext);
@@ -108,6 +120,34 @@ const Board = (props: BoardProps) => {
 
     // fake cellData to represent "out of bounds"
     return { row, col, used: false };
+  };
+
+  const isPuzzleCompleteAndCorrect = () => {
+    for (const direction of bothDirections) {
+      const across = isAcross(direction);
+      const cluesByDirection: CluesByDirection = props.cluesByDirection;
+      const cluesForDirection: CluesByNumber = cluesByDirection[direction];
+      for (const clueNumber in cluesForDirection) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (cluesForDirection.hasOwnProperty(clueNumber)) {
+          const clueAtLocation: ClueAtLocation = cluesForDirection[clueNumber];
+          const { answer, row, col, completelyFilledIn } = clueAtLocation;
+          if (!completelyFilledIn) {
+            return false;
+          }
+          for (let i = 0; i < answer.length; i++) {
+            const r = across ? row : row + i;
+            const c = across ? col + i : col;
+            const guess: Guess = props.guesses[r][c];
+            if (guess.value !== answer[i]) {
+              return false;
+            }
+          }
+        }
+      }
+    }
+
+    return true;
   };
 
   const handleCellClick = (cellCoordinates: CrosswordCellCoordinate) => {

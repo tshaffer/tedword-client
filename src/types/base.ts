@@ -163,7 +163,7 @@ export interface PuzzleSpec {
   width: number;
   height: number;
   clues: string[];
-  solution: string;
+  // solution: string;
   state: string;
   hasState: boolean;
   parsedClues: ParsedClue[];
