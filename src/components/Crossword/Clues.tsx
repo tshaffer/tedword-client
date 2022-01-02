@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import { CluesByDirection } from '../../types';
 
 import {
-  moveTo
+  moveTo,
 } from '../../controllers';
 
 import {
@@ -20,9 +20,7 @@ import {
 import DirectionClues from './DirectionClues';
 
 export interface CluesPropsFromParent {
-  onInput: (row: number, col: number, char: string) => any;
   onSetFocus: () => any;
-  onFocusedCellChange: (row: any, col: any, direction: any) => any;
 }
 
 export interface CluesProps extends CluesPropsFromParent {

@@ -12,20 +12,18 @@ import Board from './Board';
 import Clues from './Clues';
 import Chat from '../Chat/Chat';
 
-import { otherDirection } from '../../utilities';
+import {
+  GridSpec,
+} from '../../types';
 
 import {
-  GridSquareSpec,
-  GridSpec,
-  FakeCellData
-} from '../../types';
+  updateFocusedClues,
+} from '../../controllers';
 
 import {
   setCurrentDirection,
   setCurrentNumber,
   setFocused,
-  setFocusedRow,
-  setFocusedCol,
 } from '../../models';
 
 import {
@@ -53,7 +51,6 @@ const defaultTheme = {
 
 export interface CrosswordPropsFromParent {
   onInput: (row: number, col: number, char: string) => any;
-  onFocusedCellChange: (row: any, col: any) => any;
 }
 
 export interface CrosswordProps extends CrosswordPropsFromParent {
@@ -64,14 +61,13 @@ export interface CrosswordProps extends CrosswordPropsFromParent {
   onSetCurrentDirection: (direction: string) => any;
   onSetCurrentNumber: (currentNumber: string) => any;
   onSetFocused: (focused: boolean) => any;
-  onSetFocusedRow: (row: number) => any;
-  onSetFocusedCol: (col: number) => any;
+  onUpdateFocusedClues: (row: number, col: number) => any;
 }
 
 const Crossword = (props: CrosswordProps) => {
 
   React.useEffect(() => {
-    props.onFocusedCellChange(0, 0);
+    props.onUpdateFocusedClues(0, 0);
     props.onSetCurrentDirection('across');
     props.onSetCurrentNumber('1');
   }, [props.size, props.gridData]);
@@ -103,7 +99,6 @@ const Crossword = (props: CrosswordProps) => {
       <Board
         onInput={props.onInput}
         onSetFocus={handleSetFocus}
-        onFocusedCellChange={props.onFocusedCellChange}
       />
     );
   };
@@ -119,9 +114,7 @@ const Crossword = (props: CrosswordProps) => {
   const renderCluesComponent = () => {
     return (
       <Clues
-        onInput={props.onInput}
         onSetFocus={handleSetFocus}
-        onFocusedCellChange={props.onFocusedCellChange}
       />
     );
   };
@@ -162,8 +155,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetCurrentDirection: setCurrentDirection,
     onSetCurrentNumber: setCurrentNumber,
     onSetFocused: setFocused,
-    onSetFocusedRow: setFocusedRow,
-    onSetFocusedCol: setFocusedCol,
+    onUpdateFocusedClues: updateFocusedClues,
   }, dispatch);
 };
 

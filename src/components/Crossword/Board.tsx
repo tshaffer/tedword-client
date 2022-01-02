@@ -24,7 +24,8 @@ import {
 } from '../../types';
 
 import {
-  moveTo
+  moveTo,
+  updateFocusedClues,
 } from '../../controllers';
 
 import {
@@ -63,7 +64,6 @@ const defaultTheme = {
 export interface BoardPropsFromParent {
   onInput: (row: number, col: number, char: string) => any;
   onSetFocus: () => any;
-  onFocusedCellChange: (row: any, col: any, direction: any) => any;
 }
 
 export interface BoardProps extends BoardPropsFromParent {
@@ -82,12 +82,13 @@ export interface BoardProps extends BoardPropsFromParent {
   onSetFocusedCol: (col: number) => any;
   onSetInputElement: (inputElement: HTMLInputElement) => any;
   onMoveTo: (row: number, col: number, directionOverride: string) => any;
+  onUpdateFocusedClues: (row: number, col: number) => any;
 }
 
 const Board = (props: BoardProps) => {
 
   React.useEffect(() => {
-    props.onFocusedCellChange(0, 0, 'across');
+    props.onUpdateFocusedClues(0, 0);
     props.onSetFocusedRow(0);
     props.onSetFocusedCol(0);
     props.onSetCurrentDirection('across');
@@ -142,9 +143,7 @@ const Board = (props: BoardProps) => {
 
     props.onSetCurrentNumber(cellData[direction]);
 
-    if (props.onFocusedCellChange) {
-      props.onFocusedCellChange(row, col, direction);
-    }
+    props.onUpdateFocusedClues(row, col);
 
     props.onSetFocus();
   };
@@ -458,6 +457,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetFocusedCol: setFocusedCol,
     onSetInputElement: setInputElement,
     onMoveTo: moveTo,
+    onUpdateFocusedClues: updateFocusedClues,
   }, dispatch);
 };
 
