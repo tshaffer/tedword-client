@@ -11,7 +11,7 @@ import { updateElapsedTime } from '../controllers';
 import { setPuzzlePlayActive } from '../models';
 import { getBoardId, getElapsedTime, getGameState, getPuzzlePlayActive, getUsers } from '../selectors';
 
-export interface BoardToolbarProps {
+export interface GameToolbarProps {
   boardId: string,
   elapsedTime: number,
   gameState: GameState,
@@ -25,7 +25,7 @@ let currentBoardId: string = null;
 let currentElapsedTime: number = -1;
 let intervalId: NodeJS.Timeout;
 
-const BoardToolbar = (props: BoardToolbarProps) => {
+const GameToolbar = (props: GameToolbarProps) => {
 
   const elapsedGameTimerRef = React.useRef(false);
 
@@ -281,4 +281,4 @@ const mapDispatchToProps = (dispatch: any) => {
   }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BoardToolbar);
+export default connect(mapStateToProps, mapDispatchToProps)(GameToolbar);

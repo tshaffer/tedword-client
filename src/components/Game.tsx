@@ -7,8 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import { isNil } from 'lodash';
 
 import FocusedClues from './FocusedClues';
-import BoardPlay from './BoardPlay';
-import BoardToolbar from './BoardToolbar';
+import CrosswordGameMgr from './CrosswordGameMgr';
+import GameToolbar from './GameToolbar';
 import { getAppState, getBoard, getPuzzlesMetadata, getDisplayedPuzzle, getCellContents, getPuzzle } from '../selectors';
 import { AppState, BoardEntity, CellContentsMap, DisplayedPuzzle, Guess, PuzzlesMetadataMap, PuzzleSpec, UiState } from '../types';
 import { setUiState, updateGuess } from '../models';
@@ -17,7 +17,7 @@ import { setUiState, updateGuess } from '../models';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Pusher = require('pusher-js');
 
-export interface BoardTopProps {
+export interface GameProps {
   appState: AppState,
   cellContents: CellContentsMap;
   displayedPuzzle: DisplayedPuzzle;
@@ -29,11 +29,11 @@ export interface BoardTopProps {
 
 export let pusher: any;
 
-let boardTopProps;
+let gameProps;
 
-const BoardTop = (props: BoardTopProps) => {
+const Game = (props: GameProps) => {
 
-  boardTopProps = props;
+  gameProps = props;
 
   const initializePusher = () => {
 
@@ -58,32 +58,32 @@ const BoardTop = (props: BoardTopProps) => {
 
     channel.bind('cell-change', data => {
 
-      console.log(boardTopProps);
+      console.log(gameProps);
 
-      if (isNil(boardTopProps)) {
-        console.log('boardTopProps null - return');
+      if (isNil(gameProps)) {
+        console.log('gameProps null - return');
       }
       console.log('websocket cell-change');
       console.log(data);
-      console.log('current user is ', boardTopProps.appState.userName);
-      console.log('external event: ', boardTopProps.appState.userName !== data.user);
+      console.log('current user is ', gameProps.appState.userName);
+      console.log('external event: ', gameProps.appState.userName !== data.user);
 
       const { user, row, col, typedChar } = data;
 
-      const externalEvent: boolean = boardTopProps.appState.userName !== user;
+      const externalEvent: boolean = gameProps.appState.userName !== user;
       if (externalEvent) {
         const guess: Guess = {
           value: typedChar,
           guessIsRemote: true,
           remoteUser: user,
         };
-        boardTopProps.onUpdateGuess(row, col, guess);
+        gameProps.onUpdateGuess(row, col, guess);
       }
     });
   };
 
   React.useEffect(() => {
-    console.log('BoardTop useEffect invoked');
+    console.log('Game useEffect invoked');
     initializePusher();
   }, []);
 
@@ -111,10 +111,10 @@ const BoardTop = (props: BoardTopProps) => {
         <button onClick={handleHome}>Home</button>
       </div>
       <Grid container spacing={1} justify="center" style={{ minHeight: '5%', maxWidth: '100%' }}>
-        <BoardToolbar />
+        <GameToolbar />
       </Grid>
       <FocusedClues />
-      <BoardPlay
+      <CrosswordGameMgr
         appState={props.appState}
         cellContents={props.cellContents}
         displayedPuzzle={props.displayedPuzzle}
@@ -146,4 +146,4 @@ const mapDispatchToProps = (dispatch: any) => {
   }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BoardTop);
+export default connect(mapStateToProps, mapDispatchToProps)(Game);

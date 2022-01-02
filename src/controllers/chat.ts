@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { apiUrlFragment, serverUrl, Chat } from '../types';
 
-import { pusher } from '../components/BoardTop';
+import { pusher } from '../components/Game';
 
 import {
   addChat,

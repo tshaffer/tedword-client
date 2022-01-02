@@ -37,17 +37,17 @@ const defaultTheme = {
   highlightBackground: 'rgb(255,255,204)',
 };
 
-export interface CrosswordPropsFromParent {
+export interface CrosswordGamePropsFromParent {
   onInput: (row: number, col: number, char: string) => any;
 }
 
-export interface CrosswordProps extends CrosswordPropsFromParent {
+export interface CrosswordGameProps extends CrosswordGamePropsFromParent {
   inputElement: HTMLInputElement;
   size: number;
   onSetFocused: (focused: boolean) => any;
 }
 
-const Crossword = (props: CrosswordProps) => {
+const CrosswordGame = (props: CrosswordGameProps) => {
 
   const contextTheme = React.useContext(ThemeContext);
 
@@ -80,14 +80,6 @@ const Crossword = (props: CrosswordProps) => {
     );
   };
 
-  const renderChatComponent = () => {
-    return (
-      <Grid item xs={12} style={{ height: '10%' }}>
-        <Chat />
-      </Grid>
-    );
-  };
-
   const renderCluesComponent = () => {
     return (
       <Clues
@@ -96,9 +88,19 @@ const Crossword = (props: CrosswordProps) => {
     );
   };
 
+  const renderChatComponent = () => {
+    return (
+      <Grid item xs={12} style={{ height: '10%' }}>
+        <Chat />
+      </Grid>
+    );
+  };
+
   const boardComponent = renderBoardComponent();
   const cluesComponent = renderCluesComponent();
   const chatComponent = renderChatComponent();
+
+  console.log('CrosswordGame component - rerender');
 
   return (
     <CrosswordSizeContext.Provider
@@ -130,4 +132,4 @@ const mapDispatchToProps = (dispatch: any) => {
   }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Crossword);
+export default connect(mapStateToProps, mapDispatchToProps)(CrosswordGame);

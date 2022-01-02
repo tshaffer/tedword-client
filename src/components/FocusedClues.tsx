@@ -2,16 +2,7 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { makeStyles } from '@material-ui/core/styles';
-// import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-// const useStyles = makeStyles((theme) => ({
-//   paper: {
-//     padding: theme.spacing(1),
-//     textAlign: 'center',
-//     color: theme.palette.text.secondary
-//   }
-// }));
 
 import { ClueAtLocation, CluesByDirection, CluesByNumber, GameState, Guess, GuessesGrid } from '../types';
 import { getCrosswordClues, getGameState, getGuesses } from '../selectors';
@@ -24,8 +15,6 @@ export interface FocusedCluesProps {
 }
 
 const FocusedClues = (props: FocusedCluesProps) => {
-
-  // const classes = useStyles();
 
   const getUserEntry = (direction: string, clueNumber: string): string => {
 

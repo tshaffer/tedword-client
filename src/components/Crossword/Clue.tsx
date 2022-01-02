@@ -24,11 +24,6 @@ const Clue = (props: ClueProps) => {
   const clueRef = React.useRef(null);
 
   const { highlightBackground } = React.useContext(ThemeContext);
-  // const {
-  //   focused,
-  //   selectedDirection,
-  //   selectedNumber,
-  // } = React.useContext(CrosswordContext);
 
   React.useEffect(() => {
     const becameFocused = props.focused && props.direction === props.selectedDirection && props.number === props.selectedNumber;

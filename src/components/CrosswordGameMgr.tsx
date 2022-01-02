@@ -2,7 +2,7 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import Crossword from './Crossword/Crossword';
+import CrosswordGame from './Crossword/CrosswordGame';
 
 import {
   AppState,
@@ -20,7 +20,7 @@ import {
 } from '../controllers';
 import { isNil } from 'lodash';
 
-export interface BoardPlayPropsFromParent {
+export interface CrosswordGameMgrPropsFromParent {
   appState: AppState,
   cellContents: CellContentsMap;
   displayedPuzzle: DisplayedPuzzle;
@@ -28,7 +28,7 @@ export interface BoardPlayPropsFromParent {
   puzzleSpec: PuzzleSpec;
 }
 
-export interface BoardPlayProps extends BoardPlayPropsFromParent {
+export interface CrosswordGameMgrProps extends CrosswordGameMgrPropsFromParent {
   onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
   onLoadPuzzle: (puzzleId: string) => any;
@@ -36,21 +36,12 @@ export interface BoardPlayProps extends BoardPlayPropsFromParent {
   onInputEvent: (row: number, col: number, char: string) => any;
 }
 
-
-export let boardPlayCrossword: any;
-
-const BoardPlay = (props: BoardPlayProps) => {
+const CrosswordGameMgr = (props: CrosswordGameMgrProps) => {
 
   React.useEffect(() => {
     props.onLoadPuzzle(props.appState.puzzleId);
   }, []);
 
-
-  boardPlayCrossword = React.useRef();
-
-  const handleFocusedCellChange = (row: any, col: any) => {
-    props.onUpdateFocusedClues(row, col);
-  };
 
   const handleInputEvent = (row: number, col: number, char: string) => {
     props.onInputEvent(row, col, char);
@@ -64,14 +55,14 @@ const BoardPlay = (props: BoardPlayProps) => {
 
   return (
     <div style={{ height: '85%' }}>
-      <Crossword
+      <CrosswordGame
         onInput={handleInputEvent}
       />
     </div>
   );
 };
 
-function mapStateToProps(state: any, ownProps: any): Partial<BoardPlayProps> {
+function mapStateToProps(state: any, ownProps: any): Partial<CrosswordGameMgrProps> {
   return {
     puzzlesMetadata: ownProps.puzzleMetadata,
     appState: ownProps.appState,
@@ -95,8 +86,8 @@ export default React.memo(
   connect(
     mapStateToProps,
     mapDispatchToProps
-  )(BoardPlay),
-  (props: BoardPlayPropsFromParent, nextProps: BoardPlayPropsFromParent) => {
+  )(CrosswordGameMgr),
+  (props: CrosswordGameMgrPropsFromParent, nextProps: CrosswordGameMgrPropsFromParent) => {
     if (props.appState !== nextProps.appState) {
       return false;
     }

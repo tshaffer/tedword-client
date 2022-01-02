@@ -28,7 +28,7 @@ const ChatHistory = (props: ChatHistoryProps) => {
   const chatBodyRef = React.useRef(null);
 
   if (!isNil(chatBodyRef) && !isNil(chatBodyRef.current)) {
-    console.log('pizza');
+    // console.log('pizza');
     // chatBodyRef.current.scrollTop=chatBodyRef.current.clientHeight
     // scrolls div to the bottom
   }
@@ -62,8 +62,8 @@ const ChatHistory = (props: ChatHistoryProps) => {
   // const buildOrderedChats: OrderedChats = () => {
   const getChatHistory: any = () => {
 
-    console.log('props.chats');
-    console.log(props.chats);
+    // console.log('props.chats');
+    // console.log(props.chats);
 
     const orderedChats: OrderedChats = {
       chatsAtTime: [],
@@ -131,7 +131,7 @@ const ChatHistory = (props: ChatHistoryProps) => {
       orderedChats.chatsAtTime.push(chatsAtTime);
     }
 
-    console.log(orderedChats);
+    // console.log(orderedChats);
     return orderedChats as OrderedChats;
   };
 

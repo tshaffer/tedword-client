@@ -393,7 +393,7 @@ const Board = (props: BoardProps) => {
         <input
           className='board-input'
           ref={(e: HTMLInputElement) => {
-            console.log('assign inputRef.current: ', e);
+            // console.log('assign inputRef.current: ', e);
             (inputRef.current as HTMLInputElement) = e; // you can still assign to ref
             props.onSetInputElement(e);
           }}
@@ -403,7 +403,6 @@ const Board = (props: BoardProps) => {
           onClick={handleInputClick}
           onKeyDown={handleInputKeyDown}
           value=""
-          // onInput={this.handleInput}
           autoComplete="off"
           spellCheck="false"
           autoCorrect="off"

@@ -18,7 +18,7 @@ import NewGames from './NewGames';
 import ExistingGames from './ExistingGames';
 import PuzzleUpload from './PuzzleUpload';
 
-export interface GameHomeProps {
+export interface LauncherProps {
   versionInfo: VersionInfo;
   currentUser: string;
   users: UsersMap,
@@ -33,7 +33,7 @@ export interface GameHomeProps {
   onSetUserName: (userName: string) => any;
 }
 
-const GameHome = (props: GameHomeProps) => {
+const Launcher = (props: LauncherProps) => {
 
   const [showAboutModal, setShowAboutModal] = React.useState(false);
 
@@ -60,7 +60,7 @@ const GameHome = (props: GameHomeProps) => {
     props.onSetUiState(UiState.NewBoardPlay);
   };
 
-  const renderGameHome = () => {
+  const renderLauncher = () => {
 
     const tabcontent = {
       display: 'none',
@@ -209,7 +209,7 @@ const GameHome = (props: GameHomeProps) => {
     );
   };
 
-  return renderGameHome();
+  return renderLauncher();
 };
 
 function mapStateToProps(state: any) {
@@ -234,5 +234,5 @@ const mapDispatchToProps = (dispatch: any) => {
   }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(GameHome);
+export default connect(mapStateToProps, mapDispatchToProps)(Launcher);
 

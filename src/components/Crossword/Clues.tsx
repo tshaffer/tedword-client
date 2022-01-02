@@ -42,9 +42,14 @@ const Clues = (props: CluesProps) => {
         const acrossGridItem = cluesContainerGridRef.current.children[0];
         const downGridItem = cluesContainerGridRef.current.children[1];
 
-        // const cluesContainerGridHeight = cluesContainerGridRef.current.offsetHeight;
-        // const acrossGridItemHeight = acrossGridItem.offsetHeight;
-        // const downGridItemHeight = downGridItem.offsetHeight;
+        const cluesContainerGridHeight = cluesContainerGridRef.current.offsetHeight;
+        const acrossGridItemHeight = acrossGridItem.offsetHeight;
+        const downGridItemHeight = downGridItem.offsetHeight;
+
+        console.log('setCluesLayout');
+        console.log('cluesContainerGridHeight', cluesContainerGridHeight);
+        console.log('acrossGridItemHeight', acrossGridItemHeight);
+        console.log('downGridItemHeight', downGridItemHeight);
 
         // if the height of container is the same as the height of the across and down grids, then it's a side by side layout
         // if the height of the container is larger than the height of the across and down grids, then it's a top / bottom layout
@@ -101,6 +106,8 @@ const Clues = (props: CluesProps) => {
   setCluesLayout();
   const acrossCluesComponent = renderCluesComponent('across');
   const downCluesComponent = renderCluesComponent('down');
+
+  console.log('Clues component - rerender');
 
   return (
     <Grid item container spacing={1} xs={12} style={{ height: '90%', maxWidth: '100%' }} ref={cluesContainerGridRef}>

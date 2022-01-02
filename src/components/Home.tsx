@@ -12,8 +12,8 @@ import { getAppState, getUsers } from '../selectors';
 import { setUiState, setStartPage, setStartupBoardId, } from '../models';
 
 import Login from './Login';
-import GameHome from './GameHome';
-import BoardTop from './BoardTop';
+import Launcher from './Launcher';
+import Game from './Game';
 import { getCurrentUser } from '../selectors';
 import { getStartPage, getStartupBoardId } from '../selectors';
 
@@ -143,13 +143,13 @@ const Home = (props: HomeProps) => {
     }
     case UiState.SelectPuzzleOrBoard: {
       return (
-        <GameHome />
+        <Launcher />
       );
     }
     case UiState.NewBoardPlay:
     case UiState.ExistingBoardPlay: {
       return (
-        <BoardTop />
+        <Game />
       );
     }
   }
