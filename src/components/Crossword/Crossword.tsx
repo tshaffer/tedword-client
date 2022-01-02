@@ -13,23 +13,11 @@ import Clues from './Clues';
 import Chat from '../Chat/Chat';
 
 import {
-  GridSpec,
-} from '../../types';
-
-import {
-  updateFocusedClues,
-} from '../../controllers';
-
-import {
-  setCurrentDirection,
-  setCurrentNumber,
   setFocused,
 } from '../../models';
 
 import {
   getSize,
-  getGridData,
-  getCurrentDirection,
   getInputElement,
 } from '../../selectors';
 
@@ -56,21 +44,10 @@ export interface CrosswordPropsFromParent {
 export interface CrosswordProps extends CrosswordPropsFromParent {
   inputElement: HTMLInputElement;
   size: number;
-  gridData: GridSpec;
-  currentDirection: string;
-  onSetCurrentDirection: (direction: string) => any;
-  onSetCurrentNumber: (currentNumber: string) => any;
   onSetFocused: (focused: boolean) => any;
-  onUpdateFocusedClues: (row: number, col: number) => any;
 }
 
 const Crossword = (props: CrosswordProps) => {
-
-  React.useEffect(() => {
-    props.onUpdateFocusedClues(0, 0);
-    props.onSetCurrentDirection('across');
-    props.onSetCurrentNumber('1');
-  }, [props.size, props.gridData]);
 
   const contextTheme = React.useContext(ThemeContext);
 
@@ -144,18 +121,12 @@ function mapStateToProps(state: any) {
   return {
     inputElement: getInputElement(state),
     size: getSize(state),
-    gridData: getGridData(state),
-    currentDirection: getCurrentDirection(state),
-
   };
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
-    onSetCurrentDirection: setCurrentDirection,
-    onSetCurrentNumber: setCurrentNumber,
     onSetFocused: setFocused,
-    onUpdateFocusedClues: updateFocusedClues,
   }, dispatch);
 };
 
