@@ -12,7 +12,8 @@ import {
   setGridData,
   setPuzzleId,
   setSize,
-  updateGuess
+  updateGuess,
+  updateAllGuesses
 } from '../models';
 import {
   createEmptyGuessesGrid, createGridData
@@ -57,6 +58,8 @@ export const loadPuzzle = (id: string) => {
         // maybe it is - why is this called loadPuzzle?
         const cellContents: CellContentsMap = getCellContents(state);
 
+        const puzzleGuesses: GuessesGrid = cloneDeep(guesses);
+
         for (const cellContentsKey in cellContents) {
           if (Object.prototype.hasOwnProperty.call(cellContents, cellContentsKey)) {
             const cellPosition = cellContentsKey.split('_');
@@ -77,9 +80,11 @@ export const loadPuzzle = (id: string) => {
               guessIsRemote,
               remoteUser,
             };
-            dispatch(updateGuess(row, col, guess));
+            puzzleGuesses[row][col] = guess;
           }
         }
+
+        dispatch(updateAllGuesses(puzzleGuesses));
 
         dispatch(refreshCompletedClues());
       });
@@ -245,6 +250,7 @@ const buildCluesInDirection = (cluesByDirection: CluesByDirection, direction: st
         }
       }
 
+      console.log('buildCluesInDirection: ', row, col);
       clueAtLocation.completelyFilledIn = completelyFilledIn;
     }
   }
