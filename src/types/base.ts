@@ -19,6 +19,7 @@ export enum BoardStatus {
   BoardIncomplete = 'BoardIncomplete',
   BoardCompleteAndCorrect = 'BoardCompeteAndCorrect',
   BoardCompleteButIncorrect = 'BoardCompleteButIncorrect',
+  BoardStatusUninitialized = 'BoardStatusUninitialized',
 }
 
 export interface TedwordState {

@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 import { isNil } from 'lodash';
 
+import ReactModal = require('react-modal');
+
 import { ThemeContext, ThemeProvider } from 'styled-components';
 
 import Grid from '@material-ui/core/Grid';
@@ -24,6 +26,7 @@ import {
 import {
   CrosswordSizeContext,
 } from './context';
+import { BoardStatus } from '../../types';
 
 const defaultTheme = {
   columnBreakpoint: '768px',  // currently unused
@@ -51,6 +54,22 @@ const CrosswordGame = (props: CrosswordGameProps) => {
 
   const contextTheme = React.useContext(ThemeContext);
 
+  const [boardStatus, setBoardStatus] = React.useState(BoardStatus.BoardStatusUninitialized);
+
+  const modalStyle = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      minHeight: '105px',
+      minWidth: '150px',
+    },
+  };
+
+
   if (props.size === 0) {
     return null;
   }
@@ -71,11 +90,23 @@ const CrosswordGame = (props: CrosswordGameProps) => {
     props.onSetFocused(true);
   };
 
+  const handleBoardStatusChanged = (newBoardStatus: BoardStatus) => {
+    console.log('**** handleBoardStatusChanged: ', newBoardStatus);
+    if (newBoardStatus !== boardStatus) {
+      setBoardStatus(newBoardStatus);
+    }
+  };
+
+  const handleHideBoardStatusModal = () => {
+    setBoardStatus(BoardStatus.BoardStatusUninitialized);
+  };
+
   const renderBoardComponent = () => {
     return (
       <Board
         onInput={props.onInput}
         onSetFocus={handleSetFocus}
+        onBoardStatusChanged={handleBoardStatusChanged}
       />
     );
   };
@@ -100,22 +131,56 @@ const CrosswordGame = (props: CrosswordGameProps) => {
   const cluesComponent = renderCluesComponent();
   const chatComponent = renderChatComponent();
 
-  // console.log('CrosswordGame.tsx - re-render');
+  let boardStatusMessage = '';
+  if (boardStatus === BoardStatus.BoardCompleteAndCorrect) {
+    boardStatusMessage = 'Congratulations';
+  } else if (boardStatus === BoardStatus.BoardCompleteButIncorrect) {
+    boardStatusMessage = 'Sorry';
+  }
 
   return (
-    <CrosswordSizeContext.Provider
-      value={{ cellSize, cellPadding, cellInner, cellHalf, fontSize }}
-    >
-      <ThemeProvider theme={finalTheme}>
-        <Grid container spacing={1} justify="center" style={{ maxWidth: '100%', height: '100%' }}>
-          {boardComponent}
-          <Grid item xs={4} sm={5} md={6} lg={7} xl={8} container style={{ minHeight: '100%', maxHeight: '100%' }}>
-            {cluesComponent}
-            {chatComponent}
+    <div>
+      <div>
+        <ReactModal
+          isOpen={boardStatus === BoardStatus.BoardCompleteAndCorrect || boardStatus === BoardStatus.BoardCompleteButIncorrect}
+          style={modalStyle}
+          ariaHideApp={false}
+        >
+          <div>
+            <div style={{ marginBottom: '10px' }}>
+              <p>{boardStatusMessage}</p>
+            </div>
+            <div
+              style={{
+                position: 'absolute',
+                bottom: '10px',
+                right: '10px',
+              }}
+            >
+              <button
+                onClick={handleHideBoardStatusModal}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </ReactModal>
+
+      </div>
+      <CrosswordSizeContext.Provider
+        value={{ cellSize, cellPadding, cellInner, cellHalf, fontSize }}
+      >
+        <ThemeProvider theme={finalTheme}>
+          <Grid container spacing={1} justify="center" style={{ maxWidth: '100%', height: '100%' }}>
+            {boardComponent}
+            <Grid item xs={4} sm={5} md={6} lg={7} xl={8} container style={{ minHeight: '100%', maxHeight: '100%' }}>
+              {cluesComponent}
+              {chatComponent}
+            </Grid>
           </Grid>
-        </Grid>
-      </ThemeProvider>
-    </CrosswordSizeContext.Provider>
+        </ThemeProvider>
+      </CrosswordSizeContext.Provider>
+    </div>
   );
 };
 

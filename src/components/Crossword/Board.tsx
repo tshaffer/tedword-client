@@ -71,6 +71,7 @@ const defaultTheme = {
 export interface BoardPropsFromParent {
   onInput: (row: number, col: number, char: string) => any;
   onSetFocus: () => any;
+  onBoardStatusChanged: (boardStatus: BoardStatus) => any;
 }
 
 export interface BoardProps extends BoardPropsFromParent {
@@ -94,7 +95,7 @@ export interface BoardProps extends BoardPropsFromParent {
 
 const Board = (props: BoardProps) => {
 
-  const [boardStatus, setBoardStatus] = React.useState(BoardStatus.BoardIncomplete);
+  const [boardStatus, setBoardStatus] = React.useState(BoardStatus.BoardStatusUninitialized);
 
   React.useEffect(() => {
     props.onUpdateFocusedClues(0, 0);
@@ -109,6 +110,7 @@ const Board = (props: BoardProps) => {
     if (boardStatus !== boardStatusNew) {
       console.log('boardStatus changed');
       setBoardStatus(boardStatusNew);
+      props.onBoardStatusChanged(boardStatusNew);
     }
   }, [props.guesses]);
 
