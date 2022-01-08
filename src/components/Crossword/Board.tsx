@@ -22,7 +22,8 @@ import {
   CrosswordCellCoordinate,
   FakeCellData,
   CluesByNumber,
-  ClueAtLocation
+  ClueAtLocation,
+  BoardStatus
 } from '../../types';
 
 import {
@@ -93,6 +94,8 @@ export interface BoardProps extends BoardPropsFromParent {
 
 const Board = (props: BoardProps) => {
 
+  const [boardStatus, setBoardStatus] = React.useState(BoardStatus.BoardIncomplete);
+
   React.useEffect(() => {
     props.onUpdateFocusedClues(0, 0);
     props.onSetFocusedRow(0);
@@ -102,9 +105,11 @@ const Board = (props: BoardProps) => {
   }, [props.size, props.gridData]);
 
   React.useEffect(() => {
-    console.log('******** useEffect - guesses changed');
-    const puzzleIsCompleteAndCorrect = isPuzzleCompleteAndCorrect();
-    console.log('puzzleCompleteAndCorrect', puzzleIsCompleteAndCorrect);
+    const boardStatusNew = getBoardStatus();
+    if (boardStatus !== boardStatusNew) {
+      console.log('boardStatus changed');
+      setBoardStatus(boardStatusNew);
+    }
   }, [props.guesses]);
 
   const inputRef = useRef();
@@ -122,7 +127,8 @@ const Board = (props: BoardProps) => {
     return { row, col, used: false };
   };
 
-  const isPuzzleCompleteAndCorrect = () => {
+  const getBoardStatus = (): BoardStatus => {
+    let allGuessesCorrect: boolean = true;
     for (const direction of bothDirections) {
       const across = isAcross(direction);
       const cluesByDirection: CluesByDirection = props.cluesByDirection;
@@ -133,21 +139,24 @@ const Board = (props: BoardProps) => {
           const clueAtLocation: ClueAtLocation = cluesForDirection[clueNumber];
           const { answer, row, col, completelyFilledIn } = clueAtLocation;
           if (!completelyFilledIn) {
-            return false;
+            return BoardStatus.BoardIncomplete;
           }
           for (let i = 0; i < answer.length; i++) {
             const r = across ? row : row + i;
             const c = across ? col + i : col;
             const guess: Guess = props.guesses[r][c];
             if (guess.value !== answer[i]) {
-              return false;
+              allGuessesCorrect = false;
+              break;
             }
           }
+        } else {
+          debugger;
         }
       }
     }
 
-    return true;
+    return allGuessesCorrect ? BoardStatus.BoardCompleteAndCorrect : BoardStatus.BoardCompleteButIncorrect;
   };
 
   const handleCellClick = (cellCoordinates: CrosswordCellCoordinate) => {

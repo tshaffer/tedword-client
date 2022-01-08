@@ -3,6 +3,24 @@ export const serverUrl = 'http://localhost:8000';
 
 export const apiUrlFragment = '/api/v1/';
 
+export enum StartPage {
+  Standard = 'Standard',
+  JoinGame = 'JoinGame',
+}
+
+export enum UiState {
+  SelectUser = 'SelectUser',
+  SelectPuzzleOrBoard = 'SelectPuzzleOrBoard',
+  NewBoardPlay = 'NewBoardPlay',
+  ExistingBoardPlay = 'ExistingBoardPlay',
+}
+
+export enum BoardStatus {
+  BoardIncomplete = 'BoardIncomplete',
+  BoardCompleteAndCorrect = 'BoardCompeteAndCorrect',
+  BoardCompleteButIncorrect = 'BoardCompleteButIncorrect',
+}
+
 export interface TedwordState {
   versionInfo: VersionInfo;
   appParameters: AppParameters;
@@ -83,18 +101,6 @@ export interface PuzzlesState {
 
 export interface UsersMap {
   [id: string]: User; // userName
-}
-
-export enum StartPage {
-  Standard = 'Standard',
-  JoinGame = 'JoinGame',
-}
-
-export enum UiState {
-  SelectUser = 'SelectUser',
-  SelectPuzzleOrBoard = 'SelectPuzzleOrBoard',
-  NewBoardPlay = 'NewBoardPlay',
-  ExistingBoardPlay = 'ExistingBoardPlay',
 }
 
 export interface ParsedClue {
