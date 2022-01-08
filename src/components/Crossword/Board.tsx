@@ -112,7 +112,7 @@ const Board = (props: BoardProps) => {
       setBoardStatus(boardStatusNew);
       props.onBoardStatusChanged(boardStatusNew);
     }
-  }, [props.guesses]);
+  }, [props.guesses, props.cluesByDirection]);
 
   const inputRef = useRef();
 
