@@ -2,7 +2,6 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { isNil } from 'lodash';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -33,55 +32,24 @@ const Clues = (props: CluesProps) => {
 
   const cluesContainerGridRef = React.useRef(null);
 
-  const [cluesSideBySide, setCluesSideBySide] = React.useState(true);
+  const [maxHeight, setMaxHeight] = React.useState('100%');
 
-  const setCluesLayout = () => {
-    if (!isNil(cluesContainerGridRef) && !isNil(cluesContainerGridRef.current)) {
-      if (cluesContainerGridRef.current.childElementCount === 2) {
+  const mediaQueryList: MediaQueryList = window.matchMedia('(max-width: 600px)');
 
-        const acrossGridItem = cluesContainerGridRef.current.children[0];
-        const downGridItem = cluesContainerGridRef.current.children[1];
-
-        const cluesContainerGridHeight = cluesContainerGridRef.current.offsetHeight;
-        const acrossGridItemHeight = acrossGridItem.offsetHeight;
-        const downGridItemHeight = downGridItem.offsetHeight;
-
-        console.log('setCluesLayout');
-        console.log('cluesContainerGridHeight', cluesContainerGridHeight);
-        console.log('acrossGridItemHeight', acrossGridItemHeight);
-        console.log('downGridItemHeight', downGridItemHeight);
-
-        // if the height of container is the same as the height of the across and down grids, then it's a side by side layout
-        // if the height of the container is larger than the height of the across and down grids, then it's a top / bottom layout
-        // if ((cluesContainerGridHeight > acrossGridItemHeight) && (cluesContainerGridHeight > downGridItemHeight)) {
-        //   // top / bottom layout
-        //   if (cluesSideBySide) {
-        //     setCluesSideBySide(false);
-        //   }
-        // } else {
-        //   // side by side layout
-        //   if (!cluesSideBySide) {
-        //     setCluesSideBySide(true);
-        //   }
-        // }
-        const acrossRect: DOMRect = acrossGridItem.getBoundingClientRect();
-        const downRect: DOMRect = downGridItem.getBoundingClientRect();
-        let newCluesSideBySide = cluesSideBySide;
-        if (acrossRect.top !== downRect.top && cluesSideBySide) {
-          setCluesSideBySide(false);
-          newCluesSideBySide = false;
-          console.log('invoke setCluesSideBySide(false)');
-        } else if (acrossRect.left !== downRect.left && !cluesSideBySide) {
-          setCluesSideBySide(true);
-          newCluesSideBySide = true;
-          console.log('invoke setCluesSideBySide(true)');
-        }
-        if (newCluesSideBySide !== cluesSideBySide) {
-          console.log('newCluesSideBySide: ', newCluesSideBySide);
-        }
-      }
+  function screenTest(e) {
+    let newMaxHeight: string;
+    if (e.matches) {
+      /* the viewport is 600 pixels wide or less */
+      newMaxHeight = '50%';
+    } else {
+      /* the viewport is more than 600 pixels wide */
+      newMaxHeight = '100%';
     }
-  };
+    if (maxHeight !== newMaxHeight) {
+      setMaxHeight(newMaxHeight);
+    }
+  }
+
 
   const handleClueSelected = (direction, number) => {
     const info = props.cluesByDirection[direction][number];
@@ -90,9 +58,8 @@ const Clues = (props: CluesProps) => {
   };
 
   const renderCluesComponent = (direction: string) => {
-    const maxHeight = cluesSideBySide ? '100%' : '50%';
     return (
-      <Grid item xs={12} md={6} style={{ maxHeight }}>
+      <Grid item xs={12} sm={6} style={{ maxHeight }}>
         <DirectionClues
           key={direction}
           direction={direction}
@@ -103,11 +70,11 @@ const Clues = (props: CluesProps) => {
     );
   };
 
-  setCluesLayout();
+  screenTest(mediaQueryList);
+  mediaQueryList.addEventListener('change', screenTest);
+
   const acrossCluesComponent = renderCluesComponent('across');
   const downCluesComponent = renderCluesComponent('down');
-
-  // console.log('Clues.tsx - re-render');
 
   return (
     <Grid item container spacing={1} xs={12} style={{ height: '90%', maxWidth: '100%' }} ref={cluesContainerGridRef}>
