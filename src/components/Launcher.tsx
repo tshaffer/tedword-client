@@ -2,12 +2,11 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { HashRouter, Redirect } from 'react-router-dom';
+import { createHashHistory } from 'history';
 
 import ReactModal = require('react-modal');
 
 import { UiState, PuzzleMetadata, BoardEntity, UsersMap, VersionInfo } from '../types';
-import { getAppInitialized, getCurrentUser, getUsers, getVersionInfo } from '../selectors';
-import { setBoardId, setPuzzleId, setUiState, setFileUploadStatus, setUserName } from '../models';
 import {
   addUserToExistingBoard,
   createBoard,
@@ -15,6 +14,8 @@ import {
   launchExistingGame,
   initializeApp,
 } from '../controllers';
+import { setBoardId, setPuzzleId, setUiState, setFileUploadStatus, setUserName } from '../models';
+import { getAppInitialized, getCurrentUser, getUsers, getVersionInfo } from '../selectors';
 
 import NewGames from './NewGames';
 import ExistingGames from './ExistingGames';
@@ -65,6 +66,8 @@ const Launcher = (props: LauncherProps) => {
 
   const handleOpenBoard = (boardEntity: BoardEntity) => {
     props.onLaunchExistingGame(boardEntity.id);
+    const hashHistory = createHashHistory();
+    hashHistory.push('/game');
   };
 
   const handleOpenPuzzle = (puzzleMetadata: PuzzleMetadata) => {

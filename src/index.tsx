@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 
+import Game from './components/Game';
 import Home from './components/Home';
 import Launcher from './components/Launcher';
 import Login from './components/Login';
@@ -25,9 +26,10 @@ ReactDOM.render(
     <HashRouter>
       <Switch>
         <Route exact path='/' component={Home} />
-        <Route exact path='/pizza' component={Pizza} />
+        <Route exact path='/game' component={Game} />
         <Route exact path='/login' component={Login} />
         <Route exact path='/launcher' component={Launcher} />
+        <Route exact path='/pizza' component={Pizza} />
       </Switch>
     </HashRouter>
   </Provider>,

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { HashRouter } from 'react-router-dom';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -9,20 +10,24 @@ import { isNil } from 'lodash';
 import FocusedClues from './FocusedClues';
 import CrosswordGameMgr from './CrosswordGameMgr';
 import GameToolbar from './GameToolbar';
-import { getAppState, getBoard, getPuzzlesMetadata, getDisplayedPuzzle, getCellContents, getPuzzle } from '../selectors';
+
 import { AppState, BoardEntity, CellContentsMap, DisplayedPuzzle, Guess, PuzzlesMetadataMap, PuzzleSpec, UiState } from '../types';
+import { initializeApp } from '../controllers';
 import { setUiState, updateGuess } from '../models';
+import { getAppInitialized, getAppState, getBoard, getPuzzlesMetadata, getDisplayedPuzzle, getCellContents, getPuzzle } from '../selectors';
 
 // import * as Pusher from 'pusher-js';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Pusher = require('pusher-js');
 
 export interface GameProps {
+  appInitialized: boolean;
   appState: AppState,
   cellContents: CellContentsMap;
   displayedPuzzle: DisplayedPuzzle;
   puzzlesMetadata: PuzzlesMetadataMap;
   puzzleSpec: PuzzleSpec;
+  onInitializeApp: () => any;
   onSetUiState: (uiState: UiState) => any;
   onUpdateGuess: (row: number, col: number, puzzleGuess: Guess) => any;
 }
@@ -83,9 +88,13 @@ const Game = (props: GameProps) => {
   };
 
   React.useEffect(() => {
-    console.log('Game useEffect invoked');
-    initializePusher();
-  }, []);
+    console.log('Game: ', props.appInitialized);
+    if (!props.appInitialized) {
+      props.onInitializeApp();
+    } else {
+      initializePusher();
+    }
+  }, [props.appInitialized]);
 
 
   const handleHome = () => {
@@ -107,23 +116,35 @@ const Game = (props: GameProps) => {
 
   // console.log('Game.tsx - re-render');
 
+  const divStyle = {
+    height: '98vh',
+  };
+
+  if (!props.appInitialized) {
+    return (
+      <div style={divStyle}>Loading...</div>
+    );
+  }
+
   return (
-    <div style={{ height: '100%' }}>
-      <div>
-        <button onClick={handleHome}>Home</button>
+    <HashRouter>
+      <div style={{ height: '100%' }}>
+        <div>
+          <button onClick={handleHome}>Home</button>
+        </div>
+        <Grid container spacing={1} justify="center" style={{ minHeight: '5%', maxWidth: '100%' }}>
+          <GameToolbar />
+        </Grid>
+        <FocusedClues />
+        <CrosswordGameMgr
+          appState={props.appState}
+          cellContents={props.cellContents}
+          displayedPuzzle={props.displayedPuzzle}
+          puzzlesMetadata={props.puzzlesMetadata}
+          puzzleSpec={props.puzzleSpec}
+        />
       </div>
-      <Grid container spacing={1} justify="center" style={{ minHeight: '5%', maxWidth: '100%' }}>
-        <GameToolbar />
-      </Grid>
-      <FocusedClues />
-      <CrosswordGameMgr
-        appState={props.appState}
-        cellContents={props.cellContents}
-        displayedPuzzle={props.displayedPuzzle}
-        puzzlesMetadata={props.puzzlesMetadata}
-        puzzleSpec={props.puzzleSpec}
-      />
-    </div>
+    </HashRouter>
   );
 };
 
@@ -133,6 +154,7 @@ function mapStateToProps(state: any) {
   const board: BoardEntity = getBoard(state, boardId);
   const puzzleSpec = isNil(board) ? null : getPuzzle(state, board.puzzleId);
   return {
+    appInitialized: getAppInitialized(state),
     puzzlesMetadata: getPuzzlesMetadata(state),
     appState,
     displayedPuzzle: getDisplayedPuzzle(state),
@@ -143,6 +165,7 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onInitializeApp: initializeApp,
     onSetUiState: setUiState,
     onUpdateGuess: updateGuess,
   }, dispatch);
