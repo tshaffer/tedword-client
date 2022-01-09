@@ -74,6 +74,7 @@ const Login = (props: LoginProps) => {
     props.onSetUserName(selectedUser.userName);
     props.onSetStartupAppState();
 
+    //joining a game from invitation (onSetStartupAppState) not supported yet
     const hashHistory = createHashHistory();
     hashHistory.push('/launcher');
   };
