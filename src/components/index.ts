@@ -6,3 +6,4 @@ export * from './Crossword';
 export * from './Launcher';
 export * from './Home';
 export * from './Login';
+export * from './Pizza';

@@ -130,26 +130,36 @@ const Home = (props: HomeProps) => {
       });
   }, []);
 
+  const divStyle = {
+    height: '98vh',
+  };
+
   if (!initializationComplete) {
     return (
-      <div>Loading...</div>
+      <div style={divStyle}>Loading...</div>
     );
   }
   switch (props.appState.uiState) {
     case UiState.SelectUser: {
       return (
-        <Login />
+        <div style={divStyle}>
+          <Login />
+        </div>
       );
     }
     case UiState.SelectPuzzleOrBoard: {
       return (
-        <Launcher />
+        <div style={divStyle}>
+          <Launcher />
+        </div>
       );
     }
     case UiState.NewBoardPlay:
     case UiState.ExistingBoardPlay: {
       return (
-        <Game />
+        <div style={divStyle}>
+          <Game />
+        </div>
       );
     }
   }
