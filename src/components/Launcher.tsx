@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { HashRouter } from 'react-router-dom';
 
 import ReactModal = require('react-modal');
 
@@ -166,66 +167,69 @@ const Launcher = (props: LauncherProps) => {
     const divStyle = {
       height: '98vh',
     };
-  
+
     if (!props.appInitialized) {
       return (
         <div style={divStyle}>Loading...</div>
       );
     }
-  
+
     return (
-      <div>
+      <HashRouter>
         <div>
-          <ReactModal
-            isOpen={showAboutModal}
-            style={modalStyle}
-            ariaHideApp={false}
-          >
-            <div>
-              <div style={{ marginBottom: '10px' }}>
-                <p style={{ marginBottom: '6px' }}>tedword</p>
-                <p>{'Client version: ' + props.versionInfo.clientVersion}</p>
-                <p>{'Server version: ' + props.versionInfo.serverVersion}</p>
-              </div>
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '10px',
-                  right: '10px',
-                }}
-              >
-                <button
-                  onClick={handleHideAbout}
+          <div>
+            <ReactModal
+              isOpen={showAboutModal}
+              style={modalStyle}
+              ariaHideApp={false}
+            >
+              <div>
+                <div style={{ marginBottom: '10px' }}>
+                  <p style={{ marginBottom: '6px' }}>tedword</p>
+                  <p>{'Client version: ' + props.versionInfo.clientVersion}</p>
+                  <p>{'Server version: ' + props.versionInfo.serverVersion}</p>
+                </div>
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: '10px',
+                    right: '10px',
+                  }}
                 >
-                  Close
-                </button>
+                  <button
+                    onClick={handleHideAbout}
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
-            </div>
-          </ReactModal>
+            </ReactModal>
+          </div>
+          <div>
+            <button onClick={handleSignout}>Signout</button>
+            <button onClick={handleShowAbout}>About</button>
+          </div>
+          <div style={tab}>
+            <button style={tabLinks} onClick={handleSelectTab} id='newGameTabSelect' ref={newGameTabSelectRef}>New Games</button>
+            <button style={tabLinks} onClick={handleSelectTab} id='inProgressGameTabSelect' ref={inProgressGamesTabSelectRef}>In Progress Games</button>
+            <button style={tabLinks} onClick={handleSelectTab} id='settingsTabSelect' ref={settingsTabSelectRef}>Tools & Settings</button>
+          </div>
+          <div id='newGameContent' style={tabcontent} ref={newGamesContentRef}>
+            <NewGames
+              onSelectPuzzle={handleOpenPuzzle}
+            />
+          </div>
+          <div id='inProgressGamesContent' style={tabcontent} ref={inProgressGamesContentRef}>
+            <ExistingGames
+              onSelectBoard={handleOpenBoard}
+            />
+          </div>
+          <div id='settingsContent' style={tabcontent} ref={settingsContentRef}>
+            <PuzzleUpload />
+          </div>
         </div>
-        <div>
-          <button onClick={handleSignout}>Signout</button>
-          <button onClick={handleShowAbout}>About</button>
-        </div>
-        <div style={tab}>
-          <button style={tabLinks} onClick={handleSelectTab} id='newGameTabSelect' ref={newGameTabSelectRef}>New Games</button>
-          <button style={tabLinks} onClick={handleSelectTab} id='inProgressGameTabSelect' ref={inProgressGamesTabSelectRef}>In Progress Games</button>
-          <button style={tabLinks} onClick={handleSelectTab} id='settingsTabSelect' ref={settingsTabSelectRef}>Tools & Settings</button>
-        </div>
-        <div id='newGameContent' style={tabcontent} ref={newGamesContentRef}>
-          <NewGames
-            onSelectPuzzle={handleOpenPuzzle}
-          />
-        </div>
-        <div id='inProgressGamesContent' style={tabcontent} ref={inProgressGamesContentRef}>
-          <ExistingGames
-            onSelectBoard={handleOpenBoard}
-          />
-        </div>
-        <div id='settingsContent' style={tabcontent} ref={settingsContentRef}>
-          <PuzzleUpload />
-        </div>
-      </div>
+      </HashRouter>
+
     );
   };
 

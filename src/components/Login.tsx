@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { HashRouter } from 'react-router-dom';
+
+import { createHashHistory } from 'history';
 
 import Select from 'react-select';
 
@@ -70,6 +73,9 @@ const Login = (props: LoginProps) => {
     localStorage.setItem('userName', selectedUser.userName);
     props.onSetUserName(selectedUser.userName);
     props.onSetStartupAppState();
+
+    const hashHistory = createHashHistory();
+    hashHistory.push('/launcher');
   };
 
   const renderSelectUser = () => {
@@ -78,22 +84,24 @@ const Login = (props: LoginProps) => {
     const userOptions = getUserOptions(users);
 
     return (
-      <div>
-        <p>Select user</p>
-        <Select
-          options={userOptions}
-          onChange={handleUserChange}
-          placeholder={'Select a user'}
-        />
-        <p>
-          <button
-            type="button"
-            onClick={handleLogin}
-          >
-            Login
-          </button>
-        </p>
-      </div>
+      <HashRouter>
+        <div>
+          <p>Select user</p>
+          <Select
+            options={userOptions}
+            onChange={handleUserChange}
+            placeholder={'Select a user'}
+          />
+          <p>
+            <button
+              type="button"
+              onClick={handleLogin}
+            >
+              Login
+            </button>
+          </p>
+        </div>
+      </HashRouter>
     );
 
   };
