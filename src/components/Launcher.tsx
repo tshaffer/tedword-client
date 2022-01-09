@@ -74,6 +74,8 @@ const Launcher = (props: LauncherProps) => {
     props.onSetPuzzleId(puzzleMetadata.id);
     props.onCreateBoard();
     props.onSetUiState(UiState.NewBoardPlay);
+    const hashHistory = createHashHistory();
+    hashHistory.push('/game');
   };
 
   const renderLauncher = () => {
