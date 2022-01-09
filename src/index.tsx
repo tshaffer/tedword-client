@@ -8,8 +8,10 @@ import thunkMiddleware from 'redux-thunk';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 
 import Home from './components/Home';
-import { rootReducer } from './models';
 import Pizza from './components/Pizza';
+import Launcher from './components/Launcher';
+
+import { rootReducer } from './models';
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 export const store = createStore(
@@ -17,25 +19,13 @@ export const store = createStore(
     applyMiddleware(thunkMiddleware)
   ));
 
-//  height: '1080px',
-//    height: '870px',
-
-/*
-const divStyle = {
-  height: '98vh',
-};
-
-    <div style={divStyle}>
-      < Home />
-    </div>
-*/
-
 ReactDOM.render(
   <Provider store={store}>
     <HashRouter>
       <Switch>
         <Route exact path='/' component={Home} />
         <Route exact path='/pizza' component={Pizza} />
+        <Route exact path='/launcher' component={Launcher} />
       </Switch>
     </HashRouter>
   </Provider>,

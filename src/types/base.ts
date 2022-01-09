@@ -47,6 +47,7 @@ export interface AppParameters {
 }
 
 export interface AppState {
+  appInitialized: boolean;
   uiState: UiState;
   userName: string | null;
   puzzleId: string;
@@ -290,4 +291,9 @@ export interface BoardProperties {
   focusedRow: number;
   focusedCol: number;
   inputElement: HTMLInputElement;
+}
+
+export interface StartupParams {
+  startPage: StartPage,
+  startupBoardId: string,
 }

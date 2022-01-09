@@ -9,7 +9,7 @@ import { isEmpty, isNil, isString } from 'lodash';
 import { AppState, StartPage, UiState, UsersMap } from '../types';
 import { getVersions, launchExistingGame, loadBoards, loadPuzzlesMetadata, loadUsers, loginPersistentUser, } from '../controllers';
 import { getAppState, getUsers } from '../selectors';
-import { setUiState, setStartPage, setStartupBoardId, } from '../models';
+import { setAppInitialized, setUiState, setStartPage, setStartupBoardId, } from '../models';
 
 import Login from './Login';
 import Launcher from './Launcher';
@@ -30,6 +30,7 @@ export interface HomeProps {
   onLoadUsers: () => any;
   onLoginPersistentUser: () => any;
   onLaunchExistingGame: (boardId: string) => any;
+  onSetAppInitialized: () => any;
   onSetStartPage: (startPage: StartPage) => any;
   onSetStartupBoardId: (boardId: string) => any;
 }
@@ -60,36 +61,6 @@ const Home = (props: HomeProps) => {
           startPage: StartPage.JoinGame,
           startupBoardId: boardId,
         };
-        // users
-        //    userNamesOfInvitees: single invited user or list of users invited - retrieved from query string
-        //    props.users: map of user objects - loaded from server
-        //    storedUserName: user name retrieved from local storage
-        // algorithm
-        //    if storedUserName is in userNamesOfInvitees and storedUserName is in props.users, join game with storedUserName
-        //        ** not currently looking for storedUserName in props.users as props.users does not contain the list of users yet, even
-        //        though the users were loaded from the server. I don't know why as I thought this stuff was synchronous??
-        //    else ignore request and ????
-
-        // const storedUserName = localStorage.getItem('userName');
-
-        // Code is not looking for a match
-        // if (isString(storedUserName) && !isNil(props.users)) {
-        //   let proceedToStoredGame = false;
-        //   if (isArray(userNamesOfInvitees)) {
-        //     if (userNamesOfInvitees.indexOf(storedUserName) >= 0) {
-        //       proceedToStoredGame = true;
-        //     }
-        //   } else if (isString(userNamesOfInvitees)) {
-        //     if (userNamesOfInvitees === storedUserName) {
-        //       proceedToStoredGame = true;
-        //     }
-        //   }
-        //   if (proceedToStoredGame) {
-        //     props.onSetUserName(storedUserName as string);
-        //     props.onSetUiState(UiState.SelectPuzzleOrBoard);
-        //     props.onLaunchExistingGame(boardId as string);
-        //   }
-        // }
       }
 
     }
@@ -101,6 +72,8 @@ const Home = (props: HomeProps) => {
   };
 
   React.useEffect(() => {
+
+    console.log('Home React.useEffect invoked');
 
     props.onGetVersions();
 
@@ -126,6 +99,7 @@ const Home = (props: HomeProps) => {
         }
 
         setInitializationComplete(true);
+        props.onSetAppInitialized();
 
       });
   }, []);
@@ -184,6 +158,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onLoadUsers: loadUsers,
     onLoginPersistentUser: loginPersistentUser,
     onLaunchExistingGame: launchExistingGame,
+    onSetAppInitialized: setAppInitialized,
     onSetStartPage: setStartPage,
     onSetStartupBoardId: setStartupBoardId,
   }, dispatch);

@@ -5,13 +5,14 @@ import { connect } from 'react-redux';
 import ReactModal = require('react-modal');
 
 import { UiState, PuzzleMetadata, BoardEntity, UsersMap, VersionInfo } from '../types';
-import { getCurrentUser, getUsers, getVersionInfo } from '../selectors';
+import { getAppInitialized, getCurrentUser, getUsers, getVersionInfo } from '../selectors';
 import { setBoardId, setPuzzleId, setUiState, setFileUploadStatus, setUserName } from '../models';
 import {
   addUserToExistingBoard,
   createBoard,
   updateLastPlayedDateTime,
   launchExistingGame,
+  initializeApp,
 } from '../controllers';
 
 import NewGames from './NewGames';
@@ -19,9 +20,11 @@ import ExistingGames from './ExistingGames';
 import PuzzleUpload from './PuzzleUpload';
 
 export interface LauncherProps {
+  appInitialized: boolean;
   versionInfo: VersionInfo;
   currentUser: string;
   users: UsersMap,
+  onInitializeApp: () => any;
   onAddUserToBoard: (id: string, userName: string) => any;
   onCreateBoard: () => any;
   onSetBoardId: (boardId: string) => any;
@@ -36,6 +39,13 @@ export interface LauncherProps {
 const Launcher = (props: LauncherProps) => {
 
   const [showAboutModal, setShowAboutModal] = React.useState(false);
+
+  React.useEffect(() => {
+    console.log('Launcher: ', props.appInitialized);
+    if (!props.appInitialized) {
+      props.onInitializeApp();
+    }
+  }, [props.appInitialized]);
 
   const modalStyle = {
     content: {
@@ -214,6 +224,7 @@ const Launcher = (props: LauncherProps) => {
 
 function mapStateToProps(state: any) {
   return {
+    appInitialized: getAppInitialized(state),
     versionInfo: getVersionInfo(state),
     currentUser: getCurrentUser(state),
     users: getUsers(state),
@@ -222,6 +233,7 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onInitializeApp: initializeApp,
     onAddUserToBoard: addUserToExistingBoard,
     onCreateBoard: createBoard,
     onSetBoardId: setBoardId,

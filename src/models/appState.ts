@@ -4,6 +4,7 @@ import { TedwordModelBaseAction } from './baseAction';
 // ------------------------------------
 // Constants
 // ------------------------------------
+export const SET_APP_INITIALIZED = 'SET_APP_INITIALIZED';
 export const SET_UI_STATE = 'SET_UI_STATE';
 export const SET_USER_NAME = 'SET_USER_NAME';
 export const SET_PUZZLE_ID = 'SET_PUZZLE_ID';
@@ -14,6 +15,12 @@ export const SET_PUZZLE_PLAY_ACTIVE = 'SET_PUZZLE_PLAY_ACTIVE';
 // ------------------------------------
 // Actions
 // ------------------------------------
+
+export const setAppInitialized = (): any => {
+  return {
+    type: SET_APP_INITIALIZED,
+  };
+};
 
 export interface SetUiStatePayload {
   uiState: UiState;
@@ -110,6 +117,7 @@ export const setPuzzlePlayActive = (
 // ------------------------------------
 
 const initialState: AppState = {
+  appInitialized: false,
   uiState: UiState.SelectUser,
   userName: null,
   puzzleId: '',
@@ -123,6 +131,9 @@ export const appStateReducer = (
   action: TedwordModelBaseAction<SetUiStatePayload & SetUserNamePayload & SetPuzzleIdPayload & SetBoardIdPayload & SetFileUploadStatusPayload & SetPuzzlePlayActivePayload>
 ): AppState => {
   switch (action.type) {
+    case SET_APP_INITIALIZED: {
+      return { ...state, appInitialized: true};
+    }
     case SET_UI_STATE: {
       return { ...state, uiState: action.payload.uiState };
     }
