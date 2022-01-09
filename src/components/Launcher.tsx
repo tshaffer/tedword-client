@@ -163,6 +163,16 @@ const Launcher = (props: LauncherProps) => {
     const settingsTabSelectRef = React.createRef<any>();
     const settingsContentRef = React.createRef<any>();
 
+    const divStyle = {
+      height: '98vh',
+    };
+  
+    if (!props.appInitialized) {
+      return (
+        <div style={divStyle}>Loading...</div>
+      );
+    }
+  
     return (
       <div>
         <div>

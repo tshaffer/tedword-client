@@ -8,8 +8,9 @@ import thunkMiddleware from 'redux-thunk';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 
 import Home from './components/Home';
-import Pizza from './components/Pizza';
 import Launcher from './components/Launcher';
+import Login from './components/Login';
+import Pizza from './components/Pizza';
 
 import { rootReducer } from './models';
 
@@ -25,6 +26,7 @@ ReactDOM.render(
       <Switch>
         <Route exact path='/' component={Home} />
         <Route exact path='/pizza' component={Pizza} />
+        <Route exact path='/login' component={Login} />
         <Route exact path='/launcher' component={Launcher} />
       </Switch>
     </HashRouter>

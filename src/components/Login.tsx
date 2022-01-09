@@ -5,14 +5,19 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 
 import { AppState, UiState, User, UsersMap } from '../types';
-import { setStartupAppState } from '../controllers';
-import { getAppState, getUsers } from '../selectors';
+import {
+  initializeApp,
+  setStartupAppState
+} from '../controllers';
+import { getAppInitialized, getAppState, getUsers } from '../selectors';
 import { setUiState, setUserName } from '../models';
 import { isNil } from 'lodash';
 
 export interface LoginProps {
+  appInitialized: boolean;
   appState: AppState,
   users: UsersMap;
+  onInitializeApp: () => any;
   onSetUserName: (userName: string) => any;
   onSetUiState: (uiState: UiState) => any;
   onSetStartupAppState: () => any;
@@ -21,6 +26,13 @@ export interface LoginProps {
 const Login = (props: LoginProps) => {
 
   const [selectedUser, setSelectedUser] = React.useState<User>(null);
+
+  React.useEffect(() => {
+    console.log('Login: ', props.appInitialized);
+    if (!props.appInitialized) {
+      props.onInitializeApp();
+    }
+  }, [props.appInitialized]);
 
   const getUsers = (): User[] => {
     const users: User[] = [];
@@ -64,7 +76,7 @@ const Login = (props: LoginProps) => {
 
     const users: User[] = getUsers();
     const userOptions = getUserOptions(users);
-  
+
     return (
       <div>
         <p>Select user</p>
@@ -86,11 +98,22 @@ const Login = (props: LoginProps) => {
 
   };
 
+  const divStyle = {
+    height: '98vh',
+  };
+
+  if (!props.appInitialized) {
+    return (
+      <div style={divStyle}>Loading...</div>
+    );
+  }
+
   return renderSelectUser();
 };
 
 function mapStateToProps(state: any) {
   return {
+    appInitialized: getAppInitialized(state),
     users: getUsers(state),
     appState: getAppState(state),
   };
@@ -98,6 +121,7 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onInitializeApp: initializeApp,
     onSetUserName: setUserName,
     onSetUiState: setUiState,
     onSetStartupAppState: setStartupAppState,
