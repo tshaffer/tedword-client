@@ -49,7 +49,7 @@ const Chat = (props: ChatProps) => {
     transform: 'translate(-50%, -50%)',
     zIndex: 9999,
     boxShadow: 'rgba(0,0,0,.3) 0 0.3rem 1rem',
-    background: 'red',
+    background: 'rgba(0,0,0,0)',
     marginLeft: '5em',
     color: 'white',
   };
