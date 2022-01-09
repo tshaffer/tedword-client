@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { HashRouter } from 'react-router-dom';
+import { HashRouter, Redirect } from 'react-router-dom';
 
 import ReactModal = require('react-modal');
 
@@ -38,6 +38,8 @@ export interface LauncherProps {
 }
 
 const Launcher = (props: LauncherProps) => {
+
+  const [redirectTarget, setRedirectTarget] = React.useState('');
 
   const [showAboutModal, setShowAboutModal] = React.useState(false);
 
@@ -111,6 +113,8 @@ const Launcher = (props: LauncherProps) => {
         props.onSetUserName(users[0]);
       }
       props.onSetUiState(UiState.SelectUser);
+
+      setRedirectTarget('login');
     }
 
     const handleShowAbout = () => {
@@ -174,6 +178,10 @@ const Launcher = (props: LauncherProps) => {
       );
     }
 
+    if (redirectTarget === 'login') {
+      return <Redirect to='/login'/>;
+    }
+    
     return (
       <HashRouter>
         <div>
