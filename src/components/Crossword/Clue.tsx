@@ -3,20 +3,21 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { ThemeContext } from 'styled-components';
-// import { CrosswordContext } from './context';
 import { isNil } from 'lodash';
-import { getFocused, getSelectedDirection, getSelectedNumber } from '../../selectors';
+import { getFocused, getCurrentDirection, getCurrentNumber } from '../../selectors';
 
-export interface ClueProps {
+export interface CluePropsFromParent {
   direction: string,
   number: string;
   clueText: string;
   completelyFilledIn: boolean;
   onClueSelected: (direction: string, number: string) => any;
+}
 
+export interface ClueProps extends CluePropsFromParent {
   focused: boolean;
-  selectedDirection: string;
-  selectedNumber: string;
+  currentDirection: string;
+  currentNumber: string;
 }
 
 const Clue = (props: ClueProps) => {
@@ -26,11 +27,11 @@ const Clue = (props: ClueProps) => {
   const { highlightBackground } = React.useContext(ThemeContext);
 
   React.useEffect(() => {
-    const becameFocused = props.focused && props.direction === props.selectedDirection && props.number === props.selectedNumber;
+    const becameFocused = props.focused && props.direction === props.currentDirection && props.number === props.currentNumber;
     if (becameFocused && !isNil(clueRef) && !isNil(clueRef.current)) {
       clueRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
     }
-  }, [props.focused, props.selectedDirection, props.selectedNumber]);
+  }, [props.focused, props.currentDirection, props.currentNumber]);
 
   const handleClick = (event) => {
     event.preventDefault();
@@ -39,7 +40,7 @@ const Clue = (props: ClueProps) => {
     }
   };
 
-  const isFocused = props.focused && props.direction === props.selectedDirection && props.number === props.selectedNumber;
+  const isFocused = props.focused && props.direction === props.currentDirection && props.number === props.currentNumber;
   const backgroundColor = isFocused ? highlightBackground : 'transparent';
 
   const innerStyle: any = {
@@ -58,7 +59,7 @@ const Clue = (props: ClueProps) => {
     };
   }
 
-  // console.log('Clue.tsx - re-render');
+  // console.log('Clue render: ', props.direction, props.currentDirection, props.number, props.currentNumber);
 
   return (
     <div
@@ -74,8 +75,8 @@ const Clue = (props: ClueProps) => {
 function mapStateToProps(state: any) {
   return {
     focused: getFocused(state),
-    selectedDirection: getSelectedDirection(state),
-    selectedNumber: getSelectedNumber(state),
+    currentDirection: getCurrentDirection(state),
+    currentNumber: getCurrentNumber(state),
   };
 }
 

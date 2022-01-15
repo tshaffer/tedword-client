@@ -19,14 +19,6 @@ export const getCurrentNumber = (state: TedwordState): string => {
   return state.boardProperties.currentNumber;
 };
 
-export const getSelectedDirection = (state: TedwordState): string => {
-  return state.boardProperties.selectedDirection;
-};
-
-export const getSelectedNumber = (state: TedwordState): string => {
-  return state.boardProperties.selectedNumber;
-};
-
 export const getFocusedRow = (state: TedwordState): number => {
   return state.boardProperties.focusedRow;
 };

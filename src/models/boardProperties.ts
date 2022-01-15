@@ -7,8 +7,6 @@ import { TedwordModelBaseAction } from './baseAction';
 export const SET_FOCUSED = 'SET_FOCUSED';
 export const SET_CURRENT_DIRECTION = 'SET_CURRENT_DIRECTION';
 export const SET_CURRENT_NUMBER = 'SET_CURRENT_NUMBER';
-export const SET_SELECTED_DIRECTION = 'SET_SELECTED_DIRECTION';
-export const SET_SELECTED_NUMBER = 'SET_SELECTED_NUMBER';
 export const SET_FOCUSED_ROW = 'SET_FOCUSED_ROW';
 export const SET_FOCUSED_COL = 'SET_FOCUSED_COL';
 export const SET_INPUT_ELEMENT = 'SET_INPUT_ELEMENT';
@@ -61,37 +59,6 @@ export const setCurrentNumber = (
     },
   };
 };
-
-export interface SetSelectedDirectionPayload {
-  selectedDirection: string;
-}
-
-export const setSelectedDirection = (
-  selectedDirection: string,
-): any => {
-  return {
-    type: SET_SELECTED_DIRECTION,
-    payload: {
-      selectedDirection,
-    },
-  };
-};
-
-export interface SetSelectedNumberPayload {
-  selectedNumber: string;
-}
-
-export const setSelectedNumber = (
-  selectedNumber: string,
-): any => {
-  return {
-    type: SET_SELECTED_NUMBER,
-    payload: {
-      selectedNumber,
-    },
-  };
-};
-
 
 export interface SetFocusedRowPayload {
   focusedRow: number;
@@ -146,8 +113,6 @@ const initialState: BoardProperties = {
   focused: false,
   currentDirection: 'across',
   currentNumber: '1',
-  selectedDirection: 'across',
-  selectedNumber: '1',
   focusedRow: 0,
   focusedCol: 0,
   inputElement: null,
@@ -155,7 +120,7 @@ const initialState: BoardProperties = {
 
 export const boardPropertiesReducer = (
   state: BoardProperties = initialState,
-  action: TedwordModelBaseAction<SetFocusedPayload & SetCurrentDirectionPayload & SetCurrentNumberPayload & SetSelectedDirectionPayload & SetSelectedNumberPayload & SetFocusedRowPayload & SetFocusedColPayload & SetInputElementPayload>
+  action: TedwordModelBaseAction<SetFocusedPayload & SetCurrentDirectionPayload & SetCurrentNumberPayload & SetCurrentDirectionPayload & SetFocusedRowPayload & SetFocusedColPayload & SetInputElementPayload>
 ): BoardProperties => {
   switch (action.type) {
     case SET_FOCUSED: {
@@ -166,12 +131,6 @@ export const boardPropertiesReducer = (
     }
     case SET_CURRENT_NUMBER: {
       return { ...state, currentNumber: action.payload.currentNumber };
-    }
-    case SET_SELECTED_DIRECTION: {
-      return { ...state, selectedDirection: action.payload.selectedDirection };
-    }
-    case SET_SELECTED_NUMBER: {
-      return { ...state, selectedNumber: action.payload.selectedNumber };
     }
     case SET_FOCUSED_ROW: {
       return { ...state, focusedRow: action.payload.focusedRow };

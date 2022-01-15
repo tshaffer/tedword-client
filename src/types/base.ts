@@ -286,8 +286,6 @@ export interface BoardProperties {
   focused: boolean;
   currentDirection: string;
   currentNumber: string;
-  selectedDirection: string;
-  selectedNumber: string;
   focusedRow: number;
   focusedCol: number;
   inputElement: HTMLInputElement;
