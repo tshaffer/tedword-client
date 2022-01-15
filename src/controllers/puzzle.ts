@@ -52,7 +52,6 @@ export const loadPuzzle = (id: string) => {
         dispatch(initializeGuesses(guesses));
 
         const state = getState();
-        console.log('loadPuzzle', state);
 
         // TEDTODO - why is this getting loaded here? Shouldn't it get loaded when Board is opened?
         // maybe it is - why is this called loadPuzzle?
@@ -250,7 +249,6 @@ const buildCluesInDirection = (cluesByDirection: CluesByDirection, direction: st
         }
       }
 
-      console.log('buildCluesInDirection: ', row, col);
       clueAtLocation.completelyFilledIn = completelyFilledIn;
     }
   }
