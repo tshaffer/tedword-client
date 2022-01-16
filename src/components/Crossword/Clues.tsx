@@ -13,7 +13,6 @@ import {
 
 import {
   getCrosswordClues,
-  getInputElement,
 } from '../../selectors';
 
 import DirectionClues from './DirectionClues';
@@ -23,7 +22,6 @@ export interface CluesPropsFromParent {
 }
 
 export interface CluesProps extends CluesPropsFromParent {
-  inputElement: HTMLInputElement;
   cluesByDirection: CluesByDirection;
   onMoveTo: (row: number, col: number, directionOverride: string) => any;
 }
@@ -86,7 +84,6 @@ const Clues = (props: CluesProps) => {
 
 function mapStateToProps(state: any) {
   return {
-    inputElement: getInputElement(state),
     cluesByDirection: getCrosswordClues(state),
   };
 }

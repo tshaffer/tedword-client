@@ -36,7 +36,6 @@ import {
   setCurrentNumber,
   setFocusedRow,
   setFocusedCol,
-  setInputElement,
 } from '../../models';
 
 import {
@@ -88,10 +87,11 @@ export interface BoardProps extends BoardPropsFromParent {
   onSetCurrentNumber: (currentNumber: string) => any;
   onSetFocusedRow: (row: number) => any;
   onSetFocusedCol: (col: number) => any;
-  onSetInputElement: (inputElement: HTMLInputElement) => any;
   onMoveTo: (row: number, col: number, directionOverride: string) => any;
   onUpdateFocusedClues: (row: number, col: number) => any;
 }
+
+export let boardInputElement: HTMLInputElement | null = null;
 
 const Board = (props: BoardProps) => {
 
@@ -447,9 +447,7 @@ const Board = (props: BoardProps) => {
         <input
           className='board-input'
           ref={(e: HTMLInputElement) => {
-            // console.log('assign inputRef.current: ', e);
-            (inputRef.current as HTMLInputElement) = e; // you can still assign to ref
-            props.onSetInputElement(e);
+            boardInputElement = e;
           }}
           aria-label="crossword-input"
           type="text"
@@ -508,7 +506,6 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetCurrentNumber: setCurrentNumber,
     onSetFocusedRow: setFocusedRow,
     onSetFocusedCol: setFocusedCol,
-    onSetInputElement: setInputElement,
     onMoveTo: moveTo,
     onUpdateFocusedClues: updateFocusedClues,
   }, dispatch);

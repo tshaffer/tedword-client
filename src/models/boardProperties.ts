@@ -90,21 +90,6 @@ export const setFocusedCol = (
   };
 };
 
-export interface SetInputElementPayload {
-  inputElement: HTMLInputElement;
-}
-
-export const setInputElement = (
-  inputElement: HTMLInputElement,
-): any => {
-  return {
-    type: SET_INPUT_ELEMENT,
-    payload: {
-      inputElement,
-    },
-  };
-};
-
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -115,12 +100,11 @@ const initialState: BoardProperties = {
   currentNumber: '1',
   focusedRow: 0,
   focusedCol: 0,
-  inputElement: null,
 };
 
 export const boardPropertiesReducer = (
   state: BoardProperties = initialState,
-  action: TedwordModelBaseAction<SetFocusedPayload & SetCurrentDirectionPayload & SetCurrentNumberPayload & SetCurrentDirectionPayload & SetFocusedRowPayload & SetFocusedColPayload & SetInputElementPayload>
+  action: TedwordModelBaseAction<SetFocusedPayload & SetCurrentDirectionPayload & SetCurrentNumberPayload & SetCurrentDirectionPayload & SetFocusedRowPayload & SetFocusedColPayload>
 ): BoardProperties => {
   switch (action.type) {
     case SET_FOCUSED: {
@@ -137,9 +121,6 @@ export const boardPropertiesReducer = (
     }
     case SET_FOCUSED_COL: {
       return { ...state, focusedCol: action.payload.focusedCol };
-    }
-    case SET_INPUT_ELEMENT: {
-      return { ...state, inputElement: action.payload.inputElement };
     }
     default:
       return state;

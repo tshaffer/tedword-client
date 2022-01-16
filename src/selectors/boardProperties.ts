@@ -26,7 +26,3 @@ export const getFocusedRow = (state: TedwordState): number => {
 export const getFocusedCol = (state: TedwordState): number => {
   return state.boardProperties.focusedCol;
 };
-
-export const getInputElement = (state: TedwordState): HTMLInputElement => {
-  return state.boardProperties.inputElement;
-};

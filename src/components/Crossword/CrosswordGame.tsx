@@ -20,7 +20,6 @@ import {
 
 import {
   getSize,
-  getInputElement,
 } from '../../selectors';
 
 import {
@@ -44,8 +43,9 @@ export interface CrosswordGamePropsFromParent {
   onInput: (row: number, col: number, char: string) => any;
 }
 
+import { boardInputElement } from './Board';
+
 export interface CrosswordGameProps extends CrosswordGamePropsFromParent {
-  inputElement: HTMLInputElement;
   size: number;
   onSetFocused: (focused: boolean) => any;
 }
@@ -83,8 +83,8 @@ const CrosswordGame = (props: CrosswordGameProps) => {
   const finalTheme = { ...defaultTheme, ...(contextTheme as any) };
 
   const handleSetFocus = () => {
-    if (!isNil(props.inputElement)) {
-      props.inputElement.focus();
+    if (!isNil(boardInputElement)) {
+      boardInputElement.focus();
       props.onSetFocused(true);
     }
     props.onSetFocused(true);
@@ -186,7 +186,6 @@ const CrosswordGame = (props: CrosswordGameProps) => {
 
 function mapStateToProps(state: any) {
   return {
-    inputElement: getInputElement(state),
     size: getSize(state),
   };
 }

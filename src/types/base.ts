@@ -288,7 +288,6 @@ export interface BoardProperties {
   currentNumber: string;
   focusedRow: number;
   focusedCol: number;
-  inputElement: HTMLInputElement;
 }
 
 export interface StartupParams {
