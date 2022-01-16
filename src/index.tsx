@@ -21,12 +21,14 @@ export const store = createStore(
     applyMiddleware(thunkMiddleware)
   ));
 
+//         <Route exact path='/game' component={Game} />
+
 ReactDOM.render(
   <Provider store={store}>
     <HashRouter>
       <Switch>
         <Route exact path='/' component={Home} />
-        <Route exact path='/game' component={Game} />
+        <Route exact path='/game/:id' component={Game}/>
         <Route exact path='/login' component={Login} />
         <Route exact path='/launcher' component={Launcher} />
         <Route exact path='/pizza' component={Pizza} />

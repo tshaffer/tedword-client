@@ -12,8 +12,11 @@ import CrosswordGameMgr from './CrosswordGameMgr';
 import GameToolbar from './GameToolbar';
 
 import { AppState, BoardEntity, CellContentsMap, DisplayedPuzzle, Guess, PuzzlesMetadataMap, PuzzleSpec, UiState } from '../types';
-import { initializeApp } from '../controllers';
-import { setUiState, updateGuess } from '../models';
+import {
+  createBoard,
+  initializeApp
+} from '../controllers';
+import { setPuzzleId, setUiState, updateGuess } from '../models';
 import { getAppInitialized, getAppState, getBoard, getPuzzlesMetadata, getDisplayedPuzzle, getCellContents, getPuzzle } from '../selectors';
 
 // import * as Pusher from 'pusher-js';
@@ -21,6 +24,7 @@ import { getAppInitialized, getAppState, getBoard, getPuzzlesMetadata, getDispla
 const Pusher = require('pusher-js');
 
 export interface GameProps {
+  puzzleMetadataId: string;
   appInitialized: boolean;
   appState: AppState,
   cellContents: CellContentsMap;
@@ -30,6 +34,8 @@ export interface GameProps {
   onInitializeApp: () => any;
   onSetUiState: (uiState: UiState) => any;
   onUpdateGuess: (row: number, col: number, puzzleGuess: Guess) => any;
+  onSetPuzzleId: (puzzleId: string) => any;
+  onCreateBoard: () => any;
 }
 
 export let pusher: any;
@@ -38,7 +44,11 @@ let gameProps;
 
 const Game = (props: GameProps) => {
 
+  console.log(props.puzzleMetadataId);
+
   gameProps = props;
+
+  const [gameLoaded, setGameLoaded] = React.useState(false);
 
   const initializePusher = () => {
 
@@ -87,12 +97,20 @@ const Game = (props: GameProps) => {
     });
   };
 
+  const loadGame = () => {
+    props.onSetPuzzleId(props.puzzleMetadataId);
+    props.onCreateBoard();
+    props.onSetUiState(UiState.NewBoardPlay);
+    setGameLoaded(true);
+  };
+
   React.useEffect(() => {
     console.log('Game: ', props.appInitialized);
     if (!props.appInitialized) {
       props.onInitializeApp();
     } else {
       initializePusher();
+      loadGame();
     }
   }, [props.appInitialized]);
 
@@ -101,7 +119,6 @@ const Game = (props: GameProps) => {
     console.log('handleHome');
     props.onSetUiState(UiState.SelectPuzzleOrBoard);
   };
-
 
   /*
     // From 0 to 600px wide (smart-phones), I take up 12 columns, or the whole device width!
@@ -122,7 +139,13 @@ const Game = (props: GameProps) => {
 
   if (!props.appInitialized) {
     return (
-      <div style={divStyle}>Loading...</div>
+      <div style={divStyle}>Loading app...</div>
+    );
+  }
+
+  if (!gameLoaded) {
+    return (
+      <div style={divStyle}>Loading game...</div>
     );
   }
 
@@ -148,12 +171,13 @@ const Game = (props: GameProps) => {
   );
 };
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: any, ownProps: any) {
   const appState: AppState = getAppState(state);
   const boardId: string = appState.boardId;
   const board: BoardEntity = getBoard(state, boardId);
   const puzzleSpec = isNil(board) ? null : getPuzzle(state, board.puzzleId);
   return {
+    puzzleMetadataId: ownProps.match.params.id,
     appInitialized: getAppInitialized(state),
     puzzlesMetadata: getPuzzlesMetadata(state),
     appState,
@@ -168,6 +192,8 @@ const mapDispatchToProps = (dispatch: any) => {
     onInitializeApp: initializeApp,
     onSetUiState: setUiState,
     onUpdateGuess: updateGuess,
+    onSetPuzzleId: setPuzzleId,
+    onCreateBoard: createBoard,
   }, dispatch);
 };
 

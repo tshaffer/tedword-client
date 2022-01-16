@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 
 import { isEmpty } from 'lodash';
 
+import { Link } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+
 import { PuzzlesMetadataMap, PuzzleMetadata } from '../types';
 import { getPuzzlesMetadata } from '../selectors';
 
@@ -21,10 +24,17 @@ const NewGames = (props: NewGamesProps) => {
     padding: '0 15px',
   };
 
-  const handleSelectPuzzle = (puzzleMetadata: PuzzleMetadata) => {
-    props.onSelectPuzzle(puzzleMetadata);
-  };
+  // const handleSelectPuzzle = (puzzleMetadata: PuzzleMetadata) => {
+  //   props.onSelectPuzzle(puzzleMetadata);
+  // };
 
+  /*
+          <button
+            onClick={() => handleSelectPuzzle(puzzleMetadata)}
+          >
+            Play Me!
+          </button>
+  */
   const renderPuzzleRow = (puzzleMetadata: PuzzleMetadata) => {
     return (
       <tr key={puzzleMetadata.id}>
@@ -35,11 +45,10 @@ const NewGames = (props: NewGamesProps) => {
           {puzzleMetadata.author}
         </td>
         <td style={tableColumnSpacing}>
-          <button
-            onClick={() => handleSelectPuzzle(puzzleMetadata)}
-          >
+          <Link component={RouterLink} to={'/game/' + puzzleMetadata.id}>
             Play Me!
-          </button>
+          </Link>
+
         </td>
       </tr>
     );

@@ -129,13 +129,13 @@ const GameToolbar = (props: GameToolbarProps) => {
   };
 
   const handleTimerTimeout = () => {
-    console.log('GameToolbar.tsx - handleTimerTimeout invoked');
+    // console.log('GameToolbar.tsx - handleTimerTimeout invoked');
 
-    const currentElapsedTimeInSeconds = currentElapsedTime;
-    const newElapsedTimeInSeconds = currentElapsedTimeInSeconds + 1;
-    if (!isNil(currentBoardId) && (currentElapsedTime >= 0)) {
-      props.onUpdateElapsedTime(currentBoardId, newElapsedTimeInSeconds);
-    }
+    // const currentElapsedTimeInSeconds = currentElapsedTime;
+    // const newElapsedTimeInSeconds = currentElapsedTimeInSeconds + 1;
+    // if (!isNil(currentBoardId) && (currentElapsedTime >= 0)) {
+    //   props.onUpdateElapsedTime(currentBoardId, newElapsedTimeInSeconds);
+    // }
   };
 
   const startTimer = () => {
