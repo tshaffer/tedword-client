@@ -126,15 +126,12 @@ const ExistingGames = (props: ExistingGamesProps) => {
           {getFormattedLastPlayedDateTime(boardEntity.lastPlayedDateTime as unknown as string)}
         </td>
         <td style={tableColumnSpacing}>
-          {getPuzzleTitle(boardEntity)}
+          <Link component={RouterLink} to={'/game/existing/' + boardEntity.id}>
+            {getPuzzleTitle(boardEntity)}
+          </Link>
         </td>
         <td style={tableColumnSpacing}>
           {getFormattedUsers(boardEntity)}
-        </td>
-        <td style={tableColumnSpacing}>
-          <Link component={RouterLink} to={'/game/existing/' + boardEntity.id}>
-            Play Me!
-          </Link>
         </td>
       </tr>
     );
