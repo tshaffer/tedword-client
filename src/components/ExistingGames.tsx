@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 
 import { isEmpty } from 'lodash';
 
+import { Link } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+
 import { BoardEntity, BoardsMap, PuzzlesMetadataMap } from '../types';
 import { getBoards, getPuzzlesMetadata } from '../selectors';
 
@@ -124,6 +127,13 @@ const ExistingGames = (props: ExistingGamesProps) => {
     props.onSelectBoard(boardEntity);
   };
 
+  /*
+          <button
+            onClick={() => handleSelectBoard(boardEntity)}
+          >
+            Play Me!
+          </button>
+  */
   const renderBoardRow = (boardEntity: BoardEntity) => {
     return (
       <tr key={boardEntity.id}>
@@ -137,11 +147,9 @@ const ExistingGames = (props: ExistingGamesProps) => {
           {getFormattedUsers(boardEntity)}
         </td>
         <td style={tableColumnSpacing}>
-          <button
-            onClick={() => handleSelectBoard(boardEntity)}
-          >
+          <Link component={RouterLink} to={'/game/existing/' + boardEntity.id}>
             Play Me!
-          </button>
+          </Link>
         </td>
       </tr>
     );

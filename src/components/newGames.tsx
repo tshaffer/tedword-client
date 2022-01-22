@@ -45,10 +45,9 @@ const NewGames = (props: NewGamesProps) => {
           {puzzleMetadata.author}
         </td>
         <td style={tableColumnSpacing}>
-          <Link component={RouterLink} to={'/game/' + puzzleMetadata.id}>
+          <Link component={RouterLink} to={'/game/new/' + puzzleMetadata.id}>
             Play Me!
           </Link>
-
         </td>
       </tr>
     );

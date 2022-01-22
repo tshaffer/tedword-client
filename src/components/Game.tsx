@@ -14,7 +14,8 @@ import GameToolbar from './GameToolbar';
 import { AppState, BoardEntity, CellContentsMap, DisplayedPuzzle, Guess, PuzzlesMetadataMap, PuzzleSpec, UiState } from '../types';
 import {
   createBoard,
-  initializeApp
+  initializeApp,
+  launchExistingGame
 } from '../controllers';
 import { setPuzzleId, setUiState, updateGuess } from '../models';
 import { getAppInitialized, getAppState, getBoard, getPuzzlesMetadata, getDisplayedPuzzle, getCellContents, getPuzzle } from '../selectors';
@@ -25,6 +26,7 @@ const Pusher = require('pusher-js');
 
 export interface GameProps {
   puzzleMetadataId: string;
+  gameType: string;
   appInitialized: boolean;
   appState: AppState,
   cellContents: CellContentsMap;
@@ -36,6 +38,7 @@ export interface GameProps {
   onUpdateGuess: (row: number, col: number, puzzleGuess: Guess) => any;
   onSetPuzzleId: (puzzleId: string) => any;
   onCreateBoard: () => any;
+  onLaunchExistingGame: (boardId: string) => any;
 }
 
 export let pusher: any;
@@ -44,6 +47,7 @@ let gameProps;
 
 const Game = (props: GameProps) => {
 
+  console.log(props.gameType);
   console.log(props.puzzleMetadataId);
 
   gameProps = props;
@@ -97,11 +101,24 @@ const Game = (props: GameProps) => {
     });
   };
 
-  const loadGame = () => {
+  const loadNewGame = () => {
     props.onSetPuzzleId(props.puzzleMetadataId);
     props.onCreateBoard();
     props.onSetUiState(UiState.NewBoardPlay);
     setGameLoaded(true);
+  };
+
+  const loadExistingGame = () => {
+    props.onLaunchExistingGame(props.puzzleMetadataId);
+    setGameLoaded(true);
+  };
+
+  const loadGame = () => {
+    if (props.gameType === 'new') {
+      loadNewGame();
+    } else {
+      loadExistingGame();
+    }
   };
 
   React.useEffect(() => {
@@ -178,6 +195,7 @@ function mapStateToProps(state: any, ownProps: any) {
   const puzzleSpec = isNil(board) ? null : getPuzzle(state, board.puzzleId);
   return {
     puzzleMetadataId: ownProps.match.params.id,
+    gameType: ownProps.match.params.type,
     appInitialized: getAppInitialized(state),
     puzzlesMetadata: getPuzzlesMetadata(state),
     appState,
@@ -194,6 +212,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onUpdateGuess: updateGuess,
     onSetPuzzleId: setPuzzleId,
     onCreateBoard: createBoard,
+    onLaunchExistingGame: launchExistingGame,
   }, dispatch);
 };
 

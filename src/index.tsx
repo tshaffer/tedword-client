@@ -28,7 +28,7 @@ ReactDOM.render(
     <HashRouter>
       <Switch>
         <Route exact path='/' component={Home} />
-        <Route exact path='/game/:id' component={Game}/>
+        <Route exact path='/game/:type/:id' component={Game}/>
         <Route exact path='/login' component={Login} />
         <Route exact path='/launcher' component={Launcher} />
         <Route exact path='/pizza' component={Pizza} />
