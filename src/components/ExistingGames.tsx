@@ -10,11 +10,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { BoardEntity, BoardsMap, PuzzlesMetadataMap } from '../types';
 import { getBoards, getPuzzlesMetadata } from '../selectors';
 
-export interface ExistingGamesPropsFromParent {
-  onSelectBoard: (boardEntity: BoardEntity) => any;
-}
-
-export interface ExistingGamesProps extends ExistingGamesPropsFromParent {
+export interface ExistingGamesProps {
   boardsMap: BoardsMap;
   puzzlesMetadata: PuzzlesMetadataMap;
 }
@@ -123,17 +119,6 @@ const ExistingGames = (props: ExistingGamesProps) => {
     return formattedUsers;
   };
 
-  const handleSelectBoard = (boardEntity: BoardEntity) => {
-    props.onSelectBoard(boardEntity);
-  };
-
-  /*
-          <button
-            onClick={() => handleSelectBoard(boardEntity)}
-          >
-            Play Me!
-          </button>
-  */
   const renderBoardRow = (boardEntity: BoardEntity) => {
     return (
       <tr key={boardEntity.id}>

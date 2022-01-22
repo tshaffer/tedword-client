@@ -10,11 +10,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { PuzzlesMetadataMap, PuzzleMetadata } from '../types';
 import { getPuzzlesMetadata } from '../selectors';
 
-export interface NewGamesPropsFromParent {
-  onSelectPuzzle: (puzzleMetadata: PuzzleMetadata) => any;
-}
-
-export interface NewGamesProps extends NewGamesPropsFromParent {
+export interface NewGamesProps {
   puzzlesMetadata: PuzzlesMetadataMap;
 }
 
@@ -24,30 +20,16 @@ const NewGames = (props: NewGamesProps) => {
     padding: '0 15px',
   };
 
-  // const handleSelectPuzzle = (puzzleMetadata: PuzzleMetadata) => {
-  //   props.onSelectPuzzle(puzzleMetadata);
-  // };
-
-  /*
-          <button
-            onClick={() => handleSelectPuzzle(puzzleMetadata)}
-          >
-            Play Me!
-          </button>
-  */
   const renderPuzzleRow = (puzzleMetadata: PuzzleMetadata) => {
     return (
       <tr key={puzzleMetadata.id}>
         <td style={tableColumnSpacing}>
-          {puzzleMetadata.title}
+          <Link component={RouterLink} to={'/game/new/' + puzzleMetadata.id}>
+            {puzzleMetadata.title}
+          </Link>
         </td>
         <td style={tableColumnSpacing}>
           {puzzleMetadata.author}
-        </td>
-        <td style={tableColumnSpacing}>
-          <Link component={RouterLink} to={'/game/new/' + puzzleMetadata.id}>
-            Play Me!
-          </Link>
         </td>
       </tr>
     );

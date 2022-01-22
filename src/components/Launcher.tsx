@@ -2,20 +2,16 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { HashRouter, Redirect } from 'react-router-dom';
-import { createHashHistory } from 'history';
 
 import ReactModal = require('react-modal');
 
-import { UiState, PuzzleMetadata, BoardEntity, UsersMap, VersionInfo } from '../types';
+import { UiState, UsersMap, VersionInfo } from '../types';
 import {
-  addUserToExistingBoard,
-  createBoard,
   updateLastPlayedDateTime,
-  launchExistingGame,
   initializeApp,
 } from '../controllers';
-import { setBoardId, setPuzzleId, setUiState, setFileUploadStatus, setUserName } from '../models';
-import { getAppInitialized, getCurrentUser, getUsers, getVersionInfo } from '../selectors';
+import { setUiState, setFileUploadStatus, setUserName } from '../models';
+import { getAppInitialized, getUsers, getVersionInfo } from '../selectors';
 
 import NewGames from './NewGames';
 import ExistingGames from './ExistingGames';
@@ -24,17 +20,11 @@ import PuzzleUpload from './PuzzleUpload';
 export interface LauncherProps {
   appInitialized: boolean;
   versionInfo: VersionInfo;
-  currentUser: string;
   users: UsersMap,
   onInitializeApp: () => any;
-  onAddUserToBoard: (id: string, userName: string) => any;
-  onCreateBoard: () => any;
-  onSetBoardId: (boardId: string) => any;
   onSetFileUploadStatus: (fileUploadState: string) => any;
-  onSetPuzzleId: (puzzleId: string) => any;
   onSetUiState: (uiState: UiState) => any;
   onUpdateLastPlayedDateTime: (boardId: string, dt: Date) => any;
-  onLaunchExistingGame: (boardId: string) => any;
   onSetUserName: (userName: string) => any;
 }
 
@@ -62,20 +52,6 @@ const Launcher = (props: LauncherProps) => {
       minHeight: '105px',
       minWidth: '150px',
     },
-  };
-
-  const handleOpenBoard = (boardEntity: BoardEntity) => {
-    props.onLaunchExistingGame(boardEntity.id);
-    const hashHistory = createHashHistory();
-    hashHistory.push('/game');
-  };
-
-  const handleOpenPuzzle = (puzzleMetadata: PuzzleMetadata) => {
-    props.onSetPuzzleId(puzzleMetadata.id);
-    props.onCreateBoard();
-    props.onSetUiState(UiState.NewBoardPlay);
-    const hashHistory = createHashHistory();
-    hashHistory.push('/game');
   };
 
   const renderLauncher = () => {
@@ -228,14 +204,10 @@ const Launcher = (props: LauncherProps) => {
             <button style={tabLinks} onClick={handleSelectTab} id='settingsTabSelect' ref={settingsTabSelectRef}>Tools & Settings</button>
           </div>
           <div id='newGameContent' style={tabcontent} ref={newGamesContentRef}>
-            <NewGames
-              onSelectPuzzle={handleOpenPuzzle}
-            />
+            <NewGames/>
           </div>
           <div id='inProgressGamesContent' style={tabcontent} ref={inProgressGamesContentRef}>
-            <ExistingGames
-              onSelectBoard={handleOpenBoard}
-            />
+            <ExistingGames />
           </div>
           <div id='settingsContent' style={tabcontent} ref={settingsContentRef}>
             <PuzzleUpload />
@@ -253,7 +225,6 @@ function mapStateToProps(state: any) {
   return {
     appInitialized: getAppInitialized(state),
     versionInfo: getVersionInfo(state),
-    currentUser: getCurrentUser(state),
     users: getUsers(state),
   };
 }
@@ -261,14 +232,9 @@ function mapStateToProps(state: any) {
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onInitializeApp: initializeApp,
-    onAddUserToBoard: addUserToExistingBoard,
-    onCreateBoard: createBoard,
-    onSetBoardId: setBoardId,
     onSetFileUploadStatus: setFileUploadStatus,
-    onSetPuzzleId: setPuzzleId,
     onSetUiState: setUiState,
     onUpdateLastPlayedDateTime: updateLastPlayedDateTime,
-    onLaunchExistingGame: launchExistingGame,
     onSetUserName: setUserName,
   }, dispatch);
 };
