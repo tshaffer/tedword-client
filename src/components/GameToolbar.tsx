@@ -160,6 +160,7 @@ const GameToolbar = (props: GameToolbarProps) => {
     elapsedGameTimerRef.current = true;
   };
 
+  // http://localhost:8000/#/game/existing/5c599145-dc36-4ad2-90a3-89610d2b75a3
   const getInviteUrl = () => {
     const url = serverUrl + '/#/game/existing/' + props.boardId;
     return url;
@@ -170,8 +171,6 @@ const GameToolbar = (props: GameToolbarProps) => {
       pauseTimer();
     }
 
-    // http://localhost:8000/?startpage=joinGame&boardId=632d1f50-0f82-404e-8058-4f3079e4b511
-    // const inviteUrl = serverUrl + '/?startpage=joinGame&boardId=' + props.boardId;
     const inviteUrl = getInviteUrl();
     setJoinGameUrl(inviteUrl);
 
@@ -187,8 +186,6 @@ const GameToolbar = (props: GameToolbarProps) => {
 
   const handleCopyToClipboard = () => {
 
-    // const path = serverUrl + '/?startpage=joinGame&boardId=' + props.boardId;
-    // const path = serverUrl + '/game/existing/' + props.boardId;
     const inviteUrl = getInviteUrl();
     console.log('inviteUrl');
     console.log(inviteUrl);
