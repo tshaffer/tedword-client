@@ -160,13 +160,19 @@ const GameToolbar = (props: GameToolbarProps) => {
     elapsedGameTimerRef.current = true;
   };
 
+  const getInviteUrl = () => {
+    const url = serverUrl + '/#/game/existing/' + props.boardId;
+    return url;
+  }
+
   const handleShowSendInvite = () => {
     if (props.puzzlePlayActive) {
       pauseTimer();
     }
 
     // http://localhost:8000/?startpage=joinGame&boardId=632d1f50-0f82-404e-8058-4f3079e4b511
-    const inviteUrl = serverUrl + '/?startpage=joinGame&boardId=' + props.boardId;
+    // const inviteUrl = serverUrl + '/?startpage=joinGame&boardId=' + props.boardId;
+    const inviteUrl = getInviteUrl();
     setJoinGameUrl(inviteUrl);
 
     setShowSendInviteModal(true);
@@ -181,11 +187,13 @@ const GameToolbar = (props: GameToolbarProps) => {
 
   const handleCopyToClipboard = () => {
 
-    const path = serverUrl + '/?startpage=joinGame&boardId=' + props.boardId;
-    console.log('path');
-    console.log(path);
+    // const path = serverUrl + '/?startpage=joinGame&boardId=' + props.boardId;
+    // const path = serverUrl + '/game/existing/' + props.boardId;
+    const inviteUrl = getInviteUrl();
+    console.log('inviteUrl');
+    console.log(inviteUrl);
 
-    navigator.clipboard.writeText(path).then(function () {
+    navigator.clipboard.writeText(inviteUrl).then(function () {
       /* clipboard successfully set */
       console.log('success');
     }, function () {
@@ -193,7 +201,7 @@ const GameToolbar = (props: GameToolbarProps) => {
       console.log('failure');
     });
 
-    setJoinGameUrl(path);
+    setJoinGameUrl(inviteUrl);
   };
 
   const linkDiv = getLinkDiv();

@@ -15,6 +15,11 @@ export enum UiState {
   ExistingBoardPlay = 'ExistingBoardPlay',
 }
 
+export enum GameType {
+  New = 'new',
+  Existing = 'existing',
+}
+
 export enum BoardStatus {
   BoardIncomplete = 'BoardIncomplete',
   BoardCompleteAndCorrect = 'BoardCompeteAndCorrect',

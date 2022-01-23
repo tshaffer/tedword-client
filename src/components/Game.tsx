@@ -13,7 +13,7 @@ import FocusedClues from './FocusedClues';
 import CrosswordGameMgr from './CrosswordGameMgr';
 import GameToolbar from './GameToolbar';
 
-import { AppState, BoardEntity, CellContentsMap, DisplayedPuzzle, Guess, PuzzlesMetadataMap, PuzzleSpec, UiState } from '../types';
+import { AppState, BoardEntity, CellContentsMap, DisplayedPuzzle, GameType, Guess, PuzzlesMetadataMap, PuzzleSpec, UiState } from '../types';
 import {
   createBoard,
   initializeApp,
@@ -28,7 +28,7 @@ const Pusher = require('pusher-js');
 
 export interface GameProps {
   puzzleMetadataId: string;
-  gameType: string;
+  gameType: GameType;
   appInitialized: boolean;
   appState: AppState,
   cellContents: CellContentsMap;
@@ -116,7 +116,7 @@ const Game = (props: GameProps) => {
   };
 
   const loadGame = () => {
-    if (props.gameType === 'new') {
+    if (props.gameType === GameType.New) {
       loadNewGame();
     } else {
       loadExistingGame();
