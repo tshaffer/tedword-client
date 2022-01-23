@@ -21,8 +21,6 @@ export const store = createStore(
     applyMiddleware(thunkMiddleware)
   ));
 
-//         <Route exact path='/game' component={Game} />
-
 ReactDOM.render(
   <Provider store={store}>
     <HashRouter>

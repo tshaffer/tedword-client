@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
 
 import Grid from '@material-ui/core/Grid';
+import { Link } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { isNil } from 'lodash';
 
@@ -170,7 +172,9 @@ const Game = (props: GameProps) => {
     <HashRouter>
       <div style={{ height: '100%' }}>
         <div>
-          <button onClick={handleHome}>Home</button>
+          <Link component={RouterLink} to={'/launcher'} >
+            Home
+          </Link>
         </div>
         <Grid container spacing={1} justify="center" style={{ minHeight: '5%', maxWidth: '100%' }}>
           <GameToolbar />
@@ -184,7 +188,7 @@ const Game = (props: GameProps) => {
           puzzleSpec={props.puzzleSpec}
         />
       </div>
-    </HashRouter>
+    </HashRouter >
   );
 };
 
