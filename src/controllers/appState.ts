@@ -31,25 +31,25 @@ const getStartupParams = () => {
   return (dispatch: any) => {
 
     console.log(window.location.href);
-    const parsedQueryParams = QueryString.parse(window.location.search);
-    console.log(parsedQueryParams);
 
-    if (!isEmpty(parsedQueryParams)) {
+    // updated code based on new form of url
+    const urlParts: string[] = window.location.href.split('/');
+    const indexOfGame = urlParts.lastIndexOf('game');
+    if (indexOfGame >= 0) {
+      const indexOfExisting = urlParts.lastIndexOf('existing');
+      if (indexOfExisting > 0 && indexOfExisting === (indexOfGame + 1)) {
+        if (urlParts.length > (indexOfExisting + 1)) {
+          const boardId = urlParts[indexOfExisting + 1];
 
-      if (isString(parsedQueryParams.startpage) && parsedQueryParams.startpage === 'joinGame' && !isNil(parsedQueryParams.boardId)) {
-        // TEDTODO - validity checking
-        // http://localhost:8000/?user=Ted&boardId=863c7139-6b17-4762-95a7-37fe65747719
+          console.log('join game with boardId', boardId);
+          dispatch(setStartPage(StartPage.JoinGame));
+          dispatch(setStartupBoardId(boardId as string));
 
-        const boardId = parsedQueryParams.boardId;
-        // TEDTODO - typescript thinks that boardId could be an array
-
-        dispatch(setStartPage(StartPage.JoinGame));
-        dispatch(setStartupBoardId(boardId as string));
-
-        return {
-          startPage: StartPage.JoinGame,
-          startupBoardId: boardId,
-        };
+          return {
+            startPage: StartPage.JoinGame,
+            startupBoardId: boardId,
+          };
+        }
       }
     }
 
