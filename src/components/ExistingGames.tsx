@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { isEmpty } from 'lodash';
+import { cloneDeep } from 'lodash';
 
 import { Link } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
@@ -16,6 +17,12 @@ export interface ExistingGamesProps {
 }
 
 const ExistingGames = (props: ExistingGamesProps) => {
+
+  interface CheckedById {
+    [id: string]: boolean;
+  }
+  
+  const [checkedById, setCheckedById] = React.useState<CheckedById>({});
 
   const tableColumnSpacing = {
     padding: '0 15px',
@@ -119,9 +126,20 @@ const ExistingGames = (props: ExistingGamesProps) => {
     return formattedUsers;
   };
 
+  const handleCheckRow = (boardId: string) => {
+    console.log('handleCheckRow ', boardId);
+    console.log(checkedById);
+    const localCheckedById = cloneDeep(checkedById);
+    localCheckedById[boardId] = !localCheckedById[boardId];
+    setCheckedById(localCheckedById);
+  };
+
   const renderBoardRow = (boardEntity: BoardEntity) => {
     return (
       <tr key={boardEntity.id}>
+        <td>
+          <input type="checkbox" onClick={() => handleCheckRow(boardEntity.id)}></input>
+        </td>
         <td style={tableColumnSpacing}>
           {getFormattedLastPlayedDateTime(boardEntity.lastPlayedDateTime as unknown as string)}
         </td>
@@ -174,6 +192,7 @@ const ExistingGames = (props: ExistingGamesProps) => {
         <table>
           <thead>
             <tr>
+              <th></th>
               <th>Last Played</th>
               <th>Title</th>
               <th>Users</th>
