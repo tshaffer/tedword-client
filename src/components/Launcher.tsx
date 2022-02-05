@@ -127,7 +127,6 @@ const Launcher = (props: LauncherProps) => {
       setShowAboutModal(false);
     };
 
-
     function handleSelectTab(evt: any) {
       setSelectedTab(evt.target.id);
     }
@@ -142,63 +141,50 @@ const Launcher = (props: LauncherProps) => {
       return <Redirect to='/login' />;
     }
 
-    const getRenderedTabs = () => {
-      switch (selectedTab) {
-        case 'newGameTabSelect':
-          return (
-            <div style={tab}>
-              <button style={tabLinkSelected} onClick={handleSelectTab} id='newGameTabSelect'>New Games</button>
-              <button style={tabLinkUnselected} onClick={handleSelectTab} id='inProgressGameTabSelect' >In Progress Games</button>
-              <button style={tabLinkUnselected} onClick={handleSelectTab} id='settingsTabSelect' >Tools & Settings</button>
-            </div>
-          );
-        default:
-        case 'inProgressGameTabSelect':
-          return (
-            <div style={tab}>
-              <button style={tabLinkUnselected} onClick={handleSelectTab} id='newGameTabSelect'>New Games</button>
-              <button style={tabLinkSelected} onClick={handleSelectTab} id='inProgressGameTabSelect' >In Progress Games</button>
-              <button style={tabLinkUnselected} onClick={handleSelectTab} id='settingsTabSelect' >Tools & Settings</button>
-            </div>
-          );
-        case 'settingsTabSelect':
-          return (
-            <div style={tab}>
-              <button style={tabLinkUnselected} onClick={handleSelectTab} id='newGameTabSelect'>New Games</button>
-              <button style={tabLinkUnselected} onClick={handleSelectTab} id='inProgressGameTabSelect' >In Progress Games</button>
-              <button style={tabLinkSelected} onClick={handleSelectTab} id='settingsTabSelect' >Tools & Settings</button>
-            </div>
-          );
-      }
-    };
+    const getRenderedTable = () => {
 
-    const getRenderedTabContent = () => {
-
+      let newGamesTabStyle;
       let newGamesTabContentStyle;
+      let inProgressGamesTabStyle;
       let inProgressGamesTabContentStyle;
+      let settingsTabStyle;
       let settingsTabContentStyle;
 
       switch (selectedTab) {
         case 'newGameTabSelect':
+          newGamesTabStyle = tabLinkSelected;
           newGamesTabContentStyle = selectedTabContent;
+          inProgressGamesTabStyle = tabLinkUnselected;
           inProgressGamesTabContentStyle = unselectedTabContent;
+          settingsTabStyle = tabLinkUnselected;
           settingsTabContentStyle = unselectedTabContent;
           break;
         default:
         case 'inProgressGameTabSelect':
+          newGamesTabStyle = tabLinkUnselected;
           newGamesTabContentStyle = unselectedTabContent;
+          inProgressGamesTabStyle = tabLinkSelected;
           inProgressGamesTabContentStyle = selectedTabContent;
+          settingsTabStyle = tabLinkUnselected;
           settingsTabContentStyle = unselectedTabContent;
           break;
         case 'settingsTabSelect':
           newGamesTabContentStyle = unselectedTabContent;
+          newGamesTabStyle = tabLinkUnselected;
+          inProgressGamesTabStyle = tabLinkUnselected;
           inProgressGamesTabContentStyle = unselectedTabContent;
+          settingsTabStyle = tabLinkSelected;
           settingsTabContentStyle = selectedTabContent;
           break;
       }
 
       return (
         <div>
+          <div style={tab}>
+            <button style={newGamesTabStyle} onClick={handleSelectTab} id='newGameTabSelect'>New Games</button>
+            <button style={inProgressGamesTabStyle} onClick={handleSelectTab} id='inProgressGameTabSelect' >In Progress Games</button>
+            <button style={settingsTabStyle} onClick={handleSelectTab} id='settingsTabSelect' >Tools & Settings</button>
+          </div>
           <div id='newGameContent' style={newGamesTabContentStyle}>
             <NewGames />
           </div>
@@ -212,8 +198,7 @@ const Launcher = (props: LauncherProps) => {
       );
     };
 
-    const renderedTabs = getRenderedTabs();
-    const renderedTabContent = getRenderedTabContent();
+    const renderedTable = getRenderedTable();
 
     return (
       <HashRouter>
@@ -250,8 +235,7 @@ const Launcher = (props: LauncherProps) => {
             <button onClick={handleSignout}>Signout</button>
             <button onClick={handleShowAbout}>About</button>
           </div>
-          {renderedTabs}
-          {renderedTabContent}
+          {renderedTable}
         </div >
       </HashRouter >
 
