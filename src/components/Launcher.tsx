@@ -34,6 +34,8 @@ const Launcher = (props: LauncherProps) => {
 
   const [showAboutModal, setShowAboutModal] = React.useState(false);
 
+  const [selectedTab, setSelectedTab] = React.useState<string>('inProgressGameTabSelect');
+
   React.useEffect(() => {
     console.log('Launcher: ', props.appInitialized);
     if (!props.appInitialized) {
@@ -56,8 +58,15 @@ const Launcher = (props: LauncherProps) => {
 
   const renderLauncher = () => {
 
-    const tabcontent = {
+    const unselectedTabcontent = {
       display: 'none',
+      padding: '6px 12px',
+      border: '1px solid #ccc',
+      borderTop: 'none',
+    };
+
+    const selectedTabcontent = {
+      display: 'block',
       padding: '6px 12px',
       border: '1px solid #ccc',
       borderTop: 'none',
@@ -69,14 +78,26 @@ const Launcher = (props: LauncherProps) => {
       backgroundColor: '#f1f1f1',
     };
 
-    const tabLinks = {
-      backgroundColor: 'inherit',
-      // float: 'left',
+    const tabLinkSelected = {
       border: 'none',
       outline: 'none',
       cursor: 'pointer',
       padding: '14px 16px',
-      transition: '0.3s'
+      transition: '0.3s',
+      backgroundColor: '#ccc',
+    };
+
+    const tabLinkUnselected = {
+      border: 'none',
+      outline: 'none',
+      cursor: 'pointer',
+      padding: '14px 16px',
+      transition: '0.3s',
+      backgroundColor: 'inherit',
+    };
+
+    const divStyle = {
+      height: '98vh',
     };
 
     function handleSignout() {
@@ -108,50 +129,8 @@ const Launcher = (props: LauncherProps) => {
 
 
     function handleSelectTab(evt: any) {
-
-      const selectedTabId = evt.target.id;
-
-      // Hide content divs
-      newGamesContentRef.current.style.display = 'none';
-      inProgressGamesContentRef.current.style.display = 'none';
-      settingsContentRef.current.style.display = 'none';
-
-      // Show the current tab, and add an 'active' class to the button that opened the tab
-      switch (selectedTabId) {
-        case 'newGameTabSelect':
-          newGamesContentRef.current.style.display = 'block';
-          newGameTabSelectRef.current.style.backgroundColor = '#ccc';
-          inProgressGamesTabSelectRef.current.style.backgroundColor = 'inherit';
-          settingsTabSelectRef.current.style.backgroundColor = 'inherit';
-          break;
-        case 'inProgressGameTabSelect':
-          inProgressGamesContentRef.current.style.display = 'block';
-          inProgressGamesTabSelectRef.current.style.backgroundColor = '#ccc';
-          newGameTabSelectRef.current.style.backgroundColor = 'inherit';
-          settingsTabSelectRef.current.style.backgroundColor = 'inherit';
-          break;
-        case 'settingsTabSelect':
-          props.onSetFileUploadStatus('');
-          settingsContentRef.current.style.display = 'block';
-          settingsTabSelectRef.current.style.backgroundColor = '#ccc';
-          newGameTabSelectRef.current.style.backgroundColor = 'inherit';
-          inProgressGamesTabSelectRef.current.style.backgroundColor = 'inherit';
-          break;
-        default:
-          break;
-      }
+      setSelectedTab(evt.target.id);
     }
-
-    const newGameTabSelectRef = React.createRef<any>();
-    const newGamesContentRef = React.createRef<any>();
-    const inProgressGamesTabSelectRef = React.createRef<any>();
-    const inProgressGamesContentRef = React.createRef<any>();
-    const settingsTabSelectRef = React.createRef<any>();
-    const settingsContentRef = React.createRef<any>();
-
-    const divStyle = {
-      height: '98vh',
-    };
 
     if (!props.appInitialized) {
       return (
@@ -160,9 +139,89 @@ const Launcher = (props: LauncherProps) => {
     }
 
     if (redirectTarget === 'login') {
-      return <Redirect to='/login'/>;
+      return <Redirect to='/login' />;
     }
-    
+
+    const getRenderedTabs = () => {
+      switch (selectedTab) {
+        case 'newGameTabSelect':
+          return (
+            <div style={tab}>
+              <button style={tabLinkSelected} onClick={handleSelectTab} id='newGameTabSelect'>New Games</button>
+              <button style={tabLinkUnselected} onClick={handleSelectTab} id='inProgressGameTabSelect' >In Progress Games</button>
+              <button style={tabLinkUnselected} onClick={handleSelectTab} id='settingsTabSelect' >Tools & Settings</button>
+            </div>
+          );
+        default:
+        case 'inProgressGameTabSelect':
+          return (
+            <div style={tab}>
+              <button style={tabLinkUnselected} onClick={handleSelectTab} id='newGameTabSelect'>New Games</button>
+              <button style={tabLinkSelected} onClick={handleSelectTab} id='inProgressGameTabSelect' >In Progress Games</button>
+              <button style={tabLinkUnselected} onClick={handleSelectTab} id='settingsTabSelect' >Tools & Settings</button>
+            </div>
+          );
+        case 'settingsTabSelect':
+          return (
+            <div style={tab}>
+              <button style={tabLinkUnselected} onClick={handleSelectTab} id='newGameTabSelect'>New Games</button>
+              <button style={tabLinkUnselected} onClick={handleSelectTab} id='inProgressGameTabSelect' >In Progress Games</button>
+              <button style={tabLinkSelected} onClick={handleSelectTab} id='settingsTabSelect' >Tools & Settings</button>
+            </div>
+          );
+      }
+    };
+
+    const getRenderedTabContent = () => {
+      switch (selectedTab) {
+        case 'newGameTabSelect':
+          return (
+            <div>
+              <div id='newGameContent' style={selectedTabcontent}>
+                <NewGames />
+              </div>
+              <div id='inProgressGamesContent' style={unselectedTabcontent}>
+                <ExistingGames />
+              </div>
+              <div id='settingsContent' style={unselectedTabcontent}>
+                <PuzzleUpload />
+              </div>
+            </div>);
+        default:
+        case 'inProgressGameTabSelect':
+          return (
+            <div>
+              <div id='newGameContent' style={unselectedTabcontent}>
+                <NewGames />
+              </div>
+              <div id='inProgressGamesContent' style={selectedTabcontent}>
+                <ExistingGames />
+              </div>
+              <div id='settingsContent' style={unselectedTabcontent}>
+                <PuzzleUpload />
+              </div>
+            </div>
+          );
+        case 'settingsTabSelect':
+          return (
+            <div>
+              <div id='newGameContent' style={unselectedTabcontent}>
+                <NewGames />
+              </div>
+              <div id='inProgressGamesContent' style={unselectedTabcontent}>
+                <ExistingGames />
+              </div>
+              <div id='settingsContent' style={selectedTabcontent}>
+                <PuzzleUpload />
+              </div>
+            </div>
+          );
+      }
+    };
+
+    const renderedTabs = getRenderedTabs();
+    const renderedTabContent = getRenderedTabContent();
+
     return (
       <HashRouter>
         <div>
@@ -198,22 +257,10 @@ const Launcher = (props: LauncherProps) => {
             <button onClick={handleSignout}>Signout</button>
             <button onClick={handleShowAbout}>About</button>
           </div>
-          <div style={tab}>
-            <button style={tabLinks} onClick={handleSelectTab} id='newGameTabSelect' ref={newGameTabSelectRef}>New Games</button>
-            <button style={tabLinks} onClick={handleSelectTab} id='inProgressGameTabSelect' ref={inProgressGamesTabSelectRef}>In Progress Games</button>
-            <button style={tabLinks} onClick={handleSelectTab} id='settingsTabSelect' ref={settingsTabSelectRef}>Tools & Settings</button>
-          </div>
-          <div id='newGameContent' style={tabcontent} ref={newGamesContentRef}>
-            <NewGames/>
-          </div>
-          <div id='inProgressGamesContent' style={tabcontent} ref={inProgressGamesContentRef}>
-            <ExistingGames />
-          </div>
-          <div id='settingsContent' style={tabcontent} ref={settingsContentRef}>
-            <PuzzleUpload />
-          </div>
-        </div>
-      </HashRouter>
+          {renderedTabs}
+          {renderedTabContent}
+        </div >
+      </HashRouter >
 
     );
   };
