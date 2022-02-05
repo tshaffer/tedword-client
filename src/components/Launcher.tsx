@@ -58,14 +58,14 @@ const Launcher = (props: LauncherProps) => {
 
   const renderLauncher = () => {
 
-    const unselectedTabcontent = {
+    const unselectedTabContent = {
       display: 'none',
       padding: '6px 12px',
       border: '1px solid #ccc',
       borderTop: 'none',
     };
 
-    const selectedTabcontent = {
+    const selectedTabContent = {
       display: 'block',
       padding: '6px 12px',
       border: '1px solid #ccc',
@@ -173,50 +173,43 @@ const Launcher = (props: LauncherProps) => {
     };
 
     const getRenderedTabContent = () => {
+
+      let newGamesTabContentStyle;
+      let inProgressGamesTabContentStyle;
+      let settingsTabContentStyle;
+
       switch (selectedTab) {
         case 'newGameTabSelect':
-          return (
-            <div>
-              <div id='newGameContent' style={selectedTabcontent}>
-                <NewGames />
-              </div>
-              <div id='inProgressGamesContent' style={unselectedTabcontent}>
-                <ExistingGames />
-              </div>
-              <div id='settingsContent' style={unselectedTabcontent}>
-                <PuzzleUpload />
-              </div>
-            </div>);
+          newGamesTabContentStyle = selectedTabContent;
+          inProgressGamesTabContentStyle = unselectedTabContent;
+          settingsTabContentStyle = unselectedTabContent;
+          break;
         default:
         case 'inProgressGameTabSelect':
-          return (
-            <div>
-              <div id='newGameContent' style={unselectedTabcontent}>
-                <NewGames />
-              </div>
-              <div id='inProgressGamesContent' style={selectedTabcontent}>
-                <ExistingGames />
-              </div>
-              <div id='settingsContent' style={unselectedTabcontent}>
-                <PuzzleUpload />
-              </div>
-            </div>
-          );
+          newGamesTabContentStyle = unselectedTabContent;
+          inProgressGamesTabContentStyle = selectedTabContent;
+          settingsTabContentStyle = unselectedTabContent;
+          break;
         case 'settingsTabSelect':
-          return (
-            <div>
-              <div id='newGameContent' style={unselectedTabcontent}>
-                <NewGames />
-              </div>
-              <div id='inProgressGamesContent' style={unselectedTabcontent}>
-                <ExistingGames />
-              </div>
-              <div id='settingsContent' style={selectedTabcontent}>
-                <PuzzleUpload />
-              </div>
-            </div>
-          );
+          newGamesTabContentStyle = unselectedTabContent;
+          inProgressGamesTabContentStyle = unselectedTabContent;
+          settingsTabContentStyle = selectedTabContent;
+          break;
       }
+
+      return (
+        <div>
+          <div id='newGameContent' style={newGamesTabContentStyle}>
+            <NewGames />
+          </div>
+          <div id='inProgressGamesContent' style={inProgressGamesTabContentStyle}>
+            <ExistingGames />
+          </div>
+          <div id='settingsContent' style={settingsTabContentStyle}>
+            <PuzzleUpload />
+          </div>
+        </div>
+      );
     };
 
     const renderedTabs = getRenderedTabs();
