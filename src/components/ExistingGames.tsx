@@ -3,7 +3,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { isEmpty } from 'lodash';
-import { cloneDeep } from 'lodash';
 
 import { Link } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
@@ -14,6 +13,7 @@ import { getBoards, getPuzzlesMetadata } from '../selectors';
 export interface ExistingGamesProps {
   boardsMap: BoardsMap;
   puzzlesMetadata: PuzzlesMetadataMap;
+  onToggleSelectGame: (boardId: string) => any;
 }
 
 const ExistingGames = (props: ExistingGamesProps) => {
@@ -21,8 +21,6 @@ const ExistingGames = (props: ExistingGamesProps) => {
   interface CheckedById {
     [id: string]: boolean;
   }
-  
-  const [checkedById, setCheckedById] = React.useState<CheckedById>({});
 
   const tableColumnSpacing = {
     padding: '0 15px',
@@ -126,19 +124,15 @@ const ExistingGames = (props: ExistingGamesProps) => {
     return formattedUsers;
   };
 
-  const handleCheckRow = (boardId: string) => {
-    console.log('handleCheckRow ', boardId);
-    console.log(checkedById);
-    const localCheckedById = cloneDeep(checkedById);
-    localCheckedById[boardId] = !localCheckedById[boardId];
-    setCheckedById(localCheckedById);
+  const handleToggleSelectGame = (boardId: string) => {
+    props.onToggleSelectGame(boardId);
   };
 
   const renderBoardRow = (boardEntity: BoardEntity) => {
     return (
       <tr key={boardEntity.id}>
         <td>
-          <input type="checkbox" onClick={() => handleCheckRow(boardEntity.id)}></input>
+          <input type="checkbox" onClick={() => handleToggleSelectGame(boardEntity.id)}></input>
         </td>
         <td style={tableColumnSpacing}>
           {getFormattedLastPlayedDateTime(boardEntity.lastPlayedDateTime as unknown as string)}

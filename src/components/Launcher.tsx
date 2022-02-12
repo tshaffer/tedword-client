@@ -1,3 +1,5 @@
+import { cloneDeep } from 'lodash';
+
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -7,6 +9,7 @@ import ReactModal = require('react-modal');
 
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 import MenuIcon from '@material-ui/icons/Menu';
 import InfoIcon from '@material-ui/icons/Info';
 
@@ -58,6 +61,12 @@ const Launcher = (props: LauncherProps) => {
   const [showAboutModal, setShowAboutModal] = React.useState(false);
 
   const [selectedTab, setSelectedTab] = React.useState<string>('inProgressGameTabSelect');
+
+  interface SelectedExistingGamesById {
+    [id: string]: boolean;  // value is boardId
+  }
+
+  const [selectedExistingGamesById, setSelectedExistingGamesById] = React.useState<SelectedExistingGamesById>({});
 
   React.useEffect(() => {
     console.log('Launcher: ', props.appInitialized);
@@ -125,6 +134,24 @@ const Launcher = (props: LauncherProps) => {
       height: '98vh',
     };
 
+    const isGameSelected = (): boolean => {
+      for (const existingGameId in selectedExistingGamesById) {
+        if (Object.prototype.hasOwnProperty.call(selectedExistingGamesById, existingGameId)) {
+          const isSelected = selectedExistingGamesById[existingGameId];
+          if (isSelected) {
+            return true;
+          }
+        }
+      }
+      return false;
+    };
+
+    const handleToggleSelectGame = (boardId: string) => {
+      const localSelectedExistingGamesById = cloneDeep(selectedExistingGamesById);
+      localSelectedExistingGamesById[boardId] = !localSelectedExistingGamesById[boardId];
+      setSelectedExistingGamesById(localSelectedExistingGamesById);
+    };
+
     function handleSignout() {
 
       localStorage.setItem('userName', '');
@@ -166,7 +193,22 @@ const Launcher = (props: LauncherProps) => {
       return <Redirect to='/login' />;
     }
 
-    const getToolbar = () => {
+    const getRenderedDeleteIcon = () => {
+      if (isGameSelected()) {
+        return (
+          <IconButton
+            className={classes.menuButton}
+            color="inherit"
+          >
+            <DeleteIcon />
+          </IconButton>
+        );
+      } else {
+        return null;
+      }
+    };
+
+    const getRenderedToolbar = () => {
       return (
         <div className={classes.root}>
           <AppBar position="static">
@@ -180,6 +222,7 @@ const Launcher = (props: LauncherProps) => {
               <Typography className={classes.title} variant="h6" noWrap>
                 Tedword
               </Typography>
+              {getRenderedDeleteIcon()}
               <IconButton
                 className={classes.menuButton}
                 color="inherit"
@@ -242,7 +285,9 @@ const Launcher = (props: LauncherProps) => {
             <NewGames />
           </div>
           <div id='inProgressGamesContent' style={inProgressGamesTabContentStyle}>
-            <ExistingGames />
+            <ExistingGames
+              onToggleSelectGame={handleToggleSelectGame}
+            />
           </div>
           <div id='settingsContent' style={settingsTabContentStyle}>
             <PuzzleUpload />
@@ -251,7 +296,7 @@ const Launcher = (props: LauncherProps) => {
       );
     };
 
-    const toolbar = getToolbar();
+    const toolbar = getRenderedToolbar();
 
     const renderedTable = getRenderedTable();
 
