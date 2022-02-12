@@ -13,7 +13,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import MenuIcon from '@material-ui/icons/Menu';
 import InfoIcon from '@material-ui/icons/Info';
 
-
 import { UiState, UsersMap, VersionInfo } from '../types';
 import {
   updateLastPlayedDateTime,
@@ -59,6 +58,8 @@ const Launcher = (props: LauncherProps) => {
   const [redirectTarget, setRedirectTarget] = React.useState('');
 
   const [showAboutModal, setShowAboutModal] = React.useState(false);
+
+  const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = React.useState(false);
 
   const [selectedTab, setSelectedTab] = React.useState<string>('inProgressGameTabSelect');
 
@@ -152,6 +153,14 @@ const Launcher = (props: LauncherProps) => {
       setSelectedExistingGamesById(localSelectedExistingGamesById);
     };
 
+    const handleConfirmDelete = () => {
+      // setConfirmDeleteDialogOpen(true);
+      const deletionConfirmed = confirm('Permanently delete selected games?');
+      if (deletionConfirmed) {
+        console.log('delete selected games');
+      }
+    };
+
     function handleSignout() {
 
       localStorage.setItem('userName', '');
@@ -193,12 +202,13 @@ const Launcher = (props: LauncherProps) => {
       return <Redirect to='/login' />;
     }
 
-    const getRenderedDeleteIcon = () => {
+    const renderDeleteIcon = () => {
       if (isGameSelected()) {
         return (
           <IconButton
             className={classes.menuButton}
             color="inherit"
+            onClick={handleConfirmDelete}
           >
             <DeleteIcon />
           </IconButton>
@@ -222,7 +232,7 @@ const Launcher = (props: LauncherProps) => {
               <Typography className={classes.title} variant="h6" noWrap>
                 Tedword
               </Typography>
-              {getRenderedDeleteIcon()}
+              {renderDeleteIcon()}
               <IconButton
                 className={classes.menuButton}
                 color="inherit"
