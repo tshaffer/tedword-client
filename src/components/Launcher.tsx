@@ -5,6 +5,11 @@ import { HashRouter, Redirect } from 'react-router-dom';
 
 import ReactModal = require('react-modal');
 
+import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core';
+import { fade, makeStyles } from '@material-ui/core/styles';
+import MenuIcon from '@material-ui/icons/Menu';
+
+
 import { UiState, UsersMap, VersionInfo } from '../types';
 import {
   updateLastPlayedDateTime,
@@ -28,6 +33,23 @@ export interface LauncherProps {
   onSetUserName: (userName: string) => any;
 }
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+    display: 'none',
+    [
+      theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
+  },
+}));
+
 const Launcher = (props: LauncherProps) => {
 
   const [redirectTarget, setRedirectTarget] = React.useState('');
@@ -42,6 +64,8 @@ const Launcher = (props: LauncherProps) => {
       props.onInitializeApp();
     }
   }, [props.appInitialized]);
+
+  const classes = useStyles();
 
   const modalStyle = {
     content: {
@@ -141,6 +165,27 @@ const Launcher = (props: LauncherProps) => {
       return <Redirect to='/login' />;
     }
 
+    const getToolbar = () => {
+      return (
+        <div className={classes.root}>
+          <AppBar position="static">
+            <Toolbar>
+              <IconButton
+                className={classes.menuButton}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography className={classes.title} variant="h6" noWrap>
+                Welcome To GFG
+              </Typography>
+              <Button color="inherit">Login</Button>
+            </Toolbar>
+          </AppBar>
+        </div>
+      );
+    };
+
     const getRenderedTable = () => {
 
       let newGamesTabStyle;
@@ -198,6 +243,8 @@ const Launcher = (props: LauncherProps) => {
       );
     };
 
+    const toolbar = getToolbar();
+
     const renderedTable = getRenderedTable();
 
     return (
@@ -231,6 +278,7 @@ const Launcher = (props: LauncherProps) => {
               </div>
             </ReactModal>
           </div>
+          {toolbar}
           <div>
             <button onClick={handleSignout}>Signout</button>
             <button onClick={handleShowAbout}>About</button>
