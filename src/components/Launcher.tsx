@@ -5,9 +5,10 @@ import { HashRouter, Redirect } from 'react-router-dom';
 
 import ReactModal = require('react-modal');
 
+import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core';
-import { fade, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
+import InfoIcon from '@material-ui/icons/Info';
 
 
 import { UiState, UsersMap, VersionInfo } from '../types';
@@ -177,9 +178,16 @@ const Launcher = (props: LauncherProps) => {
                 <MenuIcon />
               </IconButton>
               <Typography className={classes.title} variant="h6" noWrap>
-                Welcome To GFG
+                Tedword
               </Typography>
-              <Button color="inherit">Login</Button>
+              <IconButton
+                className={classes.menuButton}
+                color="inherit"
+                onClick={handleShowAbout}
+              >
+                <InfoIcon />
+              </IconButton>
+              <Button color="inherit" onClick={handleSignout}>Logout</Button>
             </Toolbar>
           </AppBar>
         </div>
@@ -279,10 +287,6 @@ const Launcher = (props: LauncherProps) => {
             </ReactModal>
           </div>
           {toolbar}
-          <div>
-            <button onClick={handleSignout}>Signout</button>
-            <button onClick={handleShowAbout}>About</button>
-          </div>
           {renderedTable}
         </div >
       </HashRouter >
