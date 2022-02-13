@@ -301,5 +301,23 @@ export const deleteGames = (boardIds: string[]) => {
   return ((dispatch: any, getState: any): any => {
     console.log('delete existing games');
     console.log(boardIds);
+
+    const path = serverUrl + apiUrlFragment + 'deleteGames';
+
+    const deleteGamesBody: string[] = boardIds;
+
+    return axios.post(
+      path,
+      deleteGamesBody
+    ).then((response) => {
+      console.log('return from deleteGames - update reduxy');
+      // dispatch(updateElapsedTimeRedux(id, elapsedTime));
+      return;
+    }).catch((error) => {
+      console.log('error');
+      console.log(error);
+      return;
+    });
+
   });
 };

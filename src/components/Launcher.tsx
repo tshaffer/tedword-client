@@ -154,6 +154,21 @@ const Launcher = (props: LauncherProps) => {
       return false;
     };
 
+    const getSelectedBoardIds = (boardIds: string[]): string[] => {
+
+      const selectedBoardIds = [];
+
+      for (const existingGameId of boardIds) {
+        if (Object.prototype.hasOwnProperty.call(selectedExistingGamesById, existingGameId)) {
+          const isSelected = selectedExistingGamesById[existingGameId];
+          if (isSelected) {
+            selectedBoardIds.push(existingGameId);
+          }
+        }
+      }
+      return selectedBoardIds;
+    };
+
     const handleToggleSelectGame = (boardId: string) => {
       const localSelectedExistingGamesById = cloneDeep(selectedExistingGamesById);
       localSelectedExistingGamesById[boardId] = !localSelectedExistingGamesById[boardId];
@@ -169,7 +184,7 @@ const Launcher = (props: LauncherProps) => {
     };
 
     const handleDeleteSelectedGames = () => {
-      const boardIdsToDelete: string[] = Object.keys(selectedExistingGamesById);
+      const boardIdsToDelete: string[] = getSelectedBoardIds(Object.keys(selectedExistingGamesById));
       props.onDeleteGames(boardIdsToDelete);
       setConfirmDeleteDialogOpen(false);
     };
