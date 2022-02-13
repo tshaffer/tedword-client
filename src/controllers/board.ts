@@ -296,3 +296,10 @@ export const launchExistingGame = (boardId: string) => {
     }
   });
 };
+
+export const deleteGames = (boardIds: string[]) => {
+  return ((dispatch: any, getState: any): any => {
+    console.log('delete existing games');
+    console.log(boardIds);
+  });
+};

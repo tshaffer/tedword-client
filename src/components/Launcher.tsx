@@ -12,9 +12,15 @@ import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/co
 import DeleteIcon from '@material-ui/icons/Delete';
 import MenuIcon from '@material-ui/icons/Menu';
 import InfoIcon from '@material-ui/icons/Info';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { UiState, UsersMap, VersionInfo } from '../types';
 import {
+  deleteGames,
   updateLastPlayedDateTime,
   initializeApp,
 } from '../controllers';
@@ -34,6 +40,7 @@ export interface LauncherProps {
   onSetUiState: (uiState: UiState) => any;
   onUpdateLastPlayedDateTime: (boardId: string, dt: Date) => any;
   onSetUserName: (userName: string) => any;
+  onDeleteGames: (boardIds: string[]) => any;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -153,12 +160,18 @@ const Launcher = (props: LauncherProps) => {
       setSelectedExistingGamesById(localSelectedExistingGamesById);
     };
 
-    const handleConfirmDelete = () => {
-      // setConfirmDeleteDialogOpen(true);
-      const deletionConfirmed = confirm('Permanently delete selected games?');
-      if (deletionConfirmed) {
-        console.log('delete selected games');
-      }
+    const handleDeleteInvoked = () => {
+      setConfirmDeleteDialogOpen(true);
+    };
+
+    const handleCloseDeleteDialog = () => {
+      setConfirmDeleteDialogOpen(false);
+    };
+
+    const handleDeleteSelectedGames = () => {
+      const boardIdsToDelete: string[] = Object.keys(selectedExistingGamesById);
+      props.onDeleteGames(boardIdsToDelete);
+      setConfirmDeleteDialogOpen(false);
     };
 
     function handleSignout() {
@@ -207,8 +220,8 @@ const Launcher = (props: LauncherProps) => {
         return (
           <IconButton
             className={classes.menuButton}
-            color="inherit"
-            onClick={handleConfirmDelete}
+            color='inherit'
+            onClick={handleDeleteInvoked}
           >
             <DeleteIcon />
           </IconButton>
@@ -218,29 +231,48 @@ const Launcher = (props: LauncherProps) => {
       }
     };
 
-    const getRenderedToolbar = () => {
+    const renderToolbar = () => {
       return (
         <div className={classes.root}>
-          <AppBar position="static">
+          <AppBar position='static'>
             <Toolbar>
               <IconButton
                 className={classes.menuButton}
-                color="inherit"
+                color='inherit'
               >
                 <MenuIcon />
               </IconButton>
-              <Typography className={classes.title} variant="h6" noWrap>
+              <Typography className={classes.title} variant='h6' noWrap>
                 Tedword
               </Typography>
               {renderDeleteIcon()}
+              <Dialog
+                open={confirmDeleteDialogOpen}
+                onClose={handleCloseDeleteDialog}
+              >
+                <DialogTitle id='alert-dialog-title'>{'Delete games?'}</DialogTitle>
+                <DialogContent>
+                  <DialogContentText id='alert-dialog-description'>
+                    Delete the selected games?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCloseDeleteDialog} color='primary'>
+                    No
+                  </Button>
+                  <Button onClick={handleDeleteSelectedGames} color='primary' autoFocus>
+                    Yes
+                  </Button>
+                </DialogActions>
+              </Dialog>
               <IconButton
                 className={classes.menuButton}
-                color="inherit"
+                color='inherit'
                 onClick={handleShowAbout}
               >
                 <InfoIcon />
               </IconButton>
-              <Button color="inherit" onClick={handleSignout}>Logout</Button>
+              <Button color='inherit' onClick={handleSignout}>Logout</Button>
             </Toolbar>
           </AppBar>
         </div>
@@ -306,7 +338,7 @@ const Launcher = (props: LauncherProps) => {
       );
     };
 
-    const toolbar = getRenderedToolbar();
+    const toolbar = renderToolbar();
 
     const renderedTable = getRenderedTable();
 
@@ -367,6 +399,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onSetUiState: setUiState,
     onUpdateLastPlayedDateTime: updateLastPlayedDateTime,
     onSetUserName: setUserName,
+    onDeleteGames: deleteGames,
   }, dispatch);
 };
 
