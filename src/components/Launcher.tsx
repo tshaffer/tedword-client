@@ -186,6 +186,7 @@ const Launcher = (props: LauncherProps) => {
     const handleDeleteSelectedGames = () => {
       const boardIdsToDelete: string[] = getSelectedBoardIds(Object.keys(selectedExistingGamesById));
       props.onDeleteGames(boardIdsToDelete);
+      setSelectedExistingGamesById({});
       setConfirmDeleteDialogOpen(false);
     };
 

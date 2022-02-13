@@ -18,7 +18,7 @@ import {
   getCurrentUser,
   getPuzzlesMetadata
 } from '../selectors';
-import { addBoard, addUserToBoard, setBoardId, setFocusedClues, setPuzzleId, setUiState, updateElapsedTimeRedux, updateLastPlayedDateTimeRedux } from '../models';
+import { addBoard, addUserToBoard, deleteBoards, setBoardId, setFocusedClues, setPuzzleId, setUiState, updateElapsedTimeRedux, updateLastPlayedDateTimeRedux } from '../models';
 import { isNil } from 'lodash';
 import { getAppState, getPuzzle } from '../selectors';
 
@@ -299,19 +299,13 @@ export const launchExistingGame = (boardId: string) => {
 
 export const deleteGames = (boardIds: string[]) => {
   return ((dispatch: any, getState: any): any => {
-    console.log('delete existing games');
-    console.log(boardIds);
-
     const path = serverUrl + apiUrlFragment + 'deleteGames';
-
     const deleteGamesBody: string[] = boardIds;
-
     return axios.post(
       path,
       deleteGamesBody
     ).then((response) => {
-      console.log('return from deleteGames - update reduxy');
-      // dispatch(updateElapsedTimeRedux(id, elapsedTime));
+      dispatch(deleteBoards(boardIds));
       return;
     }).catch((error) => {
       console.log('error');

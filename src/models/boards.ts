@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, omit } from 'lodash';
 import { BoardEntity, BoardsState, CellContentsMap } from '../types';
 import { TedwordModelBaseAction } from './baseAction';
 
@@ -6,6 +6,7 @@ import { TedwordModelBaseAction } from './baseAction';
 // Constants
 // ------------------------------------
 export const ADD_BOARD = 'ADD_BOARD';
+export const DELETE_BOARDS = 'DELETE_BOARDS';
 export const ADD_USER_TO_BOARD = 'ADD_USER_TO_BOARD';
 export const SET_CELL_CONTENTS = 'SET_CELL_CONTENTS';
 export const UPDATE_LAST_PLAYED_DATE_TIME = 'UPDATE_LAST_PLAYED_DATE_TIME';
@@ -29,6 +30,21 @@ export const addBoard = (
     payload: {
       id,
       board,
+    }
+  };
+};
+
+export interface DeleteBoardsPayload {
+  ids: string[];
+}
+
+export const deleteBoards = (
+  boardIds: string[],
+): any => {
+  return {
+    type: DELETE_BOARDS,
+    payload: {
+      ids: boardIds,
     }
   };
 };
@@ -116,12 +132,17 @@ const initialState: BoardsState =
 
 export const boardsStateReducer = (
   state: BoardsState = initialState,
-  action: TedwordModelBaseAction<AddBoardPayload & AddUserToBoardPayload & SetCellContentsPayload & UpdateLastPlayedDateTimePayload & UpdatedElapsedTimePayload>
+  action: TedwordModelBaseAction<AddBoardPayload & DeleteBoardsPayload & AddUserToBoardPayload & SetCellContentsPayload & UpdateLastPlayedDateTimePayload & UpdatedElapsedTimePayload>
 ): BoardsState => {
   switch (action.type) {
     case ADD_BOARD: {
       const newState = cloneDeep(state) as BoardsState;
       newState.boards[action.payload.id] = action.payload.board;
+      return newState;
+    }
+    case DELETE_BOARDS: {
+      const newState = cloneDeep(state) as BoardsState;
+      newState.boards = omit(newState.boards, action.payload.ids);
       return newState;
     }
     case ADD_USER_TO_BOARD: {
